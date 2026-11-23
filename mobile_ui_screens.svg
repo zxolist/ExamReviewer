@@ -1,0 +1,467 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 820" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <!-- Phone Screen Background Gradient -->
+    <linearGradient id="screenBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#eef2ff"/>
+    </linearGradient>
+
+    <!-- Primary Button Gradient -->
+    <linearGradient id="primaryBtn" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+
+    <!-- Emerald Success Gradient -->
+    <linearGradient id="successGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <!-- Logo Squircle Gradient -->
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7056fc"/>
+      <stop offset="100%" stop-color="#593cf2"/>
+    </linearGradient>
+
+    <!-- Soft Drop Shadows -->
+    <filter id="phoneShadow" x="-15%" y="-10%" width="130%" height="125%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="20" stdDeviation="25" flood-color="#000000" flood-opacity="0.55"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#6366f1" flood-opacity="0.25"/>
+    </filter>
+
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <style>
+    .title-main { font-family: 'Prompt', 'Kanit', -apple-system, sans-serif; font-weight: 700; fill: #ffffff; }
+    .subtitle-main { font-family: 'Prompt', 'Kanit', -apple-system, sans-serif; font-weight: 400; fill: #94a3b8; }
+    .phone-text { font-family: 'Prompt', 'Kanit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .bold { font-weight: 600; }
+    .tag-title { font-size: 13px; font-weight: 600; fill: #a5b4fc; letter-spacing: 0.5px; }
+  </style>
+
+  <!-- Canvas Background -->
+  <rect width="1280" height="820" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle decorative grid -->
+  <g opacity="0.06" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="160" x2="1280" y2="160"/>
+    <line x1="0" y1="320" x2="1280" y2="320"/>
+    <line x1="0" y1="480" x2="1280" y2="480"/>
+    <line x1="0" y1="640" x2="1280" y2="640"/>
+    <line x1="320" y1="0" x2="320" y2="820"/>
+    <line x1="640" y1="0" x2="640" y2="820"/>
+    <line x1="960" y1="0" x2="960" y2="820"/>
+  </g>
+
+  <!-- Main Header Banner -->
+  <text x="640" y="48" text-anchor="middle" class="title-main" font-size="26">📱 พรีวิวการแสดงผลบนสมาร์ทโฟน (Mobile UI & Responsive Preview)</text>
+  <text x="640" y="74" text-anchor="middle" class="subtitle-main" font-size="14">BizExam Reviewer — การงานอาชีพ การประกอบธุรกิจ ม.5 | ปรับปรุงระบบสัมผัส จอแนวตั้ง และความลื่นไหล 60 FPS</text>
+
+  <!-- ============================================================ -->
+  <!-- PHONE 1 (LEFT): SETUP & STUDY BANNER                         -->
+  <!-- ============================================================ -->
+  <g transform="translate(60, 95)">
+    <!-- Screen Label -->
+    <rect x="75" y="0" width="210" height="26" rx="13" fill="#1e293b" stroke="#334155"/>
+    <text x="180" y="17" text-anchor="middle" class="phone-text tag-title">1. หน้าแรก & สรุปก่อนสอบ</text>
+
+    <!-- Phone Chassis (360x660) -->
+    <g transform="translate(0, 35)">
+      <!-- Outer Frame -->
+      <rect x="0" y="0" width="360" height="660" rx="46" fill="#1e293b" stroke="#334155" stroke-width="4" filter="url(#phoneShadow)"/>
+      <!-- Inner Bezel -->
+      <rect x="6" y="6" width="348" height="648" rx="40" fill="#090d16"/>
+      <!-- Screen Display Area -->
+      <rect x="12" y="12" width="336" height="636" rx="34" fill="url(#screenBg)"/>
+      
+      <!-- Clip Path for Screen Contents -->
+      <clipPath id="screenClip1">
+        <rect x="12" y="12" width="336" height="636" rx="34"/>
+      </clipPath>
+
+      <!-- Inside Screen 1 -->
+      <g clip-path="url(#screenClip1)">
+        <!-- Dynamic Island / Speaker Notch -->
+        <rect x="130" y="20" width="100" height="24" rx="12" fill="#000000"/>
+        <circle cx="212" cy="32" r="4.5" fill="#1e1e2e"/>
+
+        <!-- Status Bar -->
+        <text x="36" y="36" class="phone-text bold" font-size="12" fill="#1e293b">9:41</text>
+        <path d="M295 28 h12 v8 h-12 z" fill="none" stroke="#1e293b" stroke-width="1.2" rx="2"/>
+        <rect x="297" y="30" width="7" height="4" fill="#1e293b" rx="1"/>
+        <path d="M280 36 a6 6 0 0 1 0 -8 M283 36 a3 3 0 0 1 0 -4" stroke="#1e293b" stroke-width="1.5" fill="none"/>
+
+        <!-- App Mobile Header with Purple Book Icon -->
+        <g transform="translate(24, 58)">
+          <rect x="0" y="0" width="312" height="50" rx="14" fill="#ffffff" filter="url(#cardShadow)"/>
+          
+          <!-- Purple Squircle Icon (Logo) -->
+          <rect x="8" y="7" width="36" height="36" rx="10" fill="url(#logoGrad)"/>
+          <!-- 3 Colored Books inside Logo -->
+          <rect x="24" y="18" width="10" height="15" rx="1.5" fill="#38bdf8"/>
+          <rect x="19" y="15" width="10" height="15" rx="1.5" fill="#ef4444"/>
+          <rect x="14" y="12" width="10" height="16" rx="1.5" fill="#84cc16"/>
+
+          <text x="52" y="25" class="phone-text bold" font-size="13" fill="#1e293b">BizExam Reviewer</text>
+          <text x="52" y="39" class="phone-text" font-size="10" fill="#64748b">การงานอาชีพ ม.5 (50 ข้อ)</text>
+          
+          <rect x="238" y="12" width="64" height="26" rx="8" fill="#eef2ff" stroke="#c7d2fe"/>
+          <text x="270" y="29" text-anchor="middle" class="phone-text bold" font-size="10" fill="#4f46e5">📖 คู่มือ</text>
+        </g>
+
+        <!-- Learn Before Test Alert Banner -->
+        <g transform="translate(24, 118)">
+          <rect x="0" y="0" width="312" height="74" rx="14" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.2"/>
+          <rect x="12" y="12" width="28" height="28" rx="8" fill="#3b82f6"/>
+          <text x="26" y="31" text-anchor="middle" font-size="15" fill="#ffffff">💡</text>
+          
+          <text x="48" y="27" class="phone-text bold" font-size="12" fill="#1e3a8a">แนะนำ: อ่านสรุปเนื้อหาก่อนสอบ!</text>
+          <text x="48" y="44" class="phone-text" font-size="10" fill="#3b82f6">ทบทวน 4 หน้า: องค์กรธุรกิจ & วงจรชีวิต</text>
+          
+          <rect x="48" y="50" width="110" height="18" rx="9" fill="#2563eb"/>
+          <text x="103" y="62" text-anchor="middle" class="phone-text bold" font-size="9" fill="#ffffff">เปิดแท็บสรุปความรู้ ➔</text>
+        </g>
+
+        <!-- Setup Step 1: Difficulty Mode -->
+        <g transform="translate(24, 204)">
+          <rect x="0" y="0" width="312" height="136" rx="16" fill="#ffffff" filter="url(#cardShadow)"/>
+          <text x="16" y="26" class="phone-text bold" font-size="13" fill="#0f172a">1. เลือกระดับความยาก (Difficulty)</text>
+          
+          <!-- Mode 1: Easy -->
+          <rect x="16" y="38" width="134" height="40" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+          <text x="32" y="62" class="phone-text bold" font-size="11" fill="#334155">🟢 ง่าย (Easy)</text>
+
+          <!-- Mode 2: Normal (Selected) -->
+          <rect x="162" y="38" width="134" height="40" rx="10" fill="#eef2ff" stroke="#6366f1" stroke-width="2"/>
+          <text x="178" y="62" class="phone-text bold" font-size="11" fill="#4f46e5">🟡 ปานกลาง (Normal)</text>
+
+          <!-- Mode 3: Hard -->
+          <rect x="16" y="86" width="134" height="40" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+          <text x="32" y="110" class="phone-text bold" font-size="11" fill="#334155">🔴 ท้าทาย (Hard)</text>
+
+          <!-- Mode 4: All 50 Questions -->
+          <rect x="162" y="86" width="134" height="40" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+          <text x="178" y="110" class="phone-text bold" font-size="11" fill="#334155">⭐ ครบ 50 ข้อ</text>
+        </g>
+
+        <!-- Setup Step 2: Question Count -->
+        <g transform="translate(24, 352)">
+          <rect x="0" y="0" width="312" height="106" rx="16" fill="#ffffff" filter="url(#cardShadow)"/>
+          <text x="16" y="26" class="phone-text bold" font-size="13" fill="#0f172a">2. จำนวนข้อสอบที่ต้องการ</text>
+          
+          <rect x="16" y="42" width="64" height="44" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+          <text x="48" y="68" text-anchor="middle" class="phone-text bold" font-size="14" fill="#64748b">10</text>
+
+          <!-- Selected 20 -->
+          <rect x="88" y="42" width="64" height="44" rx="10" fill="#eef2ff" stroke="#6366f1" stroke-width="2"/>
+          <text x="120" y="68" text-anchor="middle" class="phone-text bold" font-size="14" fill="#4f46e5">20 ข้อ</text>
+
+          <rect x="160" y="42" width="64" height="44" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+          <text x="192" y="68" text-anchor="middle" class="phone-text bold" font-size="14" fill="#64748b">30</text>
+
+          <rect x="232" y="42" width="64" height="44" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+          <text x="264" y="68" text-anchor="middle" class="phone-text bold" font-size="14" fill="#64748b">50</text>
+        </g>
+
+        <!-- Big Start Button -->
+        <g transform="translate(24, 474)">
+          <rect x="0" y="0" width="312" height="52" rx="14" fill="url(#primaryBtn)"/>
+          <text x="156" y="32" text-anchor="middle" class="phone-text bold" font-size="15" fill="#ffffff">🚀 เริ่มทำแบบทดสอบ (Start Quiz)</text>
+        </g>
+
+        <!-- Home Indicator Bar -->
+        <rect x="110" y="632" width="140" height="4" rx="2" fill="#000000" opacity="0.4"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- PHONE 2 (CENTER): ACTIVE EXAM & REAL-TIME THAI EXPLANATION   -->
+  <!-- ============================================================ -->
+  <g transform="translate(460, 95)">
+    <!-- Screen Label -->
+    <rect x="65" y="0" width="230" height="26" rx="13" fill="#312e81" stroke="#4f46e5"/>
+    <text x="180" y="17" text-anchor="middle" class="phone-text tag-title">2. หน้าทำข้อสอบ & เฉลยทันที</text>
+
+    <!-- Phone Chassis (360x660) -->
+    <g transform="translate(0, 35)">
+      <!-- Outer Frame (Highlight center phone) -->
+      <rect x="0" y="0" width="360" height="660" rx="46" fill="#1e1b4b" stroke="#6366f1" stroke-width="4" filter="url(#phoneShadow)"/>
+      <rect x="6" y="6" width="348" height="648" rx="40" fill="#090d16"/>
+      <rect x="12" y="12" width="336" height="636" rx="34" fill="url(#screenBg)"/>
+      
+      <clipPath id="screenClip2">
+        <rect x="12" y="12" width="336" height="636" rx="34"/>
+      </clipPath>
+
+      <!-- Inside Screen 2 -->
+      <g clip-path="url(#screenClip2)">
+        <!-- Dynamic Island -->
+        <rect x="130" y="20" width="100" height="24" rx="12" fill="#000000"/>
+        <circle cx="212" cy="32" r="4.5" fill="#1e1e2e"/>
+
+        <!-- Status Bar -->
+        <text x="36" y="36" class="phone-text bold" font-size="12" fill="#1e293b">9:42</text>
+        <path d="M295 28 h12 v8 h-12 z" fill="none" stroke="#1e293b" stroke-width="1.2" rx="2"/>
+        <rect x="297" y="30" width="7" height="4" fill="#1e293b" rx="1"/>
+
+        <!-- Upper Sticky Stats Bar with Home Logo Button -->
+        <g transform="translate(20, 56)">
+          <rect x="0" y="0" width="320" height="44" rx="12" fill="#ffffff" filter="url(#cardShadow)"/>
+          
+          <!-- Sticky Home Button -->
+          <g transform="translate(8, 7)">
+            <rect x="0" y="0" width="30" height="30" rx="8" fill="url(#logoGrad)"/>
+            <text x="15" y="20" text-anchor="middle" font-size="14" fill="#ffffff">🏠</text>
+          </g>
+
+          <!-- Score badges -->
+          <rect x="46" y="10" width="56" height="24" rx="12" fill="#ecfdf5"/>
+          <text x="74" y="26" text-anchor="middle" class="phone-text bold" font-size="11" fill="#059669">✓ 3</text>
+
+          <rect x="108" y="10" width="56" height="24" rx="12" fill="#fef2f2"/>
+          <text x="136" y="26" text-anchor="middle" class="phone-text bold" font-size="11" fill="#dc2626">✗ 0</text>
+
+          <!-- Timer & Count -->
+          <rect x="170" y="10" width="60" height="24" rx="8" fill="#f8fafc"/>
+          <text x="200" y="26" text-anchor="middle" class="phone-text bold" font-size="10" fill="#475569">⏱ 02:40</text>
+
+          <rect x="236" y="10" width="76" height="24" rx="8" fill="#eef2ff"/>
+          <text x="274" y="26" text-anchor="middle" class="phone-text bold" font-size="10" fill="#4f46e5">ข้อ 4/20</text>
+        </g>
+
+        <!-- Progress Bar -->
+        <rect x="24" y="106" width="312" height="5" rx="2.5" fill="#e2e8f0"/>
+        <rect x="24" y="106" width="62" height="5" rx="2.5" fill="url(#primaryBtn)"/>
+
+        <!-- Question Card Container -->
+        <g transform="translate(20, 118)">
+          <rect x="0" y="0" width="320" height="456" rx="16" fill="#ffffff" filter="url(#cardShadow)"/>
+
+          <!-- Question Category Badge -->
+          <rect x="14" y="12" width="130" height="20" rx="6" fill="#f1f5f9"/>
+          <text x="79" y="26" text-anchor="middle" class="phone-text bold" font-size="9" fill="#475569">บทที่ 1: รูปแบบองค์กรธุรกิจ</text>
+
+          <!-- Question Prompt Text -->
+          <text x="14" y="52" class="phone-text bold" font-size="13" fill="#0f172a">ข้อ 4. รูปแบบธุรกิจใดที่ "เจ้าของรับผิดชอบ</text>
+          <text x="14" y="70" class="phone-text bold" font-size="13" fill="#0f172a">หนี้สินทั้งหมดโดยไม่จำกัดจำนวน"?</text>
+
+          <!-- Choices List -->
+          <!-- Choice A (Selected & Correct) -->
+          <g transform="translate(14, 88)">
+            <rect x="0" y="0" width="292" height="48" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+            <rect x="8" y="10" width="28" height="28" rx="8" fill="#10b981"/>
+            <text x="22" y="29" text-anchor="middle" class="phone-text bold" font-size="13" fill="#ffffff">✓</text>
+            <text x="44" y="25" class="phone-text bold" font-size="12" fill="#065f46">ก. กิจการเจ้าของคนเดียว</text>
+            <text x="44" y="39" class="phone-text" font-size="10" fill="#047857">(Sole Proprietorship) — ถูกต้อง!</text>
+          </g>
+
+          <!-- Choice B -->
+          <g transform="translate(14, 142)">
+            <rect x="0" y="0" width="292" height="42" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+            <rect x="8" y="8" width="26" height="26" rx="8" fill="#e2e8f0"/>
+            <text x="21" y="25" text-anchor="middle" class="phone-text bold" font-size="12" fill="#64748b">ข</text>
+            <text x="42" y="26" class="phone-text" font-size="11" fill="#334155">ข. ห้างหุ้นส่วนจำกัด</text>
+          </g>
+
+          <!-- Choice C -->
+          <g transform="translate(14, 190)">
+            <rect x="0" y="0" width="292" height="42" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+            <rect x="8" y="8" width="26" height="26" rx="8" fill="#e2e8f0"/>
+            <text x="21" y="25" text-anchor="middle" class="phone-text bold" font-size="12" fill="#64748b">ค</text>
+            <text x="42" y="26" class="phone-text" font-size="11" fill="#334155">ค. บริษัทจำกัด</text>
+          </g>
+
+          <!-- Choice D -->
+          <g transform="translate(14, 238)">
+            <rect x="0" y="0" width="292" height="42" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+            <rect x="8" y="8" width="26" height="26" rx="8" fill="#e2e8f0"/>
+            <text x="21" y="25" text-anchor="middle" class="phone-text bold" font-size="12" fill="#64748b">ง</text>
+            <text x="42" y="26" class="phone-text" font-size="11" fill="#334155">ง. สหกรณ์</text>
+          </g>
+
+          <!-- Cute Thai Explanation Card (Appears immediately on selection) -->
+          <g transform="translate(14, 288)">
+            <rect x="0" y="0" width="292" height="106" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2"/>
+            <text x="12" y="22" class="phone-text bold" font-size="11" fill="#15803d">💡 คำอธิบายเหตุผล (ทำไมถึงตอบข้อนี้):</text>
+            <text x="12" y="42" class="phone-text" font-size="10" fill="#166534">• กิจการเจ้าของคนเดียว มีบุคคลคนเดียวเป็นเจ้าของ</text>
+            <text x="12" y="58" class="phone-text" font-size="10" fill="#166534">  ลงทุนและบริหารเอง กำไรคนเดียว แต่มีข้อเสียสำคัญคือ</text>
+            <text x="12" y="74" class="phone-text bold" font-size="10" fill="#14532d">  "ต้องรับผิดชอบหนี้สินทางธุรกิจทั้งหมดอย่างไม่จำกัด"</text>
+            <text x="12" y="92" class="phone-text" font-size="9" fill="#15803d">  ต่างจากบริษัทจำกัดที่รับผิดชอบเฉพาะมูลค่าหุ้นที่ถือ</text>
+          </g>
+
+          <!-- Bottom Actions: Exit & Next Buttons -->
+          <g transform="translate(14, 404)">
+            <!-- Exit Button -->
+            <rect x="0" y="0" width="100" height="42" rx="10" fill="#fef2f2" stroke="#fecaca"/>
+            <text x="50" y="26" text-anchor="middle" class="phone-text bold" font-size="11" fill="#dc2626">🚪 ออกจากสอบ</text>
+
+            <!-- Next Button (Active & Unlocked) -->
+            <rect x="110" y="0" width="182" height="42" rx="10" fill="url(#primaryBtn)"/>
+            <text x="201" y="26" text-anchor="middle" class="phone-text bold" font-size="12" fill="#ffffff">ข้อถัดไป (Next) ➔</text>
+          </g>
+        </g>
+
+        <!-- Home Indicator Bar -->
+        <rect x="110" y="632" width="140" height="4" rx="2" fill="#000000" opacity="0.4"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- PHONE 3 (RIGHT): TAB LEARN & MOBILE RESPONSIVE TABLES        -->
+  <!-- ============================================================ -->
+  <g transform="translate(860, 95)">
+    <!-- Screen Label -->
+    <rect x="70" y="0" width="220" height="26" rx="13" fill="#1e293b" stroke="#334155"/>
+    <text x="180" y="17" text-anchor="middle" class="phone-text tag-title">3. แท็บสรุปเนื้อหา & ตาราง</text>
+
+    <!-- Phone Chassis (360x660) -->
+    <g transform="translate(0, 35)">
+      <!-- Outer Frame -->
+      <rect x="0" y="0" width="360" height="660" rx="46" fill="#1e293b" stroke="#334155" stroke-width="4" filter="url(#phoneShadow)"/>
+      <rect x="6" y="6" width="348" height="648" rx="40" fill="#090d16"/>
+      <rect x="12" y="12" width="336" height="636" rx="34" fill="url(#screenBg)"/>
+      
+      <clipPath id="screenClip3">
+        <rect x="12" y="12" width="336" height="636" rx="34"/>
+      </clipPath>
+
+      <!-- Inside Screen 3 -->
+      <g clip-path="url(#screenClip3)">
+        <!-- Dynamic Island -->
+        <rect x="130" y="20" width="100" height="24" rx="12" fill="#000000"/>
+        <circle cx="212" cy="32" r="4.5" fill="#1e1e2e"/>
+
+        <!-- Status Bar -->
+        <text x="36" y="36" class="phone-text bold" font-size="12" fill="#1e293b">9:43</text>
+        <path d="M295 28 h12 v8 h-12 z" fill="none" stroke="#1e293b" stroke-width="1.2" rx="2"/>
+        <rect x="297" y="30" width="7" height="4" fill="#1e293b" rx="1"/>
+
+        <!-- Tab Learn Header -->
+        <g transform="translate(20, 56)">
+          <rect x="0" y="0" width="320" height="42" rx="12" fill="#ffffff" filter="url(#cardShadow)"/>
+          <text x="16" y="26" class="phone-text bold" font-size="13" fill="#1e293b">📖 สรุปเนื้อหาเตรียมสอบ ม.5</text>
+          <rect x="230" y="8" width="76" height="26" rx="8" fill="#eef2ff"/>
+          <text x="268" y="25" text-anchor="middle" class="phone-text bold" font-size="10" fill="#4f46e5">4 หน้าสรุป</text>
+        </g>
+
+        <!-- Search Bar -->
+        <g transform="translate(20, 106)">
+          <rect x="0" y="0" width="320" height="40" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+          <text x="14" y="25" font-size="14" fill="#94a3b8">🔍</text>
+          <text x="36" y="25" class="phone-text" font-size="11" fill="#475569">ค้นหา: ห้างหุ้นส่วน, สหกรณ์, วงจรชีวิต...</text>
+        </g>
+
+        <!-- Horizontal Swipe Filter Chips -->
+        <g transform="translate(20, 154)">
+          <rect x="0" y="0" width="54" height="28" rx="8" fill="#4f46e5"/>
+          <text x="27" y="18" text-anchor="middle" class="phone-text bold" font-size="10" fill="#ffffff">ทั้งหมด</text>
+
+          <rect x="60" y="0" width="115" height="28" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+          <text x="117" y="18" text-anchor="middle" class="phone-text" font-size="10" fill="#334155">บทที่ 1: รูปแบบธุรกิจ</text>
+
+          <rect x="181" y="0" width="115" height="28" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+          <text x="238" y="18" text-anchor="middle" class="phone-text" font-size="10" fill="#334155">บทที่ 2: วงจรชีวิต</text>
+        </g>
+
+        <!-- Learn Content Card: Comparison Table -->
+        <g transform="translate(20, 192)">
+          <rect x="0" y="0" width="320" height="300" rx="16" fill="#ffffff" filter="url(#cardShadow)"/>
+          
+          <text x="14" y="24" class="phone-text bold" font-size="12" fill="#0f172a">📊 ตารางเปรียบเทียบรูปแบบองค์กรธุรกิจ</text>
+          <text x="14" y="40" class="phone-text" font-size="9" fill="#64748b">เลื่อนซ้าย-ขวาบนมือถือได้สะดวก (Touch Scroll)</text>
+
+          <!-- Table Header -->
+          <rect x="10" y="50" width="300" height="28" rx="6" fill="#f8fafc"/>
+          <text x="20" y="68" class="phone-text bold" font-size="10" fill="#475569">รูปแบบธุรกิจ</text>
+          <text x="120" y="68" class="phone-text bold" font-size="10" fill="#475569">จำนวนผู้ก่อตั้ง</text>
+          <text x="210" y="68" class="phone-text bold" font-size="10" fill="#475569">ความรับผิดชอบ</text>
+
+          <!-- Row 1: Sole Owner -->
+          <line x1="10" y1="78" x2="310" y2="78" stroke="#f1f5f9"/>
+          <text x="20" y="96" class="phone-text bold" font-size="10" fill="#0f172a">1. เจ้าของคนเดียว</text>
+          <text x="120" y="96" class="phone-text" font-size="10" fill="#334155">1 คน</text>
+          <text x="210" y="96" class="phone-text bold" font-size="10" fill="#ef4444">ไม่จำกัดจำนวน</text>
+
+          <!-- Row 2: Partnership -->
+          <line x1="10" y1="106" x2="310" y2="106" stroke="#f1f5f9"/>
+          <text x="20" y="124" class="phone-text bold" font-size="10" fill="#0f172a">2. ห้างหุ้นส่วน</text>
+          <text x="120" y="124" class="phone-text" font-size="10" fill="#334155">2 คนขึ้นไป</text>
+          <text x="210" y="124" class="phone-text" font-size="9" fill="#334155">จำกัด / ไม่จำกัด</text>
+
+          <!-- Row 3: Limited Company -->
+          <line x1="10" y1="134" x2="310" y2="134" stroke="#f1f5f9"/>
+          <text x="20" y="152" class="phone-text bold" font-size="10" fill="#0f172a">3. บริษัทจำกัด</text>
+          <text x="120" y="152" class="phone-text" font-size="10" fill="#334155">2 คนขึ้นไป</text>
+          <text x="210" y="152" class="phone-text bold" font-size="10" fill="#059669">จำกัดตามค่าหุ้น</text>
+
+          <!-- Row 4: Public Company -->
+          <line x1="10" y1="162" x2="310" y2="162" stroke="#f1f5f9"/>
+          <text x="20" y="180" class="phone-text bold" font-size="10" fill="#0f172a">4. บมจ. (มหาชน)</text>
+          <text x="120" y="180" class="phone-text" font-size="10" fill="#334155">15 คนขึ้นไป</text>
+          <text x="210" y="180" class="phone-text" font-size="10" fill="#059669">จำกัดตามค่าหุ้น</text>
+
+          <!-- Row 5: Cooperative -->
+          <line x1="10" y1="190" x2="310" y2="190" stroke="#f1f5f9"/>
+          <text x="20" y="208" class="phone-text bold" font-size="10" fill="#0f172a">5. สหกรณ์</text>
+          <text x="120" y="208" class="phone-text" font-size="10" fill="#334155">10 คนขึ้นไป</text>
+          <text x="210" y="208" class="phone-text" font-size="10" fill="#059669">จำกัดตามค่าหุ้น</text>
+
+          <!-- Exam Highlight Note -->
+          <g transform="translate(10, 222)">
+            <rect x="0" y="0" width="300" height="66" rx="8" fill="#fffbeb" stroke="#fcd34d"/>
+            <text x="10" y="18" class="phone-text bold" font-size="10" fill="#b45309">⭐ จุดเน้นข้อสอบที่พบบ่อย:</text>
+            <text x="10" y="34" class="phone-text" font-size="9" fill="#92400e">• บริษัทจำกัด กฎหมายใหม่ใช้ผู้เริ่มก่อการเพียง "2 คน" (ไม่ใช่ 3)</text>
+            <text x="10" y="48" class="phone-text" font-size="9" fill="#92400e">• สหกรณ์ยึดหลัก "1 คน 1 เสียง" มุ่งช่วยเหลือสมาชิก ไม่เน้นกำไรสูงสุด</text>
+          </g>
+        </g>
+
+        <!-- Floating Tutorial Tooltip on Mobile -->
+        <g transform="translate(20, 502)">
+          <rect x="0" y="0" width="320" height="66" rx="14" fill="#312e81" stroke="#818cf8" stroke-width="1.5"/>
+          <text x="14" y="22" class="phone-text bold" font-size="11" fill="#ffffff">🏠 ปุ่ม Home สัญลักษณ์ไอคอนหนังสือ 3 เล่ม</text>
+          <text x="14" y="40" class="phone-text" font-size="10" fill="#c7d2fe">กดได้ตลอดเวลาเพื่อกลับหน้าแรก หรือแตะเพื่อเปิดคู่มือสอนใช้งาน</text>
+          <text x="14" y="55" class="phone-text" font-size="9" fill="#a5b4fc">มีระบบแจ้งเตือนกันกดพลาดระหว่างสอบ</text>
+        </g>
+
+        <!-- Home Indicator Bar -->
+        <rect x="110" y="632" width="140" height="4" rx="2" fill="#000000" opacity="0.4"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom Badges / Performance & Features -->
+  <g transform="translate(140, 755)">
+    <rect x="0" y="0" width="1000" height="46" rx="23" fill="#1e293b" stroke="#334155"/>
+    
+    <g transform="translate(30, 14)">
+      <circle cx="8" cy="9" r="6" fill="#10b981"/>
+      <text x="22" y="13" class="phone-text bold" font-size="12" fill="#ffffff">⚡ 60-120 FPS Zero Lag</text>
+      <text x="160" y="13" class="phone-text" font-size="11" fill="#94a3b8">| ตัด Blur หนัก เลื่อนสมูท</text>
+    </g>
+
+    <g transform="translate(360, 14)">
+      <circle cx="8" cy="9" r="6" fill="#38bdf8"/>
+      <text x="22" y="13" class="phone-text bold" font-size="12" fill="#ffffff">👆 48px+ Touch Target</text>
+      <text x="175" y="13" class="phone-text" font-size="11" fill="#94a3b8">| แตะ Choice & ปุ่มง่าย ไม่กดพลาด</text>
+    </g>
+
+    <g transform="translate(710, 14)">
+      <circle cx="8" cy="9" r="6" fill="#a855f7"/>
+      <text x="22" y="13" class="phone-text bold" font-size="12" fill="#ffffff">🇹🇭 Full Thai Typography</text>
+      <text x="170" y="13" class="phone-text" font-size="11" fill="#94a3b8">| Prompt & Kanit อ่านสบายตา</text>
+    </g>
+  </g>
+</svg>

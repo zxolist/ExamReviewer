@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📱 Mobile Device Simulator — BizExam Reviewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #131b2e;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --border: #22304d;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%);
+      color: var(--text);
+      font-family: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      overflow-x: hidden;
+    }
+
+    /* Top Control Bar */
+    .controls-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 14px 24px;
+      max-width: 1040px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo-sim {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #7056fc, #593cf2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .brand-titles h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .brand-titles p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #0d1322;
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .control-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .control-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .control-btn.active {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Quick Action Buttons */
+    .quick-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-btn {
+      background: #1e293b;
+      border: 1px solid var(--border);
+      color: #cbd5e1;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: #334155;
+      color: #fff;
+    }
+
+    /* Device Container */
+    .simulator-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0;
+      width: 100%;
+    }
+
+    /* Realistic Phone Chassis */
+    .phone-case {
+      background: #161c2e;
+      border: 4px solid #334155;
+      border-radius: 54px;
+      padding: 14px;
+      box-shadow: 
+        0 25px 60px -15px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(99, 102, 241, 0.2),
+        inset 0 0 4px rgba(255, 255, 255, 0.2);
+      position: relative;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Phone Side Buttons */
+    .phone-case::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      top: 115px;
+      width: 4px;
+      height: 48px;
+      background: #334155;
+      border-radius: 4px 0 0 4px;
+      box-shadow: 0 65px 0 #334155, 0 120px 0 #334155;
+    }
+
+    .phone-case::after {
+      content: '';
+      position: absolute;
+      right: -8px;
+      top: 140px;
+      width: 4px;
+      height: 65px;
+      background: #334155;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Inner Screen Frame */
+    .phone-screen {
+      background: #000;
+      border-radius: 42px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Dynamic Island Bar */
+    .dynamic-island {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 28px;
+      background: #000000;
+      border-radius: 20px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      pointer-events: none;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .camera-lens {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #111827;
+      border: 1px solid #1f2937;
+    }
+
+    .sensor {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #090d16;
+    }
+
+    /* Phone Iframe */
+    .phone-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #f8fafc;
+      display: block;
+    }
+
+    /* Features Grid Below Phone */
+    .features-list {
+      max-width: 1040px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+      margin-bottom: 30px;
+    }
+
+    .feature-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .feature-icon {
+      font-size: 24px;
+      background: #1e293b;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feature-text h3 {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .feature-text p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Simulator Controls -->
+  <header class="controls-panel">
+    <div class="brand-section">
+      <div class="brand-logo-sim">📚</div>
+      <div class="brand-titles">
+        <h1>BizExam Mobile Simulator</h1>
+        <p>ทดสอบการแสดงผลและระบบสัมผัสบนสมาร์ทโฟน</p>
+      </div>
+    </div>
+
+    <!-- Device Selector -->
+    <div class="btn-group">
+      <button class="control-btn active" onclick="setDevice(390, 844, this)" title="iPhone 14 / 15">
+        📱 iPhone 15 (390×844)
+      </button>
+      <button class="control-btn" onclick="setDevice(360, 800, this)" title="Android Samsung Galaxy">
+        🤖 Galaxy S23 (360×800)
+      </button>
+      <button class="control-btn" onclick="setDevice(375, 667, this)" title="iPhone SE">
+        📱 iPhone SE (375×667)
+      </button>
+      <button class="control-btn" onclick="setDevice(768, 1024, this)" title="Tablet iPad">
+        📟 iPad Mini
+      </button>
+    </div>
+
+    <!-- Orientation & Quick Actions -->
+    <div class="quick-actions">
+      <button class="action-btn" onclick="toggleOrientation()" id="btn-orientation">🔄 หมุนจอ (แนวตั้ง)</button>
+      <button class="action-btn" onclick="reloadFrame()" title="รีเฟรชหน้าจำลอง">🔃 Reload</button>
+      <button class="action-btn" onclick="window.open('./mobile_composite_preview.png', '_blank')" title="ดูภาพรวม 4 หน้า">🖼️ ภาพถ่าย 4 จอ</button>
+      <button class="action-btn" onclick="window.open('./exam_preview_widget.html', '_blank')" style="background: var(--accent); color: white; border-color: transparent;">↗ เปิดเต็มจอ</button>
+    </div>
+  </header>
+
+  <!-- Screen Jump Navigation -->
+  <div style="max-width: 1040px; width: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: -12px; margin-bottom: 20px;">
+    <span style="font-size: 0.82rem; color: var(--text-muted); margin-right: 6px;">🎯 ข้ามไปยังหน้าต่างๆ ทันที:</span>
+    <button class="action-btn" onclick="loadScreen('')" style="border-color: #6366f1;">🏠 1. หน้าแรก & สรุปก่อนสอบ</button>
+    <button class="action-btn" onclick="loadScreen('quiz_answered')" style="border-color: #10b981; color: #a7f3d0;">📝 2. ข้อสอบ & เฉลยทันที</button>
+    <button class="action-btn" onclick="loadScreen('learn')" style="border-color: #38bdf8; color: #bae6fd;">📖 3. แท็บสรุป 4 หน้า & ตาราง</button>
+    <button class="action-btn" onclick="loadScreen('home_modal')" style="border-color: #f43f5e; color: #fecdd3;">🛑 4. ป๊อปอัปยืนยันก่อนออก</button>
+    <button class="action-btn" onclick="loadScreen('tutorial')" style="border-color: #eab308; color: #fef08a;">🎓 5. คู่มือสอนใช้งาน 8 ขั้น</button>
+  </div>
+
+  <!-- Phone Mockup Container -->
+  <main class="simulator-wrapper">
+    <div class="phone-case" id="phoneCase" style="width: 418px; height: 872px;">
+      <div class="dynamic-island" id="dynamicIsland">
+        <div class="sensor"></div>
+        <div class="camera-lens"></div>
+      </div>
+      <div class="phone-screen" id="phoneScreen" style="width: 390px; height: 844px;">
+        <iframe src="./exam_preview_widget.html" class="phone-iframe" id="previewIframe" title="Live Mobile Exam Preview"></iframe>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Feature Highlights -->
+  <section class="features-list">
+    <div class="feature-box">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-text">
+        <h3>60-120 FPS Zero Lag</h3>
+        <p>ตัด Blur หนักและ background-attachment fixed ทำให้การเลื่อนปัดจอสัมผัสบนมือถือเร็วและไม่กระตุก</p>
+      </div>
+    </div>
+
+    <div class="feature-box">
+      <div class="feature-icon">🏠</div>
+      <div class="feature-text">
+        <h3>ปุ่ม Home & Tutorial</h3>
+        <p>ไอคอนหนังสือ 3 เล่มเป็นปุ่มกลับหน้าแรก พร้อมระบบแจ้งเตือนยืนยันไม่ให้เผลอกดออกข้อสอบ</p>
+      </div>
+    </div>
+
+    <div class="feature-box">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-text">
+        <h3>ปุ่ม Next ล็อกอัตโนมัติ</h3>
+        <p>หากยังไม่ได้แตะเลือกคำตอบ ปุ่มถัดไปจะถูกล็อกไม่ให้ข้าม พร้อมเฉลยเหตุผลภาษาไทยทันทีที่แตะ</p>
+      </div>
+    </div>
+
+    <div class="feature-box">
+      <div class="feature-icon">📖</div>
+      <div class="feature-text">
+        <h3>Tab Learn & Responsive Table</h3>
+        <p>แท็บสรุป 4 หน้าพร้อมตารางเปรียบเทียบที่ปัดเลื่อนซ้าย-ขวาบนจอมือถือได้สะดวก</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    let currentWidth = 390;
+    let currentHeight = 844;
+    let isLandscape = false;
+
+    function setDevice(w, h, btn) {
+      currentWidth = w;
+      currentHeight = h;
+      isLandscape = false;
+
+      // Update active button state
+      document.querySelectorAll('.btn-group .control-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      updatePhoneDimensions();
+    }
+
+    function toggleOrientation() {
+      isLandscape = !isLandscape;
+      const btn = document.getElementById('btn-orientation');
+      btn.textContent = isLandscape ? '🔄 หมุนจอ (แนวนอน)' : '🔄 หมุนจอ (แนวตั้ง)';
+      updatePhoneDimensions();
+    }
+
+    function updatePhoneDimensions() {
+      const w = isLandscape ? currentHeight : currentWidth;
+      const h = isLandscape ? currentWidth : currentHeight;
+
+      const screen = document.getElementById('phoneScreen');
+      const casing = document.getElementById('phoneCase');
+      const island = document.getElementById('dynamicIsland');
+
+      screen.style.width = w + 'px';
+      screen.style.height = h + 'px';
+      casing.style.width = (w + 28) + 'px';
+      casing.style.height = (h + 28) + 'px';
+
+      // Hide island on tablet or landscape if too wide
+      if (w > 600 || isLandscape) {
+        island.style.display = 'none';
+      } else {
+        island.style.display = 'flex';
+      }
+    }
+
+    function reloadFrame() {
+      const frame = document.getElementById('previewIframe');
+      frame.src = frame.src;
+    }
+
+    function loadScreen(mode) {
+      const frame = document.getElementById('previewIframe');
+      frame.src = mode ? `./exam_preview_widget.html?mode=${mode}` : './exam_preview_widget.html';
+    }
+  </script>
+</body>
+</html>

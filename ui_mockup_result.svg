@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f4ff"/>
+      <stop offset="50%" stop-color="#e6eaf8"/>
+      <stop offset="100%" stop-color="#fdf4f5"/>
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="retryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="620" fill="url(#bg)"/>
+
+  <!-- Top Bar -->
+  <rect width="800" height="54" fill="#ffffff" fill-opacity="0.9"/>
+  <line x1="0" y1="54" x2="800" y2="54" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="45" y="34" font-family="'Segoe UI', sans-serif" font-size="16" fill="#4f46e5" font-weight="bold">📊 BizExam Review - ผลคะแนนการทดสอบ</text>
+
+  <!-- Result Main Card -->
+  <rect x="60" y="80" width="680" height="510" rx="20" fill="#ffffff" filter="url(#shadow)" stroke="#e2e8f0"/>
+
+  <!-- Title -->
+  <text x="400" y="125" font-family="'Segoe UI', sans-serif" font-size="20" fill="#0f172a" font-weight="bold" text-anchor="middle">🎉 ยอดเยี่ยมมาก! ทำคะแนนได้ในเกณฑ์ดี</text>
+  <text x="400" y="148" font-family="'Segoe UI', sans-serif" font-size="12" fill="#64748b" text-anchor="middle">คุณพร้อมสำหรับการสอบจริงแล้ว แต่สามารถกดฝึกซ้ำข้อที่พลาดเพื่อให้ได้ 100% เต็มได้</text>
+
+  <!-- Circle Progress Meter -->
+  <circle cx="400" cy="225" r="55" fill="none" stroke="#f1f5f9" stroke-width="10"/>
+  <circle cx="400" cy="225" r="55" fill="none" stroke="#10b981" stroke-width="10" stroke-dasharray="345" stroke-dashoffset="69" stroke-linecap="round" transform="rotate(-90 400 225)"/>
+  <text x="400" y="222" font-family="'Segoe UI', sans-serif" font-size="26" fill="#0f172a" font-weight="bold" text-anchor="middle">16/20</text>
+  <text x="400" y="242" font-family="'Segoe UI', sans-serif" font-size="13" fill="#10b981" font-weight="bold" text-anchor="middle">80% ผ่านเกณฑ์</text>
+
+  <!-- 4 Metric Cards -->
+  <rect x="100" y="295" width="135" height="65" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="167" y="325" font-family="'Segoe UI', sans-serif" font-size="20" fill="#059669" font-weight="bold" text-anchor="middle">16</text>
+  <text x="167" y="345" font-family="'Segoe UI', sans-serif" font-size="10" fill="#64748b" text-anchor="middle">ข้อที่ตอบถูก</text>
+
+  <rect x="250" y="295" width="135" height="65" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="317" y="325" font-family="'Segoe UI', sans-serif" font-size="20" fill="#dc2626" font-weight="bold" text-anchor="middle">4</text>
+  <text x="317" y="345" font-family="'Segoe UI', sans-serif" font-size="10" fill="#64748b" text-anchor="middle">ข้อที่ตอบผิด</text>
+
+  <rect x="400" y="295" width="135" height="65" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="467" y="325" font-family="'Segoe UI', sans-serif" font-size="20" fill="#4f46e5" font-weight="bold" text-anchor="middle">80%</text>
+  <text x="467" y="345" font-family="'Segoe UI', sans-serif" font-size="10" fill="#64748b" text-anchor="middle">อัตราความแม่นยำ</text>
+
+  <rect x="550" y="295" width="135" height="65" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="617" y="325" font-family="'Segoe UI', sans-serif" font-size="18" fill="#334155" font-weight="bold" text-anchor="middle">08m 12s</text>
+  <text x="617" y="345" font-family="'Segoe UI', sans-serif" font-size="10" fill="#64748b" text-anchor="middle">เวลาที่ใช้</text>
+
+  <!-- Special Feature: Retry Wrong Questions Button -->
+  <rect x="180" y="380" width="440" height="46" rx="12" fill="url(#retryGrad)"/>
+  <text x="400" y="409" font-family="'Segoe UI', sans-serif" font-size="14" fill="#ffffff" font-weight="bold" text-anchor="middle">
+    🔁 ทำซ้ำเฉพาะข้อที่ผิด (Retry 4 Wrong Questions)
+  </text>
+
+  <!-- Secondary Buttons -->
+  <rect x="180" y="440" width="210" height="38" rx="10" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="285" y="464" font-family="'Segoe UI', sans-serif" font-size="12" fill="#334155" font-weight="600" text-anchor="middle">🔄 ทำใหม่ทั้งหมด (Retry All)</text>
+
+  <rect x="410" y="440" width="210" height="38" rx="10" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="515" y="464" font-family="'Segoe UI', sans-serif" font-size="12" fill="#334155" font-weight="600" text-anchor="middle">⚙️ ตั้งค่าระดับความยากใหม่</text>
+
+  <!-- Bottom Review Header -->
+  <text x="400" y="520" font-family="'Segoe UI', sans-serif" font-size="12" fill="#64748b" text-anchor="middle">
+    👇 เลื่อนลงด้านล่างเพื่ออ่านเฉลยละเอียดและวิเคราะห์ข้อสอบทุกข้อ
+  </text>
+</svg>

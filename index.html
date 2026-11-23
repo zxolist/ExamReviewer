@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BizExam - ระบบติวสอบทบทวน: การประกอบธุรกิจ ม.5 (คลังข้อสอบ 50 ข้อ)</title>
+  
+  <!-- SEO & Social Sharing (Open Graph for Netlify deployment) -->
+  <meta name="title" content="BizExam - คลังข้อสอบทบทวน การประกอบธุรกิจ ม.5">
+  <meta name="description" content="เว็บแอปพลิเคชันสำหรับติวและทบทวนข้อสอบวิชาการประกอบธุรกิจ ม.5 พร้อมระบบเฉลยละเอียด แฟลชการ์ด สรุปหัวใจสำคัญ และระบบทำซ้ำเฉพาะข้อที่ผิด">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="BizExam - คลังข้อสอบทบทวน การประกอบธุรกิจ ม.5">
+  <meta property="og:description" content="ระบบติวเข้มก่อนสอบจริง 50 ข้อ เลือกระดับความยากได้ พร้อมโหมดจำลองสอบและแฟลชการ์ด">
+  <meta property="og:image" content="ui_mockup_quiz.svg">
+  <meta name="theme-color" content="#4f46e5">
+
+  <!-- Optimized Google Fonts Loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;800&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Confetti Canvas Layer -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <!-- Logo & Home Button -->
+      <div id="btn-home-logo" class="logo-group" role="button" tabindex="0" title="🏠 กลับสู่หน้าแรก (Home) / 📖 วิธีใช้งาน (Tutorial)">
+        <div class="logo-badge">
+          <img src="logo.svg" alt="BizExam Home Icon" class="logo-img">
+          <span class="home-indicator-badge" title="กดเพื่อกลับหน้าแรก">🏠</span>
+        </div>
+        <div>
+          <div class="logo-title">BizExam Reviewer</div>
+          <div class="logo-subtitle">การประกอบธุรกิจ ม.5 (50 ข้อ)</div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button class="nav-tab-btn active" data-tab="quiz">
+          <span>📝</span> <span>ทำข้อสอบ</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="learn">
+          <span>📖</span> <span>อ่านสรุปก่อนสอบ (Learn)</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="flashcards">
+          <span>🗂️</span> <span>แฟลชการ์ด</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="search">
+          <span>🔍</span> <span>ค้นหาข้อสอบ</span>
+        </button>
+      </nav>
+
+      <!-- Action Icons -->
+      <div class="header-actions">
+        <button id="btn-open-tutorial" class="btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.82rem;" title="ดูคู่มือวิธีใช้งานเว็บไซต์ (Tutorial)">
+          <span>📖 วิธีใช้งาน</span>
+        </button>
+        <button id="btn-reopen-wizard" class="btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.82rem;" title="ตั้งค่าการสอบแบบทีละขั้นตอน">
+          <span>🧙‍♂️ สเต็ปตั้งค่า</span>
+        </button>
+        <button id="theme-toggle-btn" class="icon-btn" title="สลับโหมดมืด/สว่าง">🌙</button>
+        <button class="icon-btn" onclick="window.print()" title="พิมพ์ข้อสอบ (Print)">🖨️</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Upper Live Stats Bar (Visible during active quiz) -->
+  <div id="upper-stats-bar" class="upper-stats-bar" style="display: none;">
+    <div class="stats-container">
+      <div class="stat-pills">
+        <span class="stat-pill progress-info">
+          <span>ข้อ</span> <span id="stat-progress-text">1/20</span>
+        </span>
+
+        <!-- Practice Mode Stats -->
+        <span id="stat-correct-container" class="stat-pill correct">
+          <span>✓ ถูก</span> <span id="stat-correct">0</span>
+        </span>
+        <span id="stat-wrong-container" class="stat-pill wrong">
+          <span>✗ ผิด</span> <span id="stat-wrong">0</span>
+        </span>
+
+        <!-- Streak Fire Counter -->
+        <div id="streak-pill" class="streak-pill" style="display: none;" title="ทำถูกต่อเนื่อง!">
+          <span>🔥</span> <span id="streak-count">0</span>
+        </div>
+
+        <!-- Exam Mode Stats (Safe, No Spoilers) -->
+        <span id="stat-exam-progress-container" class="stat-pill progress-info" style="display: none;">
+          <span>📝 ตอบแล้ว</span> <span id="stat-exam-answered">0</span>
+          <span style="opacity: 0.6; margin: 0 4px;">|</span>
+          <span>เหลือ</span> <span id="stat-exam-remaining">20</span>
+        </span>
+      </div>
+
+      <!-- Live Animated Progress Bar -->
+      <div class="progress-track" title="ความคืบหน้า">
+        <div id="progress-bar-fill" class="progress-fill"></div>
+      </div>
+
+      <!-- Home, Timer, Question Palette & Exit Button -->
+      <div style="display: flex; align-items: center; gap: 0.45rem;">
+        <button id="btn-upper-home" class="btn-home-nav" title="กลับสู่หน้าแรก (Home)">
+          <img src="logo.svg" alt="Home" class="upper-home-icon">
+          <span>🏠 หน้าแรก</span>
+        </button>
+        <div class="timer-box" title="เวลา">
+          <span>⏱</span> <span id="timer-display">00:00</span>
+        </div>
+        <button id="btn-palette-toggle" class="btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.85rem;" title="กระดานภาพรวมข้อสอบ">
+          📋 กระดานข้อ
+        </button>
+        <!-- Upper Exit Button -->
+        <button id="btn-exit-upper" class="btn-exit" title="ออกจากแบบทดสอบ">
+          <span>🚪 ออก</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="app-main">
+
+    <!-- ================= TAB 1: QUIZ / EXAM ================= -->
+    <div id="tab-view-quiz">
+
+      <!-- Screen 1: Setup & Configuration -->
+      <section id="screen-setup" class="glass-card">
+        <div class="setup-hero">
+          <h1>🎯 เตรียมความพร้อมก่อนสอบจริง</h1>
+          <p>คลังข้อสอบทบทวนวิชาการประกอบธุรกิจ ม.5 รวม 50 ข้อ พร้อมเฉลยละเอียดและวิเคราะห์ผล</p>
+          <div style="margin-top: 0.85rem; display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+            <button id="btn-hero-wizard" class="btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.9rem; border-color: var(--primary); color: var(--primary);">
+              <span>🧙‍♂️ ตั้งค่าแบบทีละสเต็ป (Step-by-Step Wizard)</span>
+            </button>
+            <button id="btn-hero-tutorial" class="btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.9rem; border-color: #8b5cf6; color: #8b5cf6;">
+              <span>📖 วิธีใช้งานเว็บไซต์ (Tutorial Guide)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Study Before Test Banner (Read before exam) -->
+        <div id="banner-learn-before-test" class="study-before-test-banner" role="button" tabindex="0" title="คลิกเพื่ออ่านสรุปบทเรียนก่อนเริ่มสอบ">
+          <div class="study-banner-inner">
+            <div class="study-banner-icon">📖✨</div>
+            <div class="study-banner-text">
+              <span class="study-banner-badge">💡 แนะนำ: อ่านก่อนสอบ</span>
+              <div class="study-banner-title">ยังไม่มั่นใจ? อ่านสรุปบทเรียนเข้มข้นก่อนเริ่มสอบ (2 บทหลัก)</div>
+              <div class="study-banner-desc">สรุปองค์กรธุรกิจ และ วงจรชีวิตธุรกิจ พร้อมตารางเปรียบเทียบและจุดเน้นข้อสอบ อ่านจบเข้าใจใน 5 นาที</div>
+            </div>
+            <button class="btn-study-now" type="button">📖 เปิดอ่านสรุปก่อนสอบ →</button>
+          </div>
+        </div>
+
+        <!-- Difficulty Selection -->
+        <div class="section-title">
+          <span>⚡</span> 1. เลือกระดับความยาก (Difficulty)
+        </div>
+        <div class="config-grid">
+          <div class="option-card difficulty-card active" data-difficulty="all">
+            <div class="option-card-title">
+              <span>🌟 รวมทุกระดับ (All)</span>
+              <span class="badge" style="background:#eef2ff; color:#4f46e5;">50 ข้อ</span>
+            </div>
+            <div class="option-card-desc">สุ่มรวมครบทุกประเด็นตั้งแต่พื้นฐานจนถึงโจทย์วิเคราะห์</div>
+          </div>
+          <div class="option-card difficulty-card" data-difficulty="easy">
+            <div class="option-card-title">
+              <span>🟢 ง่าย - พื้นฐาน (Easy)</span>
+              <span class="badge badge-easy">10 ข้อ</span>
+            </div>
+            <div class="option-card-desc">ชุดที่ 1: ลักษณะธุรกิจ, เจ้าของคนเดียว, รัฐวิสาหกิจ, FTA</div>
+          </div>
+          <div class="option-card difficulty-card" data-difficulty="normal">
+            <div class="option-card-title">
+              <span>🟡 ปานกลาง - ประยุกต์ (Medium)</span>
+              <span class="badge badge-normal">20 ข้อ</span>
+            </div>
+            <div class="option-card-desc">ชุดที่ 2: เจาะลึกสภาพแวดล้อมธุรกิจ, หุ้นส่วน, วงจรชีวิต 4 ระยะ</div>
+          </div>
+          <div class="option-card difficulty-card" data-difficulty="hard">
+            <div class="option-card-title">
+              <span>🔴 ยาก - ครอบคลุม (Hard)</span>
+              <span class="badge badge-hard">20 ข้อ</span>
+            </div>
+            <div class="option-card-desc">ชุดที่ 3: ทบทวนครอบคลุมทุกประเด็น วิเคราะห์โจทย์เชิงลึก</div>
+          </div>
+        </div>
+
+        <!-- Question Count Selection -->
+        <div class="section-title">
+          <span>🔢</span> 2. จำนวนข้อสอบที่ต้องการทำ
+        </div>
+        <div class="number-pills">
+          <button class="number-pill count-pill" data-count="5">5 ข้อ</button>
+          <button class="number-pill count-pill" data-count="10">10 ข้อ</button>
+          <button class="number-pill count-pill active" data-count="20">20 ข้อ</button>
+          <button class="number-pill count-pill" data-count="30">30 ข้อ</button>
+          <button class="number-pill count-pill" data-count="all">ทั้งหมด (50)</button>
+        </div>
+
+        <!-- Mode Selection -->
+        <div class="section-title">
+          <span>🎮</span> 3. เลือกโหมดการทำแบบทดสอบ
+        </div>
+        <div class="config-grid" style="grid-template-columns: 1fr 1fr;">
+          <div class="option-card mode-card active" data-mode="practice">
+            <div class="option-card-title">💡 โหมดฝึกทบทวน (Practice Mode)</div>
+            <div class="option-card-desc">เฉลยทันทีหลังเลือก พร้อมสาระสำคัญคำอธิบาย ตัดช้อยส์ 50:50 และคอมโบ Streak</div>
+          </div>
+          <div class="option-card mode-card" data-mode="exam">
+            <div class="option-card-title">⏱️ โหมดจำลองสอบจริง (Exam Simulation)</div>
+            <div class="option-card-desc">สอบต่อเนื่อง จับเวลาเสมือนห้องสอบจริง ไม่สปอยล์เฉลย แล้วตรวจคะแนนตอนส่ง</div>
+          </div>
+        </div>
+
+        <!-- Extra Toggles -->
+        <div class="section-title">
+          <span>⚙️</span> 4. ตัวเลือกเพิ่มเติม
+        </div>
+        <div class="toggle-group">
+          <div class="toggle-row">
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem;">สลับลำดับข้อสอบ (Shuffle Questions)</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">สุ่มคำถามใหม่ทุกครั้ง ไม่จำเจ</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-shuffle-q" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem;">เปิดเสียงเอฟเฟกต์ (Sound Effects)</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">เสียงดนตรีและเสียงตอบรับอย่างไพเราะ</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-sound" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Start Button -->
+        <button id="btn-start-quiz" class="btn-primary">
+          <span>🚀 เริ่มทำแบบทดสอบ (Start Exam)</span>
+        </button>
+      </section>
+
+      <!-- Screen 2: Active Question View -->
+      <section id="screen-quiz" class="glass-card" style="display: none;">
+        <div class="question-header-row">
+          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            <span id="badge-category" class="badge" style="background: var(--primary-light); color: var(--primary);">หมวดหมู่</span>
+            <span id="badge-difficulty" class="badge">ระดับ</span>
+            <span id="question-number" style="font-size: 0.9rem; font-weight: 700; color: var(--text-muted);">ข้อที่ 1/20</span>
+          </div>
+
+          <!-- Utility Toolbelt -->
+          <div class="question-toolbelt">
+            <button id="btn-fifty-fifty" class="tool-btn" title="ตัด 2 ช้อยส์ที่ผิดออก">
+              <span>✂️</span> <span>50:50</span>
+            </button>
+            <button id="btn-speak" class="tool-btn" title="อ่านโจทย์ให้ฟัง">
+              <span>🔊</span> <span>อ่านโจทย์</span>
+            </button>
+            <button id="btn-bookmark" class="tool-btn" title="ติดดาวข้อนี้">
+              ☆ ติดดาว
+            </button>
+            <!-- In-screen Exit Button -->
+            <button id="btn-exit-tool" class="btn-exit" title="ออกจากข้อสอบ">
+              <span>🚪 ออก</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Question Text -->
+        <div id="question-text" class="question-text">
+          กำลังโหลดข้อสอบ...
+        </div>
+
+        <!-- Choices Grid -->
+        <div id="choices-container" class="choices-grid">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Prominent Thai Explanation Box (Shows why correct) -->
+        <div id="explanation-box" class="explanation-box" style="display: none;">
+          <div class="explanation-title">
+            <span id="explanation-header-title">💡 ทำไมข้อนี้ถึงตอบข้อนี้? (คำอธิบายเฉลยภาษาไทย)</span>
+            <button id="btn-expl-next" class="btn-primary" style="width: auto; padding: 0.4rem 1rem; font-size: 0.9rem;">
+              <span>ข้อถัดไป →</span>
+            </button>
+          </div>
+          <div id="explanation-text" class="explanation-text">
+            คำอธิบายภาษาไทยจะปรากฏที่นี่...
+          </div>
+        </div>
+
+        <!-- Bottom Navigation Controls -->
+        <div class="quiz-nav-row">
+          <button id="btn-prev" class="btn-secondary">
+            <span>← ข้อก่อนหน้า</span>
+          </button>
+          <button id="btn-next" class="btn-primary" style="width: auto; padding: 0.65rem 1.85rem;">
+            <span>ข้อถัดไป →</span>
+          </button>
+          <button id="btn-finish" class="btn-primary" style="display: none; width: auto; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+            <span>🏁 ส่งข้อสอบ & ดูผลคะแนน</span>
+          </button>
+        </div>
+
+        <!-- Hint message when trying to click next without selecting -->
+        <div id="nav-hint-box" class="nav-hint-text" style="display: none;">
+          ⚠️ กรุณาคลิกเลือกคำตอบก่อนไปข้อถัดไปน้า
+        </div>
+
+        <div style="text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-muted);">
+          💡 คีย์ลัด: กดปุ่มเลข 1, 2, 3, 4 หรือ A, B, C, D | กด Enter หรือ ลูกศร ← / → เพื่อเปลี่ยนข้อ | กด Esc เพื่อออก
+        </div>
+      </section>
+
+      <!-- Screen 3: Results & Analytics Screen -->
+      <section id="screen-result" class="glass-card" style="display: none;">
+        <div class="result-header">
+          <div id="result-grade-badge" class="badge" style="font-size: 0.95rem; padding: 0.45rem 1rem; margin-bottom: 0.85rem;">
+            🏆 ผลการสอบ
+          </div>
+          <h2 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 0.5rem;">สรุปผลการประเมิน</h2>
+          <p id="result-feedback" style="font-size: 1.05rem; color: var(--text-muted); max-width: 650px; margin: 0 auto; line-height: 1.6;">
+            สรุปคำแนะนำสำหรับการเตรียมตัวสอบจริง
+          </p>
+        </div>
+
+        <!-- Radial Score Progress Ring -->
+        <div class="score-circle-wrapper">
+          <svg class="score-circle-svg" viewBox="0 0 160 160">
+            <circle class="score-circle-bg" cx="80" cy="80" r="70"></circle>
+            <circle id="score-circle-progress" class="score-circle-progress" cx="80" cy="80" r="70"></circle>
+          </svg>
+          <div class="score-text-inner">
+            <div class="score-big"><span id="result-score">0</span>/<span id="result-total">0</span></div>
+            <div id="result-percentage" class="score-sub">0%</div>
+          </div>
+        </div>
+
+        <!-- 4 Metric Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div id="metric-correct" class="metric-val green">0</div>
+            <div class="metric-label">ข้อที่ตอบถูก (Correct)</div>
+          </div>
+          <div class="metric-card">
+            <div id="metric-wrong" class="metric-val red">0</div>
+            <div class="metric-label">ข้อที่ตอบผิด (Wrong)</div>
+          </div>
+          <div class="metric-card">
+            <div id="metric-accuracy" class="metric-val">0%</div>
+            <div class="metric-label">ความแม่นยำ (Accuracy)</div>
+          </div>
+          <div class="metric-card">
+            <div id="metric-time" class="metric-val">0m 0s</div>
+            <div class="metric-label">เวลาที่ใช้ (Time Spent)</div>
+          </div>
+        </div>
+
+        <!-- Action Button Cluster -->
+        <div class="action-cluster">
+          <!-- Superpower: Retry Wrong Only -->
+          <button id="btn-retry-wrong" class="btn-retry-wrong">
+            🔁 ทำซ้ำเฉพาะข้อที่ผิด (Retry Wrong Questions)
+          </button>
+
+          <div class="btn-row">
+            <button id="btn-retry-all" class="btn-secondary" style="justify-content: center; padding: 0.85rem;">
+              🔄 ทำแบบทดสอบใหม่อีกครั้ง
+            </button>
+            <button id="btn-share-score" class="btn-secondary" style="justify-content: center; padding: 0.85rem;">
+              📋 คัดลอกผลคะแนนไปแชร์
+            </button>
+            <button id="btn-back-setup" class="btn-secondary" style="justify-content: center; padding: 0.85rem;">
+              ⚙️ ปรับระดับความยากใหม่
+            </button>
+          </div>
+        </div>
+
+        <!-- Detailed Review Accordion -->
+        <div style="margin-top: 2.25rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800;">📝 ตรวจคำตอบและทบทวนเฉลยรายข้อ</h3>
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+              <button class="btn-secondary review-tab active" data-filter="all" style="padding: 0.35rem 0.75rem; font-size: 0.85rem;">ทั้งหมด</button>
+              <button class="btn-secondary review-tab" data-filter="wrong" style="padding: 0.35rem 0.75rem; font-size: 0.85rem; color:#dc2626;">เฉพาะที่ผิด</button>
+              <button class="btn-secondary review-tab" data-filter="correct" style="padding: 0.35rem 0.75rem; font-size: 0.85rem; color:#059669;">เฉพาะที่ถูก</button>
+              <button class="btn-secondary review-tab" data-filter="bookmarked" style="padding: 0.35rem 0.75rem; font-size: 0.85rem; color:#f59e0b;">ติดดาว ⭐</button>
+            </div>
+          </div>
+
+          <div id="review-list-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ================= TAB 2: FLASHCARDS ================= -->
+    <div id="tab-view-flashcards" style="display: none;">
+      <section class="glass-card" style="text-align: center;">
+        <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.4rem;">🗂️ แฟลชการ์ดช่วยจำ (Study Flashcards)</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
+          คลิกที่การ์ดเพื่อพลิกดูคำตอบและสรุปสาระสำคัญ เหมาะสำหรับการจำก่อนเข้าห้องสอบ
+        </p>
+
+        <!-- 3D Flippable Card -->
+        <div id="flashcard-card" class="flashcard-wrapper">
+          <div class="flashcard-inner">
+            <!-- Front -->
+            <div class="flashcard-front">
+              <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 1rem;">
+                <span id="flashcard-category" class="badge" style="background:var(--primary-light); color:var(--primary);">หมวดหมู่</span>
+                <span id="flashcard-difficulty" class="badge badge-normal">ระดับ</span>
+              </div>
+              <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                <h3 id="flashcard-question" style="font-size: 1.35rem; font-weight: 700; line-height: 1.5;">
+                  คำถามแฟลชการ์ด
+                </h3>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--primary); font-weight: 600;">
+                👆 คลิกเพื่อพลิกดูเฉลย (Click to Flip)
+              </div>
+            </div>
+
+            <!-- Back -->
+            <div class="flashcard-back">
+              <span class="badge" style="background:#dcfce7; color:#15803d; align-self: flex-start; margin-bottom: 1rem;">
+                ✓ คำตอบที่ถูกต้อง
+              </span>
+              <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                <div id="flashcard-answer" style="font-size: 1.25rem; font-weight: 800; color: #059669; margin-bottom: 0.75rem;">
+                  คำตอบ...
+                </div>
+                <div id="flashcard-explanation" style="font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">
+                  คำอธิบาย...
+                </div>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">
+                👆 คลิกอีกครั้งเพื่อพลิกกลับ
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flashcard Controls -->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+          <button id="btn-flash-prev" class="btn-secondary">
+            ← การ์ดก่อนหน้า
+          </button>
+          <span id="flashcard-counter" style="font-weight: 700; font-size: 0.95rem; min-width: 130px;">
+            การ์ดที่ 1 / 50
+          </span>
+          <button id="btn-flash-next" class="btn-primary" style="width: auto; padding: 0.65rem 1.5rem;">
+            การ์ดถัดไป →
+          </button>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-top: 1rem;">
+          <button id="btn-flash-master" class="btn-secondary" style="font-size: 0.85rem;">
+            📌 บันทึกว่าจำได้แล้ว
+          </button>
+          <button id="btn-flash-shuffle" class="btn-secondary" style="font-size: 0.85rem;">
+            🔀 สุ่มการ์ดใหม่
+          </button>
+          <span id="flashcard-mastered-badge" class="badge" style="display: none; background: #dcfce7; color: #15803d;">
+            ✓ แม่นยำแล้ว
+          </span>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= TAB 2: LEARN / CHEAT SHEET (อ่านสรุปก่อนสอบ) ================= -->
+    <div id="tab-view-learn" style="display: none;">
+      <section class="glass-card">
+        
+        <!-- Learn Header -->
+        <div class="learn-header-card">
+          <span class="learn-header-badge">📖 เอกสารทบทวนเตรียมสอบ • การงานอาชีพ 2 (งานธุรกิจ) ม.5</span>
+          <h2 class="learn-header-title">สรุปเนื้อหาเข้มข้น: องค์กรธุรกิจ และ วงจรชีวิตธุรกิจ</h2>
+          <p class="learn-header-sub">
+            รวบรวมประเด็นหลัก คำจำกัดความ จุดเน้นข้อสอบ และตารางเปรียบเทียบครบถ้วนตามบทเรียน อ่านจบเข้าใจได้ใน 5-10 นาที
+          </p>
+
+          <!-- Chapter Filter Pills -->
+          <div class="learn-filter-pills">
+            <button class="learn-filter-btn active" data-chapter="all">🌟 เนื้อหาทั้งหมด</button>
+            <button class="learn-filter-btn" data-chapter="ch1">🏛️ บทที่ 1: องค์กรธุรกิจ</button>
+            <button class="learn-filter-btn" data-chapter="ch2">📈 บทที่ 2: วงจรชีวิตธุรกิจ</button>
+            <button class="learn-filter-btn" data-chapter="tips">⚡ จุดเน้นข้อสอบ (Tips)</button>
+          </div>
+
+          <!-- Quick Search in Notes -->
+          <div class="learn-search-bar">
+            <span>🔍</span>
+            <input type="text" id="learn-search-box" placeholder="พิมพ์คำค้นหาในบทสรุป เช่น รัฐวิสาหกิจ, ห้างหุ้นส่วน, AFTA, 4 ระยะ, ครีมโกนหนวด...">
+            <button id="btn-clear-learn-search" style="display:none; background:none; border:none; cursor:pointer; color:var(--text-muted);">✕</button>
+          </div>
+        </div>
+
+        <div id="learn-content-container">
+
+          <!-- ================= CHAPTER 1 ================= -->
+          <div class="learn-chapter-card" data-ch="ch1">
+            <span class="learn-chapter-badge">🏛️ บทที่ 1</span>
+            <h3 class="learn-chapter-title">องค์กรธุรกิจ (Business Organization)</h3>
+            
+            <div class="learn-def-box">
+              <strong>📌 คำจำกัดความ:</strong> องค์กรธุรกิจ หมายถึง <em>บุคคลหรือคณะบุคคลที่ร่วมกันประกอบกิจการเพื่อมุ่งการค้าหากำไร</em> ซึ่งปัจจุบันมีอยู่หลายลักษณะ เพื่อให้เกิดความสะดวกต่อผู้ประกอบการในการปฏิบัติตามกฎหมายหรือกฎระเบียบข้อบังคับต่าง ๆ
+            </div>
+
+            <!-- 1.1 ประเภทของธุรกิจ -->
+            <h4 class="learn-section-subtitle">🏢 1.1 ประเภทของธุรกิจ (จำแนกตามลักษณะการดำเนินงาน 3 ประเภท)</h4>
+            <div class="learn-table-responsive">
+              <table class="learn-table">
+                <thead>
+                  <tr>
+                    <th style="width: 25%;">ประเภทธุรกิจ</th>
+                    <th style="width: 50%;">ลักษณะสำคัญ</th>
+                    <th style="width: 25%;">ตัวอย่างกิจการ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>1. ธุรกิจการอุตสาหกรรม</strong></td>
+                    <td>ธุรกิจเกี่ยวกับการผลิต ดำเนินการแปรรูปวัตถุดิบและปัจจัยการผลิตเป็นสินค้าชนิดต่าง ๆ มีทั้งอุตสาหกรรมขนาดใหญ่ที่ใช้เครื่องจักรหรือเทคโนโลยี และขนาดกลาง/ย่อมที่นำภูมิปัญญาท้องถิ่นหรือแรงงานในครัวเรือนมาผลิต</td>
+                    <td>โรงงานผลิตเครื่องดื่มกระป๋อง, งานหัตถกรรมท้องถิ่น</td>
+                  </tr>
+                  <tr>
+                    <td><strong>2. ธุรกิจการพาณิชยกรรม</strong></td>
+                    <td>ธุรกิจเกี่ยวกับการจำหน่าย ดำเนินการกระจายสินค้าจากแหล่งผลิตไปยังผู้บริโภคอย่างทั่วถึง มีลักษณะเป็นการค้าส่งและการค้าปลีก</td>
+                    <td>ร้านสะดวกซื้อ (เช่น 7-Eleven), ห้างสรรพสินค้า</td>
+                  </tr>
+                  <tr>
+                    <td><strong>3. ธุรกิจการบริการ</strong></td>
+                    <td>ธุรกิจเกี่ยวกับการให้บริการในรูปแบบต่าง ๆ เพื่อตอบสนองความต้องการของผู้บริโภค และอำนวยความสะดวกในด้านต่าง ๆ</td>
+                    <td>การท่องเที่ยว, การโรงแรม, การรักษาพยาบาล, การซ่อมแซมเครื่องใช้ไฟฟ้า</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 1.2 จุดมุ่งหมายขององค์กรธุรกิจ -->
+            <h4 class="learn-section-subtitle">🎯 1.2 จุดมุ่งหมายขององค์กรธุรกิจ (จำแนกตามลักษณะองค์กร 2 กลุ่ม)</h4>
+            
+            <!-- Group 1: รัฐวิสาหกิจ -->
+            <div style="background: rgba(99,102,241,0.04); border: 1px solid var(--card-border); border-radius: 14px; padding: 1.15rem; margin-bottom: 1rem;">
+              <h5 style="color: var(--primary); font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem;">
+                🏛️ กลุ่มที่ 1: รัฐวิสาหกิจ (State Enterprises)
+              </h5>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.6rem;">
+                คือ องค์กรธุรกิจที่รัฐหรือหน่วยงานที่รัฐบาลเป็นเจ้าของ รวมถึงบริษัทหรือห้างหุ้นส่วนนิติบุคคลที่ <strong>ส่วนราชการถือหุ้นเกินกว่าร้อยละ 50</strong> และมีระบบการบริหารงานแบบกึ่งราชการและธุรกิจ มีจุดมุ่งหมาย 5 ประการ:
+              </p>
+              <ul class="tutorial-list" style="margin-bottom: 0;">
+                <li><strong>1. เพื่อประโยชน์ต่อสังคม:</strong> โดยการให้บริการประชาชน เช่น <em>การไฟฟ้านครหลวง, การประปานครหลวง</em></li>
+                <li><strong>2. เพื่อความมั่นคงของประเทศ:</strong> เนื่องจากกิจการบางอย่างมีความจำเป็นที่จะต้องใช้ในยามฉุกเฉิน เช่น <em>การปิโตรเลียมแห่งประเทศไทย (ปตท.)</em></li>
+                <li><strong>3. เพื่อหารายได้เข้ารัฐ:</strong> เช่น <em>สำนักงานสลากกินแบ่งรัฐบาล</em></li>
+                <li><strong>4. เพื่อควบคุมสินค้าบางชนิดที่อาจก่อให้เกิดผลเสียต่อสังคม:</strong> เช่น <em>การยาสูบแห่งประเทศไทย</em></li>
+                <li><strong>5. เพื่อประชาสัมพันธ์และเผยแพร่ชื่อเสียงของประเทศ:</strong> เช่น <em>การท่องเที่ยวแห่งประเทศไทย (ททท.)</em></li>
+              </ul>
+            </div>
+
+            <!-- Group 2: วิสาหกิจเอกชน -->
+            <div style="background: rgba(16,185,129,0.04); border: 1px solid rgba(16,185,129,0.3); border-radius: 14px; padding: 1.15rem; margin-bottom: 1.25rem;">
+              <h5 style="color: #059669; font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem;">
+                💼 กลุ่มที่ 2: วิสาหกิจเอกชน (Private Enterprises)
+              </h5>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.6rem;">
+                คือ องค์กรธุรกิจที่มีความอิสระและมีความสามารถในการบริหารจัดการ มีจุดมุ่งหมาย 4 ประการ:
+              </p>
+              <ul class="tutorial-list" style="margin-bottom: 0;">
+                <li><strong>1. กำไร (Profit):</strong> เป็นผลตอบแทนจากการลงทุนด้วยสินทรัพย์ แรงกาย ความรู้ ความสามารถ และเป็นสิ่งจูงใจในการดำเนินกิจกรรมต่าง ๆ</li>
+                <li><strong>2. ความอยู่รอด (Survival):</strong> เป็นการทำหน้าที่ผลิตสินค้าหรือบริการแก่ผู้บริโภค โดยมุ่งให้ธุรกิจประสบความสำเร็จและสามารถดำเนินกิจการต่อไปได้</li>
+                <li><strong>3. ความเจริญเติบโต (Growth):</strong> เป็นการดำเนินธุรกิจให้มีความเจริญเติบโต โดยขยายขนาดของกิจการ มียอดการผลิตหรือยอดขายเพิ่มขึ้น ตลอดจนมีสินทรัพย์เพิ่มขึ้น</li>
+                <li><strong>4. ความรับผิดชอบต่อสังคม (Social Responsibility):</strong> ดำเนินธุรกิจให้สอดคล้องกับความรับผิดชอบต่อส่วนรวม คือ มีความซื่อสัตย์และยุติธรรมต่อผู้บริโภค ปฏิบัติตามกฎหมาย และอนุรักษ์สิ่งแวดล้อม</li>
+              </ul>
+            </div>
+
+            <!-- 1.3 รูปแบบของธุรกิจ -->
+            <h4 class="learn-section-subtitle">⚖️ 1.3 รูปแบบของธุรกิจ (เปรียบเทียบ 4 รูปแบบหลัก)</h4>
+            <div class="learn-table-responsive">
+              <table class="learn-table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">รูปแบบธุรกิจ</th>
+                    <th style="width: 18%;">จำนวนผู้ร่วมลงทุน</th>
+                    <th style="width: 32%;">ลักษณะทางกฎหมาย / การจัดตั้ง</th>
+                    <th style="width: 30%;">จุดเด่น / ภาษี / ตัวอย่าง</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>1. กิจการเจ้าของคนเดียว</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">Sole Proprietorship</span></td>
+                    <td><strong>บุคคลคนเดียว</strong></td>
+                    <td>เป็นเจ้าของและบริหารจัดการทุกเรื่องด้วยตนเอง ไม่ต้องจดทะเบียนจัดตั้ง แต่อาจจะต้องจดทะเบียนพาณิชย์</td>
+                    <td>อิสระและคล่องตัวสูง เสียภาษีเงินได้บุคคลธรรมดา เช่น <em>ร้านขายของชำ, ร้านเสริมสวย</em></td>
+                  </tr>
+                  <tr>
+                    <td><strong>2. ห้างหุ้นส่วน</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">Partnership</span></td>
+                    <td><strong>ตั้งแต่ 2 คนขึ้นไป</strong></td>
+                    <td>ทำสัญญาด้วยวาจาหรือลายลักษณ์อักษร ลงหุ้นด้วยเงินหรือแรงกาย แบ่งเป็น 2 ประเภท:<br>
+                      • <strong>ห้างหุ้นส่วนสามัญ:</strong> จดหรือไม่จดนิติบุคคลก็ได้<br>
+                      • <strong>ห้างหุ้นส่วนจำกัด:</strong> ต้องจดเป็นนิติบุคคลเสมอ
+                    </td>
+                    <td>ร่วมกันดำเนินกิจการและแบ่งกำไรตามสัดส่วนที่ตกลงกัน</td>
+                  </tr>
+                  <tr>
+                    <td><strong>3. บริษัทจำกัด</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">Corporation Limited</span></td>
+                    <td>• <strong>เอกชนจำกัด: 7–99 คน</strong><br>• <strong>มหาชนจำกัด: 100 คนขึ้นไป</strong></td>
+                    <td>จดทะเบียนเป็นนิติบุคคล แบ่งทุนเป็นหุ้นมูลค่าเท่ากัน ผู้ถือหุ้นรับผิดชอบจำกัดไม่เกินจำนวนเงินค่าหุ้นที่ต้องชำระ โดยระบุความประสงค์ไว้ใน <strong>หนังสือบริคณห์สนธิ</strong></td>
+                    <td><strong>บริษัทมหาชนจำกัด</strong> จัดตั้งขึ้นเพื่อเสนอขายหุ้นต่อประชาชนทั่วไป</td>
+                  </tr>
+                  <tr>
+                    <td><strong>4. สหกรณ์</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">Cooperation</span></td>
+                    <td><strong>ตั้งแต่ 10 คนขึ้นไป</strong></td>
+                    <td>คณะบุคคลที่มีอาชีพ ความต้องการ หรือความสนใจคล้ายคลึงกัน ร่วมกันจัดตั้งและจดทะเบียนตาม พ.ร.บ. สหกรณ์ แบ่งเป็น สหกรณ์จำกัด และ สหกรณ์ไม่จำกัด</td>
+                    <td>วัตถุประสงค์เพื่อส่งเสริมอาชีพและการครองชีพของสมาชิกให้ดีขึ้น ให้ประโยชน์ต่อสมาชิกและส่วนรวม</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 1.4 สภาพแวดล้อมทางธุรกิจ -->
+            <h4 class="learn-section-subtitle">🌐 1.4 สภาพแวดล้อมทางธุรกิจ (Business Environment)</h4>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+              สภาพแวดล้อมที่ส่งผลกระทบต่อการประกอบธุรกิจ แบ่งออกเป็น 2 ประเภทใหญ่ ๆ ดังนี้:
+            </p>
+
+            <div class="learn-grid-2">
+              <!-- Internal -->
+              <div class="learn-box-internal">
+                <div class="learn-factor-title" style="color: #0284c7;">
+                  <span>⚙️ 1. สภาพแวดล้อมภายใน</span>
+                  <span class="badge" style="background:#e0f2fe; color:#0369a1;">ควบคุมได้ (8 ปัจจัย)</span>
+                </div>
+                <ul class="learn-factor-list">
+                  <li><strong>บุคลากร:</strong> ผู้สร้างคุณภาพสินค้า/บริการ คัดเลือกคนมีความรู้ความสามารถ</li>
+                  <li><strong>เงินทุน:</strong> สร้างความคล่องตัว ต้องจัดหาแหล่งเงินทุนและบริหารให้ดี</li>
+                  <li><strong>วัตถุดิบ:</strong> เลือกคุณภาพดี ปริมาณเพียงพอ ลดต้นทุนผลิตเพื่อขายราคาถูก</li>
+                  <li><strong>เครื่องจักร:</strong> เพิ่มผลผลิต ลดปัญหาขาดแรงงาน ผลิตได้มาก เร็ว ได้มาตรฐาน</li>
+                  <li><strong>การจัดการ:</strong> นำทรัพยากรมาจัดการให้มีประสิทธิภาพ ลดต้นทุน</li>
+                  <li><strong>การตลาด:</strong> นำสินค้า/บริการสู่ลูกค้า สร้างความพึงพอใจและตัดสินใจซื้อ</li>
+                  <li><strong>ทำเล:</strong> สถานที่ดำเนินธุรกิจที่เหมาะสม เช่น โรงงานควรอยู่ใกล้แหล่งวัตถุดิบ</li>
+                  <li><strong>วัฒนธรรมองค์กร:</strong> ค่านิยม ความคิด ความเชื่อ ทัศนคติที่กำหนดพฤติกรรมคนในองค์กร</li>
+                </ul>
+              </div>
+
+              <!-- External -->
+              <div class="learn-box-external">
+                <div class="learn-factor-title" style="color: #ea580c;">
+                  <span>🌍 2. สภาพแวดล้อมภายนอก</span>
+                  <span class="badge" style="background:#ffedd5; color:#c2410c;">ควบคุมไม่ได้ (6 ปัจจัย)</span>
+                </div>
+                <ul class="learn-factor-list">
+                  <li><strong>สภาพเศรษฐกิจ:</strong> ต้องคาดคะเนล่วงหน้าเพื่อวางแผนปรับปรุงธุรกิจและลดความสูญเสีย</li>
+                  <li><strong>สภาพสังคมและวัฒนธรรม:</strong> กำหนดความเหมาะสมของสินค้า เช่น ช่วงปีใหม่ยอดขายกระเช้าของขวัญเพิ่ม</li>
+                  <li><strong>ภาวะทางกฎหมาย:</strong> กฎหมายที่ตราขึ้นเพื่อให้เกิดความยุติธรรม เช่น กฎหมายป้องกันการผูกขาด, กฎหมายแรงงาน</li>
+                  <li><strong>ภาวะทางการเมือง:</strong> ความไม่สงบ สงคราม การปฏิวัติ รัฐบาลขาดเสถียรภาพ ส่งผลต่อการลงทุนและอาจทำให้ขาดทุน</li>
+                  <li><strong>นวัตกรรมและเทคโนโลยี:</strong> เปลี่ยนแปลงตลอดเวลา เช่น ใช้ระบบสื่อสารเชื่อมโยงเครือข่ายช่วยซื้อขาย</li>
+                  <li><strong>ภัยธรรมชาติและโรคระบาด:</strong> เช่น อุทกภัย, โรคระบาด COVID-19 ทำให้ขาดทุนหรือปิดกิจการ</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Exam Tip FTA -->
+            <div class="learn-tip-box" data-ch="tips">
+              <div class="learn-tip-title">
+                <span>⚡ สาระน่ารู้เพิ่มเติม (ข้อสอบมักออกบ่อยมาก!):</span>
+              </div>
+              <p style="margin-bottom: 0.5rem; line-height: 1.55;">
+                <strong>เขตการค้าเสรี (Free Trade Area : FTA)</strong> คือ การรวมกลุ่มเศรษฐกิจเพื่อลดภาษีศุลกากรระหว่างประเทศสมาชิกให้เหลือน้อยที่สุดหรือเป็น <strong>0%</strong> และใช้อัตราภาษีปกติที่สูงกว่ากับประเทศนอกกลุ่ม
+              </p>
+              <p style="margin-bottom: 0; line-height: 1.55;">
+                <strong>ตัวอย่างเช่น เขตการค้าเสรีอาเซียน (AFTA)</strong> ซึ่งมีสมาชิกทั้งหมด <strong>10 ประเทศ</strong> ได้แก่ <em>ไทย, มาเลเซีย, ฟิลิปปินส์, อินโดนีเซีย, บรูไนดารุสซาลาม, สิงคโปร์, ลาว, กัมพูชา, เวียดนาม และเมียนมา</em>
+              </p>
+            </div>
+          </div>
+
+          <!-- ================= CHAPTER 2 ================= -->
+          <div class="learn-chapter-card" data-ch="ch2">
+            <span class="learn-chapter-badge" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">📈 บทที่ 2</span>
+            <h3 class="learn-chapter-title">วงจรชีวิตธุรกิจ (Business Life Cycle)</h3>
+            
+            <div class="learn-def-box" style="border-left-color: #10b981; background: rgba(16,185,129,0.06);">
+              <strong>📌 คำจำกัดความ:</strong> วงจรชีวิตธุรกิจ เป็นลำดับการเจริญเติบโตและการพัฒนาของธุรกิจ ซึ่งคล้ายกับวงจรชีวิตของระบบเศรษฐกิจหรือวงจรชีวิตผลิตภัณฑ์ (Product Life Cycle : PLC) ช่วยให้ผู้ประกอบการตัดสินใจแก้ไขสถานการณ์ได้อย่างมีประสิทธิภาพ
+            </div>
+
+            <!-- 2.1 ธุรกิจระยะต่าง ๆ -->
+            <h4 class="learn-section-subtitle">📊 2.1 ธุรกิจระยะต่าง ๆ (เรียงตามลำดับ 4 ระยะ)</h4>
+            <div class="learn-table-responsive">
+              <table class="learn-table">
+                <thead>
+                  <tr>
+                    <th style="width: 25%;">ระยะของธุรกิจ</th>
+                    <th style="width: 45%;">ลักษณะการบริหารและต้นทุน</th>
+                    <th style="width: 30%;">สถานการณ์ด้านตลาดและยอดขาย</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>1. ธุรกิจระยะเริ่มต้น</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">Introduction</span></td>
+                    <td>เริ่มจัดตั้งธุรกิจ มีการลงทุนสูง มุ่งใช้ทรัพยากรและเทคนิคในการผลิตอย่างมาก</td>
+                    <td>เป็นระยะการนำผลิตภัณฑ์ออกสู่ตลาด</td>
+                  </tr>
+                  <tr>
+                    <td><strong>2. ธุรกิจระยะสร้างตัว</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">Growth</span></td>
+                    <td>พัฒนาทิศทางและเป้าหมายชัดเจนขึ้น บริหารองค์กรอย่างเป็นระบบ <strong>ต้นทุนต่อหน่วยผลิตต่ำลง</strong></td>
+                    <td>ผู้บริโภคเริ่มรู้จักผลิตภัณฑ์และเลือกซื้อ ทำให้ยอดขายเพิ่มขึ้น</td>
+                  </tr>
+                  <tr>
+                    <td><strong>3. ธุรกิจระยะทรงตัว</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">Maturity</span></td>
+                    <td>กำหนดแนวทางปฏิบัติและสายบังคับบัญชาชัดเจน พัฒนานวัตกรรมใหม่ ๆ แต่อาจเกิดวิกฤติด้านการควบคุมและล่าช้าบ้าง</td>
+                    <td>มีการขยายส่วนแบ่งตลาด แต่ <strong>ทำยอดขายได้ช้าลงเนื่องจากมีคู่แข่งเกิดขึ้น</strong></td>
+                  </tr>
+                  <tr>
+                    <td><strong>4. ธุรกิจระยะตกต่ำหรือสูงขึ้น</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">Decline or Extension</span></td>
+                    <td>กลยุทธ์เดิมเริ่มไม่เหมาะสมกับสภาพแวดล้อม <em>หากปรับตัวเข้ากับสถานการณ์ได้จะกลายเป็นระยะที่สูงขึ้น</em></td>
+                    <td>พฤติกรรมผู้บริโภคเปลี่ยนไป ยอดขายลดลงเนื่องจากมีผลิตภัณฑ์ใหม่ในตลาดมากขึ้น</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 2.2 แนวทางการขยายวงจรชีวิตธุรกิจ -->
+            <h4 class="learn-section-subtitle">🚀 2.2 แนวทางการขยายวงจรชีวิตธุรกิจ (4 กลยุทธ์หลัก)</h4>
+            <div class="learn-strategy-grid">
+              
+              <div class="learn-strategy-card">
+                <h5>1. การขยายสู่ส่วนตลาดใหม่<br><span style="font-size:0.78rem; font-weight:normal; color:var(--text-muted);">Selling to New Segments</span></h5>
+                <p>เมื่อตลาดเป้าหมายเดิมอิ่มตัว ให้ขยายไปกลุ่มลูกค้าอื่นโดยระวังไม่ให้เสียตำแหน่งผลิตภัณฑ์ (Product Positioning)<br>
+                <strong>ตัวอย่าง:</strong> <em>ครีมโกนหนวดสำหรับผู้ชายการศึกษาสูง ขยายสู่กลุ่มลูกค้าทั่วไป</em></p>
+              </div>
+
+              <div class="learn-strategy-card">
+                <h5>2. การกระตุ้นความถี่ในการใช้<br><span style="font-size:0.78rem; font-weight:normal; color:var(--text-muted);">Stimulating More Frequent Use</span></h5>
+                <p>ส่งเสริมการขายกระตุ้นให้ผู้บริโภคใช้บ่อยขึ้นมากกว่าความจำเป็น<br>
+                <strong>ตัวอย่าง:</strong> <em>ค่ายมือถือลดราคาค่าโทรในช่วงเวลาต่าง ๆ ให้โทรบ่อยขึ้น</em></p>
+              </div>
+
+              <div class="learn-strategy-card">
+                <h5>3. สนับสนุนให้มีโอกาสใช้มากขึ้น<br><span style="font-size:0.78rem; font-weight:normal; color:var(--text-muted);">Encourage More Use Per Occasion</span></h5>
+                <p>กระตุ้นให้ใช้ในแต่ละครั้งนานขึ้นหรือปริมาณมากขึ้น<br>
+                <strong>ตัวอย่าง:</strong> <em>คิดค่าโทรสำหรับหมายเลขพิเศษถูกกว่าปกติ ทำให้ผู้ใช้โทรนานขึ้น</em></p>
+              </div>
+
+              <div class="learn-strategy-card">
+                <h5>4. ส่งเสริมให้ใช้ได้หลากหลาย<br><span style="font-size:0.78rem; font-weight:normal; color:var(--text-muted);">Promoting More Varied Use</span></h5>
+                <p>พัฒนาให้สินค้าใช้งานได้หลายรูปแบบนอกเหนือจากหน้าที่เดิม<br>
+                <strong>ตัวอย่าง:</strong> <em>คอมพิวเตอร์ในอดีตใช้คำนวณและจัดเอกสาร ปัจจุบันใช้เล่นอินเทอร์เน็ต ดูหนัง ฟังเพลง ถ่ายภาพ และตัดต่อภาพยนตร์</em></p>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- CTA to Start Quiz -->
+          <div class="learn-cta-box">
+            <h3>🎯 อ่านเนื้อหาครบถ้วนแล้ว พร้อมทดสอบความเข้าใจหรือยัง?</h3>
+            <p>ทดสอบความจำด้วยคลังข้อสอบ 50 ข้อ สลับช้อยส์ ก ข ค ง อัตโนมัติ พร้อมตรวจเฉลยละเอียดภาษาไทยทันที</p>
+            <button id="btn-learn-start-quiz" class="btn-primary" style="padding: 0.85rem 2rem; font-size: 1.05rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+              🚀 เริ่มทำแบบทดสอบทันที!
+            </button>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= TAB 4: SEARCH BANK ================= -->
+    <div id="tab-view-search" style="display: none;">
+      <section class="glass-card">
+        <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.4rem;">🔍 คลังค้นหาข้อสอบ & เฉลยละเอียด</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
+          ค้นหาข้อสอบจากคำสำคัญ (เช่น AFTA, รัฐวิสาหกิจ, ยาสูบ, วงจรชีวิต) เพื่อดูแนวข้อสอบและคำอธิบาย
+        </p>
+
+        <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+          <input type="text" id="search-input" placeholder="พิมพ์คำค้นหา เช่น รัฐวิสาหกิจ, ห้างหุ้นส่วน, FTA..." 
+            style="flex: 1; min-width: 200px; padding: 0.75rem 1rem; border: 2px solid var(--card-border); border-radius: var(--radius-sm); font-family: inherit; font-size: 1rem; background: transparent; color: var(--text-main);">
+          
+          <select id="search-difficulty-filter" style="padding: 0.75rem 1rem; border: 2px solid var(--card-border); border-radius: var(--radius-sm); font-family: inherit; font-size: 0.95rem; background: var(--card-bg); color: var(--text-main);">
+            <option value="all">ทุกระดับความยาก</option>
+            <option value="easy">เฉพาะระดับง่าย (พื้นฐาน)</option>
+            <option value="normal">เฉพาะระดับปานกลาง (ประยุกต์)</option>
+            <option value="hard">เฉพาะระดับยาก (ครอบคลุม)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <span id="search-result-count" style="font-weight: 700; color: var(--primary);">พบ 50 ข้อ</span>
+        </div>
+
+        <div id="search-results-list">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- ================= CUTE RESULT MODAL POPUP ================= -->
+  <div id="cute-result-modal" class="cute-modal-backdrop">
+    <div id="cute-result-card" class="cute-modal-card high-score">
+      <!-- Mascot Avatar -->
+      <div id="cute-mascot-badge" class="cute-mascot-badge">
+        🐱✨
+      </div>
+
+      <!-- Title & Score Pill -->
+      <h3 id="cute-modal-title" class="cute-modal-title">
+        งุ้ยยย เก่งมากเลยน้าา! 🎉✨
+      </h3>
+
+      <div id="cute-modal-score-pill" class="cute-modal-score-pill high">
+        <span>🏆</span> <span id="cute-modal-score-text">ได้ 18 / 20 ข้อ (90%)</span>
+      </div>
+
+      <p id="cute-modal-desc" class="cute-modal-desc">
+        คุณพร้อมสอบระดับดีเยี่ยมแล้ว น้อนภูมิใจในตัวคุณมาก ปรบมือให้รัว ๆ เลยยย 👏💖
+      </p>
+
+      <!-- Action Buttons inside Cute Modal -->
+      <div class="cute-modal-actions">
+        <button id="btn-cute-retry-wrong" class="btn-retry-wrong" style="display: none; padding: 0.85rem 1.25rem;">
+          🔁 ทำซ้ำเฉพาะข้อที่ผิด
+        </button>
+        <button id="btn-cute-view-review" class="btn-primary" style="padding: 0.85rem 1.25rem;">
+          👀 ตรวจคำตอบ & ดูเฉลยละเอียดทุกข้อ
+        </button>
+        <button id="btn-cute-retry-all" class="btn-secondary" style="justify-content: center; padding: 0.75rem;">
+          🔄 ทำแบบทดสอบใหม่อีกครั้ง
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CUTE EXIT CONFIRMATION MODAL ================= -->
+  <div id="cute-exit-modal" class="cute-modal-backdrop">
+    <div class="cute-modal-card exit-confirm">
+      <div class="cute-mascot-badge">
+        😿
+      </div>
+      <h3 class="cute-modal-title">
+        ต้องการออกจากข้อสอบใช่ไหม?
+      </h3>
+      <p class="cute-modal-desc">
+        หากกดออกตอนนี้ ข้อสอบรอบนี้จะไม่ถูกบันทึกน้า จะออกจริง ๆ หรือทำต่ออีกนิดดีนะ? 🥺💖
+      </p>
+      <div class="cute-modal-actions">
+        <button id="btn-confirm-exit" class="btn-primary" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+          🚪 ยืนยันออกจากข้อสอบ
+        </button>
+        <button id="btn-cancel-exit" class="btn-secondary" style="justify-content: center; padding: 0.8rem;">
+          💪 ทำต่ออีกนิด (ยกเลิก)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CUTE HOME CONFIRMATION MODAL ================= -->
+  <div id="cute-home-modal" class="cute-modal-backdrop">
+    <div class="cute-modal-card exit-confirm">
+      <div class="cute-mascot-badge" style="background: linear-gradient(135deg, #c7d2fe 0%, #818cf8 100%); border: 4px solid #fff;">
+        🏠✨
+      </div>
+      <h3 class="cute-modal-title">
+        กลับสู่หน้าแรก (Home)?
+      </h3>
+      <p class="cute-modal-desc">
+        คุณกำลังอยู่ในแบบทดสอบ หากกลับหน้าแรก ข้อสอบชุดนี้จะสิ้นสุดลง หรือคุณต้องการดูคู่มือวิธีใช้งานเว็บก่อนดีนะ? 🐱💖
+      </p>
+      <div class="cute-modal-actions">
+        <button id="btn-confirm-go-home" class="btn-primary" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
+          🏠 ยืนยันกลับหน้าแรก
+        </button>
+        <button id="btn-home-view-tutorial" class="btn-secondary" style="justify-content: center; padding: 0.8rem; border-color: var(--primary); color: var(--primary);">
+          📖 ดูวิธีใช้งานเว็บไซต์ (Tutorial)
+        </button>
+        <button id="btn-cancel-go-home" class="btn-secondary" style="justify-content: center; padding: 0.8rem;">
+          💪 ทำข้อสอบต่อ (ยกเลิก)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question Palette Modal -->
+  <div id="palette-modal" class="palette-modal">
+    <div class="palette-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.15rem; font-weight: 800;">📋 กระดานภาพรวมข้อสอบทั้งหมด</h3>
+        <button id="btn-close-palette" class="icon-btn" style="border: none;">✕</button>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+        คลิกที่หมายเลขข้อเพื่อกระโดดไปยังข้อนั้นทันที
+      </p>
+
+      <div id="palette-grid" class="palette-grid">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div style="display: flex; gap: 1rem; font-size: 0.8rem; color: var(--text-muted); flex-wrap: wrap; margin-top: 0.75rem;">
+        <span>🟩 ตอบถูก</span>
+        <span>🟥 ตอบผิด</span>
+        <span>🟦 กำลังทำ/เลือกแล้ว</span>
+        <span>⭐ ติดดาวไว้</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= STEP-BY-STEP ONBOARDING WIZARD MODAL ================= -->
+  <div id="wizard-modal" class="wizard-modal-backdrop">
+    <div class="wizard-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+        <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary);">✨ ยินดีต้อนรับสู่ BizExam</span>
+        <button id="btn-close-wizard" class="icon-btn" style="border: none; width: 32px; height: 32px;">✕</button>
+      </div>
+
+      <!-- Step Indicators -->
+      <div class="wizard-step-indicator">
+        <div id="wizard-dot-1" class="wizard-step-dot active"></div>
+        <div id="wizard-dot-2" class="wizard-step-dot"></div>
+        <div id="wizard-dot-3" class="wizard-step-dot"></div>
+      </div>
+
+      <!-- STEP 1: Device Selection -->
+      <div id="wizard-step-1" class="wizard-step-content active">
+        <div class="wizard-header">
+          <div class="wizard-mascot">📱💻</div>
+          <h3 class="cute-modal-title">คุณกำลังใช้งานผ่านอุปกรณ์ใด?</h3>
+          <p class="cute-modal-desc">ระบบจะปรับแต่งขนาดปุ่มและรูปแบบการแสดงผลให้เหมาะสมที่สุด</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 1rem;">
+          <div class="option-card wizard-device-card active" data-device="mobile">
+            <div style="font-size: 2rem; text-align: center; margin-bottom: 0.25rem;">📱</div>
+            <div class="option-card-title" style="justify-content: center;">สมาร์ตโฟน (Mobile)</div>
+            <div class="option-card-desc" style="text-align: center;">ปุ่มสัมผัสขนาดใหญ่พิเศษ ป้องกันการกดพลาด</div>
+          </div>
+
+          <div class="option-card wizard-device-card" data-device="pc">
+            <div style="font-size: 2rem; text-align: center; margin-bottom: 0.25rem;">💻</div>
+            <div class="option-card-title" style="justify-content: center;">คอมพิวเตอร์ (PC / Laptop)</div>
+            <div class="option-card-desc" style="text-align: center;">รองรับคีย์ลัด 1-4, Enter, Esc เต็มรูปแบบ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Difficulty Selection -->
+      <div id="wizard-step-2" class="wizard-step-content">
+        <div class="wizard-header">
+          <div class="wizard-mascot">⚡🎯</div>
+          <h3 class="cute-modal-title">เลือกระดับความยากที่ต้องการติว</h3>
+          <p class="cute-modal-desc">ข้อสอบทั้งหมด 50 ข้อ แบ่งออกเป็น 3 ชุดตามความลึก</p>
+        </div>
+
+        <div class="config-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 1rem;">
+          <div class="option-card wizard-diff-card active" data-diff="all">
+            <div class="option-card-title">🌟 รวมทุกระดับ (50 ข้อ)</div>
+            <div class="option-card-desc">สุ่มรวมครบทุกประเด็น</div>
+          </div>
+          <div class="option-card wizard-diff-card" data-diff="easy">
+            <div class="option-card-title">🟢 ง่าย - พื้นฐาน (10 ข้อ)</div>
+            <div class="option-card-desc">ชุดที่ 1: ลักษณะธุรกิจ, รัฐวิสาหกิจ</div>
+          </div>
+          <div class="option-card wizard-diff-card" data-diff="normal">
+            <div class="option-card-title">🟡 ปานกลาง - ประยุกต์ (20 ข้อ)</div>
+            <div class="option-card-desc">ชุดที่ 2: สภาพแวดล้อม, วงจรชีวิต</div>
+          </div>
+          <div class="option-card wizard-diff-card" data-diff="hard">
+            <div class="option-card-title">🔴 ยาก - ครอบคลุม (20 ข้อ)</div>
+            <div class="option-card-desc">ชุดที่ 3: วิเคราะห์โจทย์เชิงลึก</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Count, Mode, and Start -->
+      <div id="wizard-step-3" class="wizard-step-content">
+        <div class="wizard-header">
+          <div class="wizard-mascot">🎲⏱️</div>
+          <h3 class="cute-modal-title">จำนวนข้อและรูปแบบการติว</h3>
+          <p class="cute-modal-desc">ระบบจะสุ่มคำถามและสุ่มตำแหน่งช้อยส์ ก ข ค ง ใหม่ทั้งหมด!</p>
+        </div>
+
+        <!-- Count selection -->
+        <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.45rem;">เลือกจำนวนข้อ:</div>
+        <div class="number-pills" style="margin-bottom: 1.25rem;">
+          <button class="number-pill wizard-count-pill" data-count="5">5 ข้อ</button>
+          <button class="number-pill wizard-count-pill" data-count="10">10 ข้อ</button>
+          <button class="number-pill wizard-count-pill active" data-count="20">20 ข้อ</button>
+          <button class="number-pill wizard-count-pill" data-count="all">ทั้งหมด</button>
+        </div>
+
+        <!-- Mode selection -->
+        <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.45rem;">เลือกโหมดการทำ:</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem;">
+          <div class="option-card wizard-mode-card active" data-mode="practice">
+            <div class="option-card-title">💡 โหมดฝึกทบทวน</div>
+            <div class="option-card-desc">เฉลยทันที พร้อมคำอธิบายละเอียด</div>
+          </div>
+          <div class="option-card wizard-mode-card" data-mode="exam">
+            <div class="option-card-title">⏱️ โหมดจำลองสอบจริง</div>
+            <div class="option-card-desc">จับเวลา สรุปผลคะแนนตอนจบ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wizard Navigation Buttons -->
+      <div class="wizard-nav-buttons">
+        <button id="btn-wizard-prev" class="btn-secondary" style="visibility: hidden;">
+          ← ย้อนกลับ
+        </button>
+        <button id="btn-wizard-next" class="btn-primary" style="width: auto; padding: 0.65rem 1.75rem;">
+          ถัดไป →
+        </button>
+        <button id="btn-wizard-start" class="btn-primary" style="display: none; width: auto; padding: 0.65rem 1.75rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+          🚀 เริ่มทำข้อสอบทันที!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TUTORIAL MODAL (คู่มือวิธีใช้งานเว็บ) ================= -->
+  <div id="tutorial-modal" class="cute-modal-backdrop">
+    <div class="cute-modal-card tutorial-modal-card">
+      <button id="btn-close-tutorial-x" class="modal-close-corner" title="ปิดหน้าต่าง">✕</button>
+      
+      <!-- Tutorial Header -->
+      <div class="tutorial-header">
+        <div class="tutorial-badge-icon">
+          <img src="logo.svg" alt="BizExam" class="tutorial-logo-img">
+        </div>
+        <h3 class="cute-modal-title" style="margin-top: 0.35rem; font-size: 1.35rem;">📖 วิธีใช้งานเว็บ BizExam</h3>
+        <p class="cute-modal-desc" style="margin-bottom: 0.75rem;">คู่มือเตรียมตัวสอบการประกอบธุรกิจ ม.5 แบบเข้าใจง่ายใน 1 นาที</p>
+      </div>
+
+      <!-- Tutorial Step Tabs -->
+      <div class="tutorial-nav-tabs">
+        <button class="tutorial-tab-btn active" data-step="1">🌟 1. ภาพรวมเว็บ</button>
+        <button class="tutorial-tab-btn" data-step="2">📖 2. อ่านก่อนสอบ (Learn)</button>
+        <button class="tutorial-tab-btn" data-step="3">🧙‍♂️ 3. สเต็ปตั้งค่า</button>
+        <button class="tutorial-tab-btn" data-step="4">💡 4. ฝึกทำ & เฉลยละเอียด</button>
+        <button class="tutorial-tab-btn" data-step="5">⏱️ 5. โหมดจำลองสอบจริง</button>
+        <button class="tutorial-tab-btn" data-step="6">🏠 6. ปุ่ม Home (ไอคอนนี้)</button>
+        <button class="tutorial-tab-btn" data-step="7">🗂️ 7. แฟลชการ์ด & ค้นหา</button>
+        <button class="tutorial-tab-btn" data-step="8">🔁 8. ซ่อมข้อที่ผิด</button>
+      </div>
+
+      <!-- Tutorial Step Contents -->
+      <div class="tutorial-body">
+        <!-- Step 1: Overview -->
+        <div id="tutorial-step-1" class="tutorial-step-pane active">
+          <div class="tutorial-card-box">
+            <h4>🌟 1. ภาพรวมเว็บไซต์ & แถบเมนูทั้ง 4 เมนู</h4>
+            <p>BizExam Reviewer ออกแบบมาเพื่อช่วยให้นักเรียน ม.5 เตรียมความพร้อมก่อนสอบจริงอย่างมั่นใจ ประกอบด้วย 4 เครื่องมือหลัก:</p>
+            <ul class="tutorial-list">
+              <li>📝 <strong>ทำข้อสอบ:</strong> คลังข้อสอบ 50 ข้อ เลือกระดับความยากได้ พร้อมตรวจคำตอบและจับเวลา</li>
+              <li>📖 <strong>อ่านสรุปก่อนสอบ (Learn):</strong> เอกสารสรุป 2 บทเรียนเข้มข้น (องค์กรธุรกิจ และ วงจรชีวิตธุรกิจ) พร้อมตารางเปรียบเทียบ</li>
+              <li>🗂️ <strong>แฟลชการ์ด (Flashcards):</strong> บัตรคำศัพท์ 50 ข้อ แตะเพื่อพลิกดูเฉลยและเหตุผล</li>
+              <li>🔍 <strong>ค้นหาข้อสอบ:</strong> ค้นหาโจทย์หรือคำสำคัญที่ต้องการทบทวนได้ทันที</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 2: Tab Learn -->
+        <div id="tutorial-step-2" class="tutorial-step-pane">
+          <div class="tutorial-card-box">
+            <h4>📖 2. แท็บอ่านสรุปก่อนสอบ (Tab Learn)</h4>
+            <p>ก่อนเริ่มทำแบบทดสอบ แนะนำให้อ่านสรุปเนื้อหาเข้มข้น 2 บทหลักตามเอกสารทบทวนเตรียมสอบ:</p>
+            <ul class="tutorial-list">
+              <li>🏛️ <strong>บทที่ 1: องค์กรธุรกิจ:</strong> ประเภทธุรกิจ 3 ด้าน, จุดมุ่งหมายรัฐวิสาหกิจ 5 ประการ vs เอกชน 4 ประการ, ตารางเปรียบเทียบ 4 รูปแบบธุรกิจ, และสภาพแวดล้อมภายใน 8 ปัจจัย vs ภายนอก 6 ปัจจัย (FTA/AFTA)</li>
+              <li>📈 <strong>บทที่ 2: วงจรชีวิตธุรกิจ:</strong> 4 ระยะของธุรกิจ (เริ่มต้น ➔ สร้างตัว ➔ ทรงตัว ➔ ตกต่ำหรือสูงขึ้น) และ 4 กลยุทธ์หลักในการขยายวงจรชีวิต</li>
+              <li>⚡ <strong>ตัวกรอง & ค้นหาในบทสรุป:</strong> มีปุ่มเลือกดูเฉพาะบทที่ต้องการ และช่องค้นหาคำศัพท์ในบทเรียนได้ทันที</li>
+            </ul>
+            <div class="tutorial-tip">
+              <strong>💡 ทริค:</strong> ในหน้าแรก จะมีกล่องแนะนำ <em>"ยังไม่มั่นใจ? อ่านสรุปบทเรียนเข้มข้นก่อนเริ่มสอบ"</em> กดเพื่อข้ามมาอ่านได้ทันที!
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Setup Wizard -->
+        <div id="tutorial-step-3" class="tutorial-step-pane">
+          <div class="tutorial-card-box">
+            <h4>🧙‍♂️ 3. การตั้งค่า & ตัวช่วยสเต็ปวิซาร์ด (Wizard)</h4>
+            <p>คุณสามารถตั้งค่าการสอบได้ตามระดับความพร้อม:</p>
+            <ul class="tutorial-list">
+              <li>📱 <strong>สเต็ป 1 (อุปกรณ์):</strong> เลือกว่าใช้งานผ่านมือถือหรือคอมพิวเตอร์ ระบบจะปรับขนาดปุ่มให้กดง่ายที่สุด</li>
+              <li>⚡ <strong>สเต็ป 2 (ระดับความยาก):</strong>
+                <br>• 🟢 ง่าย (10 ข้อ): พื้นฐาน ลักษณะธุรกิจ รัฐวิสาหกิจ
+                <br>• 🟡 ปานกลาง (20 ข้อ): ประยุกต์ สภาพแวดล้อม วงจรชีวิต
+                <br>• 🔴 ยาก (20 ข้อ): วิเคราะห์โจทย์เชิงลึก กฎหมาย
+                <br>• 🌟 รวมทุกระดับ (50 ข้อ): สุ่มครบทุกประเด็น
+              </li>
+              <li>🎲 <strong>สเต็ป 3 (จำนวนข้อ & โหมด):</strong> เลือกทำ 5, 10, 20 หรือทั้งหมด และเลือกโหมดฝึกทำ หรือจำลองสอบจริง</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 4: Practice & Locked Next -->
+        <div id="tutorial-step-4" class="tutorial-step-pane">
+          <div class="tutorial-card-box">
+            <h4>💡 4. โหมดฝึกทบทวน & ระบบล็อคปุ่มถัดไป</h4>
+            <ul class="tutorial-list">
+              <li>⚡ <strong>ตรวจคำตอบทันที:</strong> เมื่อแตะตัวเลือก ก, ข, ค, ง ระบบจะแสดงสีเขียว (ถูก) หรือ สีแดง (ผิด) ทันที</li>
+              <li>📖 <strong>เฉลยละเอียดภาษาไทย:</strong> มีกล่องอธิบายเหตุผล กฎหมาย และหลักการธุรกิจประกอบทุกข้อ</li>
+              <li>🔒 <strong>ปุ่ม 'ข้อถัดไป' ถูกล็อค:</strong> ต้องคลิกเลือกช้อยส์ก่อน ปุ่มจึงจะปลดล็อค ป้องกันการกดข้ามโดยไม่ตั้งใจ</li>
+              <li>🔀 <strong>สลับช้อยส์อัตโนมัติ:</strong> ตัวเลือก ก ข ค ง จะสุ่มสลับตำแหน่งใหม่ทุกครั้งที่เริ่มสอบ ป้องกันการจำตำแหน่งข้อ</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 5: Exam Simulation -->
+        <div id="tutorial-step-5" class="tutorial-step-pane">
+          <div class="tutorial-card-box">
+            <h4>⏱️ 5. โหมดจำลองสอบจริง (Exam Simulation)</h4>
+            <ul class="tutorial-list">
+              <li>⏳ <strong>จับเวลานับถอยหลัง:</strong> ช่วยฝึกบริหารความเร็วในการทำข้อสอบให้ทันเวลา</li>
+              <li>🤫 <strong>ไม่สปอยล์คำตอบ:</strong> ระบบจะไม่เฉลยระหว่างทำ เพื่อจำลองบรรยากาศห้องสอบจริง</li>
+              <li>📋 <strong>กระดานข้อสอบ (Palette):</strong> กดปุ่ม 'กระดานข้อ' ด้านบนเพื่อเช็กสถานะข้อที่ตอบแล้วหรือยังไม่ได้ตอบ</li>
+              <li>🏁 <strong>ตัดเกรดสรุปผล:</strong> เมื่อกดส่งข้อสอบ ระบบจะวิเคราะห์คะแนนและประเมินผลอย่างละเอียด</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 6: Spotlight Home Button -->
+        <div id="tutorial-step-6" class="tutorial-step-pane">
+          <div class="tutorial-card-box highlight-home-box">
+            <div style="display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.75rem;">
+              <div class="home-icon-spotlight">
+                <img src="logo.svg" alt="Home Button" style="width: 52px; height: 52px; border-radius: 14px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);">
+              </div>
+              <div>
+                <h4 style="margin: 0; color: var(--primary);">🏠 ปุ่ม Home (ไอคอนหนังสือสีม่วง)</h4>
+                <span class="badge" style="background: #e0e7ff; color: #4338ca; font-size: 0.75rem;">กลับหน้าแรกได้ตลอดเวลา!</span>
+              </div>
+            </div>
+            <p><strong>คุณสามารถแตะที่ไอคอนนี้ได้ทุกเมื่อ เพื่อกลับสู่หน้าแรก:</strong></p>
+            <ul class="tutorial-list">
+              <li>📍 <strong>เข้าถึงได้ตลอดเวลา:</strong> ไอคอนจะอยู่ที่มุมบนซ้ายของแถบเมนูเสมอ ไม่ว่าจะอยู่หน้าไหน</li>
+              <li>⏱️ <strong>มีปุ่มในแถบทำข้อสอบ:</strong> ในระหว่างทำข้อสอบหรือทบทวน แถบด้านบนจะมีปุ่ม <code>🏠 หน้าแรก</code> ให้กดได้ทันที</li>
+              <li>🛡️ <strong>ป้องกันการกดพลาด:</strong> หากอยู่ในระหว่างทำข้อสอบ ระบบจะแสดงป๊อปอัปยืนยันก่อน เพื่อไม่ให้เสียความคืบหน้าโดยไม่ตั้งใจ</li>
+              <li>📖 <strong>เข้าดูคู่มือนี้ได้ตลอด:</strong> เมื่อกดปุ่ม Home จะมีตัวเลือกให้เปิดดูคู่มือวิธีใช้งานนี้ได้ทุกเมื่อ</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 7: Flashcards & Search -->
+        <div id="tutorial-step-7" class="tutorial-step-pane">
+          <div class="tutorial-card-box">
+            <h4>🗂️ 7. แฟลชการ์ดช่วยจำ & คลังค้นหาข้อสอบ</h4>
+            <ul class="tutorial-list">
+              <li>🗂️ <strong>แฟลชการ์ด (Flashcards):</strong> แตะการ์ดเพื่อพลิกดูเฉลย มีปุ่มติ๊ก <code>✓ จำได้แล้ว</code> เพื่อคัดกรองข้อที่จำได้แล้วออก</li>
+              <li>🔀 <strong>สับการ์ดสุ่ม:</strong> กดปุ่มสับเปลี่ยนลำดับการ์ด เพื่อไม่ให้จำตำแหน่ง</li>
+              <li>🔍 <strong>คลังค้นหาข้อสอบ:</strong> ค้นหาคีย์เวิร์ด เช่น "ห้างหุ้นส่วน", "งบการเงิน", "AFTA", "PLC" เพื่อทบทวนข้อสอบเฉพาะเรื่องแบบตรงจุด</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 8: Results & Smart Retry -->
+        <div id="tutorial-step-8" class="tutorial-step-pane">
+          <div class="tutorial-card-box">
+            <h4>🔁 8. ระบบประเมินคะแนน & ซ่อมข้อผิด (Smart Retry)</h4>
+            <p>เมื่อทำแบบทดสอบจบ ระบบจะประเมินคะแนนพร้อมป๊อปอัปน่ารัก:</p>
+            <ul class="tutorial-list">
+              <li>🎉 <strong>คะแนนสูง (≥70%):</strong> แมวน้อยร่วมฉลองด้วยเอฟเฟกต์ Confetti 🐱✨</li>
+              <li>🥺 <strong>คะแนนน้อย (&lt;70%):</strong> ป๊อปอัปให้กำลังใจ พร้อมปุ่ม <code>🔁 ทำซ้ำเฉพาะข้อที่ผิด</code></li>
+              <li>🎯 <strong>ฝึกจนได้ 100%:</strong> เมื่อกดทำซ้ำ ระบบจะดึงเฉพาะข้อที่คุณตอบผิดมาให้ฝึกใหม่ จนกว่าจะผ่านทุกข้ออย่างมั่นใจ!</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tutorial Modal Actions -->
+      <div class="cute-modal-actions" style="margin-top: 1rem;">
+        <div style="display: flex; gap: 0.5rem; justify-content: space-between;">
+          <button id="btn-tutorial-prev-step" class="btn-secondary" style="flex: 1; justify-content: center;">
+            ← ก่อนหน้า
+          </button>
+          <button id="btn-tutorial-next-step" class="btn-primary" style="flex: 1; justify-content: center;">
+            ถัดไป →
+          </button>
+        </div>
+        <button id="btn-tutorial-start-now" class="btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); justify-content: center; padding: 0.75rem;">
+          🚀 เริ่มทำข้อสอบทันที!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="questions_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
