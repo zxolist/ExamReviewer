@@ -1,0 +1,9 @@
+git remote add origin https://github.com/zxolist/ExamReviewer.git
+git push -u origin main
+
+
+----- when update -----
+
+git add .
+git commit -m "update website"
+git push

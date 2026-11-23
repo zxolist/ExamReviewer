@@ -1,4 +1,4 @@
-// BizExam Engine - app.js
+// RywReviewer Engine - app.js
 // Production-Ready Exam Review Web Application
 
 class ExamApp {
@@ -7,7 +7,7 @@ class ExamApp {
     this.quizQuestions = [];
     this.currentIndex = 0;
     this.userAnswers = {}; // { [qId]: { selected: number, isCorrect: boolean } }
-    this.bookmarkedIds = new Set(JSON.parse(localStorage.getItem('bizexam_bookmarks') || '[]'));
+    this.bookmarkedIds = new Set(JSON.parse(localStorage.getItem('rywreviewer_bookmarks') || localStorage.getItem('bizexam_bookmarks') || '[]'));
     this.eliminatedChoices = {}; // { [qId]: Set of eliminated indices }
     this.streakCount = 0;
     this.maxStreak = 0;
@@ -62,7 +62,7 @@ class ExamApp {
 
     // First time visitor check: open Step Wizard automatically only on first visit
     setTimeout(() => {
-      const hasOnboarded = localStorage.getItem('bizexam_onboarded_v2');
+      const hasOnboarded = localStorage.getItem('rywreviewer_onboarded_v2') || localStorage.getItem('bizexam_onboarded_v2');
       if (!hasOnboarded) {
         this.openWizard();
       }
@@ -814,7 +814,7 @@ class ExamApp {
   }
 
   finishWizardAndStart() {
-    localStorage.setItem('bizexam_onboarded_v2', 'true');
+    localStorage.setItem('rywreviewer_onboarded_v2', 'true');
 
     // Sync wizard selections to app config
     this.config.difficulty = this.wizardState.difficulty;
@@ -1170,7 +1170,7 @@ class ExamApp {
     } else {
       this.bookmarkedIds.add(q.id);
     }
-    localStorage.setItem('bizexam_bookmarks', JSON.stringify([...this.bookmarkedIds]));
+    localStorage.setItem('rywreviewer_bookmarks', JSON.stringify([...this.bookmarkedIds]));
     this.playSound('click');
     this.renderQuestion();
   }
@@ -1511,7 +1511,7 @@ class ExamApp {
     const shareText = `📚 ผลการทำแบบทดสอบทบทวน: การประกอบธุรกิจ (ม.5)\n` +
       `🎯 ได้คะแนน: ${correct}/${total} (${pct}%)\n` +
       `⏱️ ใช้เวลา: ${this.metricTime.textContent}\n` +
-      `💡 มาฝึกทบทวนและทำซ้ำข้อที่ผิดได้ที่ BizExam Reviewer!`;
+      `💡 มาฝึกทบทวนและทำซ้ำข้อที่ผิดได้ที่ RywReviewer!`;
 
     navigator.clipboard.writeText(shareText).then(() => {
       alert("📋 คัดลอกผลคะแนนเรียบร้อยแล้ว! สามารถนำไปแชร์ใน LINE หรือส่งให้คุณครูได้เลยครับ");
@@ -1790,7 +1790,7 @@ class ExamApp {
   }
 
   loadTheme() {
-    const saved = localStorage.getItem('bizexam_theme') || 'light';
+    const saved = localStorage.getItem('rywreviewer_theme') || localStorage.getItem('bizexam_theme') || 'light';
     document.documentElement.setAttribute('data-theme', saved);
     this.updateThemeIcon(saved);
   }
@@ -1799,7 +1799,7 @@ class ExamApp {
     const current = document.documentElement.getAttribute('data-theme') || 'light';
     const next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('bizexam_theme', next);
+    localStorage.setItem('rywreviewer_theme', next);
     this.updateThemeIcon(next);
   }
 
