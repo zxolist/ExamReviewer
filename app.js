@@ -85,24 +85,28 @@ class ExamApp {
     this.updateSubjectMasteryUI();
     this.initFlashcardSwipe();
 
-    // Check first visit: prompt for nickname if never set
-    setTimeout(() => {
-      const hasNickname = localStorage.getItem('rywreviewer_nickname');
-      if (!hasNickname) {
-        this.openNicknameModal();
-      }
-    }, 450);
-
-    // First time visitor check: open Device Mode setting if never chosen
+    // First time visitor check: open Device Mode setting if never chosen, else ask nickname
     setTimeout(() => {
       const hasChosenDevice = localStorage.getItem('rywreviewer_device_mode');
+      const hasNickname = localStorage.getItem('rywreviewer_nickname');
       if (!hasChosenDevice) {
         this.openWizard();
+      } else if (!hasNickname) {
+        this.openNicknameModal();
       }
     }, 350);
   }
 
   initElements() {
+    // Nickname Modal Elements
+    this.nicknameModal = document.getElementById('nickname-modal');
+    this.nicknameInput = document.getElementById('nickname-input');
+    this.btnSaveNickname = document.getElementById('btn-save-nickname');
+    this.btnSkipNickname = document.getElementById('btn-skip-nickname');
+    this.btnCloseNickname = document.getElementById('btn-close-nickname');
+    this.btnHeroProfile = document.getElementById('btn-hero-profile');
+    this.playerProfileBadge = document.getElementById('player-profile-badge');
+
     // Device Settings Modal Elements
     this.wizardModal = document.getElementById('wizard-modal');
     this.btnCloseWizard = document.getElementById('btn-close-wizard');
@@ -242,6 +246,38 @@ class ExamApp {
   }
 
   bindEvents() {
+    // Nickname Modal bindings
+    if (this.nicknameModal) {
+      this.nicknameModal.addEventListener('click', (e) => {
+        if (e.target === this.nicknameModal) {
+          this.closeNicknameModal();
+        }
+      });
+    }
+    if (this.btnSaveNickname) {
+      this.btnSaveNickname.addEventListener('click', () => this.saveNickname());
+    }
+    if (this.btnSkipNickname) {
+      this.btnSkipNickname.addEventListener('click', () => this.closeNicknameModal());
+    }
+    if (this.btnCloseNickname) {
+      this.btnCloseNickname.addEventListener('click', () => this.closeNicknameModal());
+    }
+    if (this.btnHeroProfile) {
+      this.btnHeroProfile.addEventListener('click', () => this.openNicknameModal());
+    }
+    if (this.playerProfileBadge) {
+      this.playerProfileBadge.addEventListener('click', () => this.openNicknameModal());
+    }
+    if (this.nicknameInput) {
+      this.nicknameInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          this.saveNickname();
+        }
+      });
+    }
+
     // Theme toggle
     const themeBtn = document.getElementById('theme-toggle-btn');
     if (themeBtn) {
@@ -800,6 +836,9 @@ class ExamApp {
       this.wizardModal.classList.remove('active');
       this.wizardModal.style.display = 'none';
       try { this.playSound('click'); } catch (e) {}
+    }
+    if (!localStorage.getItem('rywreviewer_nickname')) {
+      setTimeout(() => this.openNicknameModal(), 200);
     }
   }
 
@@ -2359,6 +2398,66 @@ class ExamApp {
         this.navigateFlashcard(1);
       }
     });
+  }
+
+
+  // ==========================================
+  // NICKNAME & PROFILE SYSTEM
+  // ==========================================
+  openNicknameModal() {
+    const modal = document.getElementById('nickname-modal');
+    const input = document.getElementById('nickname-input');
+    if (modal) {
+      modal.style.display = 'flex';
+      modal.classList.add('active');
+      try { this.playSound('click'); } catch (e) {}
+    }
+    if (input) {
+      input.value = this.nickname && this.nickname !== 'ผู้สอบ' ? this.nickname : '';
+      setTimeout(() => input.focus(), 150);
+    }
+  }
+
+  closeNicknameModal() {
+    const modal = document.getElementById('nickname-modal');
+    if (modal) {
+      modal.classList.remove('active');
+      modal.style.display = 'none';
+      try { this.playSound('click'); } catch (e) {}
+    }
+  }
+
+  saveNickname(customName = null) {
+    const input = document.getElementById('nickname-input');
+    let name = customName !== null ? customName : (input ? input.value : '');
+    name = (name || '').trim();
+    if (!name) name = 'ผู้สอบ';
+
+    this.nickname = name;
+    localStorage.setItem('rywreviewer_nickname', this.nickname);
+    this.updateNicknameUI();
+    this.closeNicknameModal();
+    try { this.playSound('correct'); } catch (e) {}
+
+    // Floating Welcome Toast
+    try {
+      const toast = document.createElement('div');
+      toast.className = 'exp-floating-toast';
+      toast.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+      toast.innerHTML = `<span>👋 สวัสดีคุณ ${this.nickname}!</span>`;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        if (toast && toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 1900);
+    } catch (e) {}
+  }
+
+  updateNicknameUI() {
+    const displayName = this.nickname || 'ผู้สอบ';
+    const headerDisplay = document.getElementById('player-nickname-display');
+    const heroDisplay = document.getElementById('hero-nickname-display');
+    if (headerDisplay) headerDisplay.textContent = displayName;
+    if (heroDisplay) heroDisplay.textContent = displayName;
   }
 
 }
