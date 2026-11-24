@@ -2640,3 +2640,211 @@ body.pc-ui .app-main {
     font-size: 0.82rem;
   }
 }
+
+/* ==========================================================================
+   AURORA GLOW BACKGROUND & MODERN POLISH
+   ========================================================================== */
+[data-theme="dark"] body {
+  background-color: #0b0f19;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.14) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(217, 119, 6, 0.10) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.10) 0px, transparent 50%),
+    linear-gradient(135deg, #090d16 0%, #0f172a 50%, #161a29 100%);
+  background-attachment: fixed;
+}
+
+/* Micro-interaction scale on interactive elements */
+.btn-primary:active, 
+.btn-secondary:active, 
+.tool-btn:active, 
+.choice-btn:active, 
+.subject-pill-btn:active, 
+.option-card:active {
+  transform: scale(0.975);
+}
+
+/* Level & EXP Badge in Header */
+.player-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+[data-theme="dark"] .player-level-badge {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #c7d2fe;
+}
+.player-level-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.25);
+}
+.player-exp-bar {
+  width: 48px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+[data-theme="dark"] .player-exp-bar {
+  background: rgba(255, 255, 255, 0.15);
+}
+.player-exp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #10b981);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* Floating EXP Toast */
+.exp-floating-toast {
+  position: fixed;
+  top: 75px;
+  right: 20px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 800;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+  z-index: 999;
+  pointer-events: none;
+  animation: floatUpFade 1.8s forwards;
+}
+@keyframes floatUpFade {
+  0% { opacity: 0; transform: translateY(12px) scale(0.9); }
+  20% { opacity: 1; transform: translateY(0) scale(1.05); }
+  35% { transform: translateY(0) scale(1); }
+  80% { opacity: 1; transform: translateY(-8px); }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
+
+/* Subject Card Progress Bar */
+.subject-card-progress-wrap {
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--card-border);
+}
+.subject-progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+.subject-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+[data-theme="dark"] .subject-progress-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+.subject-progress-bar {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+/* Weak Spot Alert Banner */
+.weak-spot-banner {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(245, 158, 11, 0.08) 100%);
+  border: 1.5px solid rgba(239, 68, 68, 0.35);
+  border-radius: 16px;
+  padding: 0.85rem 1.15rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  animation: fadeIn 0.3s ease;
+}
+[data-theme="dark"] .weak-spot-banner {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.16) 0%, rgba(245, 158, 11, 0.12) 100%);
+  border-color: rgba(239, 68, 68, 0.45);
+}
+.weak-spot-text {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.weak-spot-icon {
+  font-size: 1.6rem;
+}
+.weak-spot-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+.weak-spot-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.btn-weak-spot-drill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.48rem 0.95rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  border: none;
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  transition: all 0.2s ease;
+}
+.btn-weak-spot-drill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+}
+
+/* Speedrun 60s Mode Styles */
+.speedrun-timer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.88rem;
+  animation: pulse 1s infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+/* Flashcard Swipe Gesture Classes */
+.flashcard.swiping-left {
+  transform: translateX(-80px) rotate(-8deg);
+  opacity: 0.65;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.flashcard.swiping-right {
+  transform: translateX(80px) rotate(8deg);
+  opacity: 0.65;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}

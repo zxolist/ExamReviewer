@@ -26,6 +26,7 @@ class ExamApp {
     this.eliminatedChoices = {}; // { [qId]: Set of eliminated indices }
     this.streakCount = 0;
     this.maxStreak = 0;
+    this.exp = parseInt(localStorage.getItem('rywreviewer_exp') || '0', 10);
 
     // Config state
     this.config = {
@@ -77,6 +78,10 @@ class ExamApp {
     this.initCheatSheet();
     this.initSearchBank();
     this.initSubjectSystem();
+    this.updateLevelUI();
+    this.updateWeakSpotUI();
+    this.updateSubjectMasteryUI();
+    this.initFlashcardSwipe();
 
     // First time visitor check: open Device Mode setting if never chosen
     setTimeout(() => {
@@ -231,6 +236,12 @@ class ExamApp {
     const themeBtn = document.getElementById('theme-toggle-btn');
     if (themeBtn) {
       themeBtn.addEventListener('click', () => this.toggleTheme());
+    }
+
+    // Weak spot drill button
+    const btnWeakSpot = document.getElementById('btn-weak-spot-drill');
+    if (btnWeakSpot) {
+      btnWeakSpot.addEventListener('click', () => this.startWeakSpotDrill());
     }
 
     // Tab Navigation
@@ -885,6 +896,34 @@ class ExamApp {
       this.updateTimerDisplay();
     }, 1000);
 
+    // Speedrun Mode setup
+    this.speedrunTimerContainer = document.getElementById('speedrun-timer-container');
+    this.speedrunSecondsEl = document.getElementById('speedrun-seconds');
+    if (this.speedrunInterval) {
+      clearInterval(this.speedrunInterval);
+      this.speedrunInterval = null;
+    }
+
+    if (this.config.mode === 'speedrun') {
+      this.speedrunSecondsLeft = 60;
+      if (this.speedrunTimerContainer) this.speedrunTimerContainer.style.display = 'inline-flex';
+      if (this.speedrunSecondsEl) this.speedrunSecondsEl.textContent = '60s';
+
+      this.speedrunInterval = setInterval(() => {
+        this.speedrunSecondsLeft--;
+        if (this.speedrunSecondsEl) {
+          this.speedrunSecondsEl.textContent = `${this.speedrunSecondsLeft}s`;
+        }
+        if (this.speedrunSecondsLeft <= 0) {
+          clearInterval(this.speedrunInterval);
+          this.speedrunInterval = null;
+          this.finishQuiz(true);
+        }
+      }, 1000);
+    } else {
+      if (this.speedrunTimerContainer) this.speedrunTimerContainer.style.display = 'none';
+    }
+
     // Switch View
     this.screenSetup.style.display = 'none';
     this.screenResult.style.display = 'none';
@@ -1044,8 +1083,12 @@ class ExamApp {
       navigator.vibrate(isCorrect ? [25] : [50, 40, 50]);
     }
 
-    // Sound & Streak feedback
+    // Track weak spot & subject stats
+    this.recordQuestionResult(q, isCorrect);
+
+    // Sound, EXP & Streak feedback
     if (isCorrect) {
+      this.gainExp(10, 'ตอบถูก!');
       this.streakCount++;
       if (this.streakCount > this.maxStreak) this.maxStreak = this.streakCount;
       if (this.streakCount >= 3) {
@@ -1060,6 +1103,20 @@ class ExamApp {
 
     this.updateUpperStats();
     this.renderQuestion();
+
+    // In Speedrun mode: Auto-advance after 220ms
+    if (this.config.mode === 'speedrun') {
+      setTimeout(() => {
+        if (!this.isSubmitted) {
+          if (this.currentIndex + 1 < this.quizQuestions.length) {
+            this.currentIndex++;
+            this.renderQuestion();
+          } else {
+            this.finishQuiz(true);
+          }
+        }
+      }, 220);
+    }
   }
 
   triggerFiftyFifty() {
@@ -1259,6 +1316,11 @@ class ExamApp {
     }
 
     if (this.timerInterval) clearInterval(this.timerInterval);
+    if (this.speedrunInterval) {
+      clearInterval(this.speedrunInterval);
+      this.speedrunInterval = null;
+    }
+    if (this.speedrunTimerContainer) this.speedrunTimerContainer.style.display = 'none';
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     this.isSubmitted = true;
     this.showResultScreen();
@@ -1354,6 +1416,22 @@ class ExamApp {
     }
 
     this.renderReviewList('all');
+
+    // EXP & Speedrun rewards
+    if (this.config.mode === 'speedrun') {
+      const bestSpeed = parseInt(localStorage.getItem('rywreviewer_speedrun_best') || '0', 10);
+      if (correct > bestSpeed) {
+        localStorage.setItem('rywreviewer_speedrun_best', correct.toString());
+        feedback = `⚡ นิวไฮสปีดรันใหม่! คุณตอบถูก ${correct} ข้อใน 60 วินาที ชนะสถิติเดิม (${bestSpeed} ข้อ) สมาธิดีเลิศ!`;
+      } else {
+        feedback = `⚡ สปีดรัน 60 วิ ทำได้ ${correct} ข้อ! (สถิติสูงสุดของคุณคือ ${bestSpeed} ข้อ)`;
+      }
+      this.gainExp(correct * 15 + 30, 'Speedrun 60s');
+    } else {
+      this.gainExp(50 + correct * 5, 'สอบเสร็จสิ้น!');
+    }
+    this.updateWeakSpotUI();
+    this.updateSubjectMasteryUI();
 
     // ================= POPUP CUTE MODAL =================
     setTimeout(() => {
@@ -1944,6 +2022,10 @@ class ExamApp {
 
     // Re-filter Search Bank
     this.filterSearchBank();
+
+    // Update Weak Spot and Subject Mastery UI
+    this.updateWeakSpotUI();
+    this.updateSubjectMasteryUI();
   }
 
   renderLessonPills() {
@@ -2027,11 +2109,253 @@ class ExamApp {
       }
     }
   }
+
+  // ==========================================
+  // LEVEL & GAMIFICATION SYSTEM
+  // ==========================================
+  gainExp(amount, label = '') {
+    const oldLevel = Math.floor(this.exp / 100) + 1;
+    this.exp += amount;
+    localStorage.setItem('rywreviewer_exp', this.exp.toString());
+    const newLevel = Math.floor(this.exp / 100) + 1;
+
+    // Show floating EXP toast
+    try {
+      const toast = document.createElement('div');
+      toast.className = 'exp-floating-toast';
+      toast.innerHTML = `<span>⭐ +${amount} EXP</span> ${label ? `<small style="font-size:0.75rem;opacity:0.9;">(${label})</small>` : ''}`;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        if (toast && toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 1800);
+    } catch (e) {}
+
+    // Level up celebration
+    if (newLevel > oldLevel) {
+      this.playSound('fanfare');
+      this.launchConfetti();
+      setTimeout(() => {
+        alert(`🎉 ยินดีด้วย! คุณเลเวลอัปเป็น Lv.${newLevel} เรียบร้อยแล้ว!\nสะสมความรู้เตรียมพร้อมเกรด 4 ได้อย่างยอดเยี่ยม`);
+      }, 300);
+    }
+
+    this.updateLevelUI();
+  }
+
+  updateLevelUI() {
+    const level = Math.floor(this.exp / 100) + 1;
+    const progress = this.exp % 100;
+    const levelEl = document.getElementById('player-level-text');
+    const fillEl = document.getElementById('player-exp-fill');
+    if (levelEl) levelEl.textContent = `⭐ Lv.${level}`;
+    if (fillEl) fillEl.style.width = `${progress}%`;
+  }
+
+  // ==========================================
+  // WEAK SPOT ANALYZER & DRILL
+  // ==========================================
+  recordQuestionResult(q, isCorrect) {
+    try {
+      const wrongBank = JSON.parse(localStorage.getItem('rywreviewer_wrong_bank') || '{}');
+      const stats = JSON.parse(localStorage.getItem('rywreviewer_stats') || '{}');
+
+      // Update question stats
+      if (!stats[q.id]) stats[q.id] = { correct: 0, wrong: 0, subject: q.subject || this.currentSubject };
+      if (isCorrect) {
+        stats[q.id].correct++;
+      } else {
+        stats[q.id].wrong++;
+      }
+      localStorage.setItem('rywreviewer_stats', JSON.stringify(stats));
+
+      // Update wrong bank
+      if (!isCorrect) {
+        wrongBank[q.id] = {
+          id: q.id,
+          subject: q.subject || this.currentSubject,
+          lesson: q.lesson || 1,
+          question: q.question,
+          choices: q.choices,
+          answer: q.answer,
+          explanation: q.explanation,
+          category: q.category,
+          difficulty: q.difficulty,
+          difficulty_label: q.difficulty_label,
+          wrongCount: (wrongBank[q.id]?.wrongCount || 0) + 1,
+          timestamp: Date.now()
+        };
+      } else {
+        // Mastered this question! Remove from wrong bank
+        if (wrongBank[q.id]) {
+          delete wrongBank[q.id];
+        }
+      }
+      localStorage.setItem('rywreviewer_wrong_bank', JSON.stringify(wrongBank));
+    } catch (e) {
+      console.warn("Storage error in recordQuestionResult:", e);
+    }
+
+    this.updateWeakSpotUI();
+    this.updateSubjectMasteryUI();
+  }
+
+  updateWeakSpotUI() {
+    const banner = document.getElementById('weak-spot-banner');
+    const countEl = document.getElementById('weak-spot-count');
+    if (!banner || !countEl) return;
+
+    try {
+      const wrongBank = JSON.parse(localStorage.getItem('rywreviewer_wrong_bank') || '{}');
+      const curSubj = this.currentSubject;
+      const wrongIds = Object.keys(wrongBank).filter(id => {
+        const item = wrongBank[id];
+        return !item.subject || item.subject === curSubj;
+      });
+
+      if (wrongIds.length > 0) {
+        banner.style.display = 'flex';
+        countEl.textContent = wrongIds.length.toString();
+      } else {
+        banner.style.display = 'none';
+      }
+    } catch (e) {
+      banner.style.display = 'none';
+    }
+  }
+
+  startWeakSpotDrill() {
+    try {
+      const wrongBank = JSON.parse(localStorage.getItem('rywreviewer_wrong_bank') || '{}');
+      const curSubj = this.currentSubject;
+      let wrongList = Object.values(wrongBank).filter(item => !item.subject || item.subject === curSubj);
+      
+      if (wrongList.length === 0) {
+        wrongList = Object.values(wrongBank);
+      }
+
+      if (wrongList.length === 0) {
+        alert("🎉 ยอดเยี่ยมมาก! คุณไม่มีข้อที่ตอบผิดสะสมอยู่เลยในขณะนี้ พร้อมสอบ 100%!");
+        return;
+      }
+
+      const drillQuestions = wrongList.map(item => {
+        const found = this.allQuestions.find(q => q.id === item.id);
+        if (found) return found;
+        return {
+          id: item.id,
+          question: item.question,
+          choices: item.choices || ['ก', 'ข', 'ค', 'ง'],
+          answer: item.answer !== undefined ? item.answer : 0,
+          answer_letter: ['ก', 'ข', 'ค', 'ง'][item.answer || 0],
+          explanation: item.explanation || 'ทบทวนหัวข้อนี้อย่างละเอียดเพื่อความแม่นยำ',
+          category: item.category || 'ติวซ่อมจุดอ่อน',
+          difficulty: item.difficulty || 'medium',
+          difficulty_label: item.difficulty_label || 'ปานกลาง'
+        };
+      });
+
+      this.config.mode = 'practice';
+      this.startQuiz(drillQuestions);
+    } catch (e) {
+      console.error("Error launching weak spot drill:", e);
+    }
+  }
+
+  updateSubjectMasteryUI() {
+    try {
+      const stats = JSON.parse(localStorage.getItem('rywreviewer_stats') || '{}');
+      const wrongBank = JSON.parse(localStorage.getItem('rywreviewer_wrong_bank') || '{}');
+
+      ['thurakid', 'history'].forEach(subKey => {
+        const subData = this.subjectsData[subKey];
+        if (!subData || !subData.questions) return;
+        const total = subData.questions.length;
+        
+        let mastered = 0;
+        subData.questions.forEach(q => {
+          if (stats[q.id] && stats[q.id].correct > 0 && !wrongBank[q.id]) {
+            mastered++;
+          }
+        });
+
+        const pct = total > 0 ? Math.round((mastered / total) * 100) : 0;
+        const textEl = document.getElementById(`subject-progress-text-${subKey}`);
+        const barEl = document.getElementById(`subject-progress-bar-${subKey}`);
+        if (textEl) textEl.textContent = `${pct}% (${mastered}/${total} ข้อ)`;
+        if (barEl) barEl.style.width = `${pct}%`;
+      });
+    } catch (e) {
+      console.warn("Error updating subject mastery:", e);
+    }
+  }
+
+  // ==========================================
+  // FLASHCARD TOUCH SWIPE GESTURES
+  // ==========================================
+  initFlashcardSwipe() {
+    const card = this.flashcardCard;
+    if (!card) return;
+
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let isSwiping = false;
+
+    card.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      currentX = startX;
+      isSwiping = true;
+    }, { passive: true });
+
+    card.addEventListener('touchmove', (e) => {
+      if (!isSwiping || e.touches.length !== 1) return;
+      currentX = e.touches[0].clientX;
+      const diffX = currentX - startX;
+      const diffY = e.touches[0].clientY - startY;
+
+      // Only track distinct horizontal swipe
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 15) {
+        if (diffX < 0) {
+          card.classList.add('swiping-left');
+          card.classList.remove('swiping-right');
+        } else {
+          card.classList.add('swiping-right');
+          card.classList.remove('swiping-left');
+        }
+      }
+    }, { passive: true });
+
+    card.addEventListener('touchend', (e) => {
+      if (!isSwiping) return;
+      isSwiping = false;
+      const diffX = currentX - startX;
+      card.classList.remove('swiping-left', 'swiping-right');
+
+      if (diffX < -60) {
+        // Swipe Left: Review again -> Advance next
+        this.playSound('click');
+        this.navigateFlashcard(1);
+      } else if (diffX > 60) {
+        // Swipe Right: Mastered!
+        const q = this.allQuestions[this.flashcardIndex];
+        if (q && !this.flashcardMastered.has(q.id)) {
+          this.flashcardMastered.add(q.id);
+          this.gainExp(5, 'จำการ์ดได้แล้ว');
+          this.playSound('correct');
+        }
+        this.navigateFlashcard(1);
+      }
+    });
+  }
+
 }
 
 // Instantiate on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
   window.app = new ExamApp();
+  window.examApp = window.app;
   window.app.updateAvailableCounts();
 
   // Support direct URL parameters for deep-linking & previews (e.g. ?mode=learn, ?mode=quiz)

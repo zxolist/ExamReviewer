@@ -2663,6 +2663,214 @@ body.pc-ui .app-main {
   }
 }
 
+/* ==========================================================================
+   AURORA GLOW BACKGROUND & MODERN POLISH
+   ========================================================================== */
+[data-theme="dark"] body {
+  background-color: #0b0f19;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.14) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(217, 119, 6, 0.10) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.10) 0px, transparent 50%),
+    linear-gradient(135deg, #090d16 0%, #0f172a 50%, #161a29 100%);
+  background-attachment: fixed;
+}
+
+/* Micro-interaction scale on interactive elements */
+.btn-primary:active, 
+.btn-secondary:active, 
+.tool-btn:active, 
+.choice-btn:active, 
+.subject-pill-btn:active, 
+.option-card:active {
+  transform: scale(0.975);
+}
+
+/* Level & EXP Badge in Header */
+.player-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+[data-theme="dark"] .player-level-badge {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #c7d2fe;
+}
+.player-level-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.25);
+}
+.player-exp-bar {
+  width: 48px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+[data-theme="dark"] .player-exp-bar {
+  background: rgba(255, 255, 255, 0.15);
+}
+.player-exp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #10b981);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* Floating EXP Toast */
+.exp-floating-toast {
+  position: fixed;
+  top: 75px;
+  right: 20px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 800;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+  z-index: 999;
+  pointer-events: none;
+  animation: floatUpFade 1.8s forwards;
+}
+@keyframes floatUpFade {
+  0% { opacity: 0; transform: translateY(12px) scale(0.9); }
+  20% { opacity: 1; transform: translateY(0) scale(1.05); }
+  35% { transform: translateY(0) scale(1); }
+  80% { opacity: 1; transform: translateY(-8px); }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
+
+/* Subject Card Progress Bar */
+.subject-card-progress-wrap {
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--card-border);
+}
+.subject-progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+.subject-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+[data-theme="dark"] .subject-progress-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+.subject-progress-bar {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+/* Weak Spot Alert Banner */
+.weak-spot-banner {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(245, 158, 11, 0.08) 100%);
+  border: 1.5px solid rgba(239, 68, 68, 0.35);
+  border-radius: 16px;
+  padding: 0.85rem 1.15rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  animation: fadeIn 0.3s ease;
+}
+[data-theme="dark"] .weak-spot-banner {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.16) 0%, rgba(245, 158, 11, 0.12) 100%);
+  border-color: rgba(239, 68, 68, 0.45);
+}
+.weak-spot-text {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.weak-spot-icon {
+  font-size: 1.6rem;
+}
+.weak-spot-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+.weak-spot-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.btn-weak-spot-drill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.48rem 0.95rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  border: none;
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  transition: all 0.2s ease;
+}
+.btn-weak-spot-drill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+}
+
+/* Speedrun 60s Mode Styles */
+.speedrun-timer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.88rem;
+  animation: pulse 1s infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+/* Flashcard Swipe Gesture Classes */
+.flashcard.swiping-left {
+  transform: translateX(-80px) rotate(-8deg);
+  opacity: 0.65;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.flashcard.swiping-right {
+  transform: translateX(80px) rotate(8deg);
+  opacity: 0.65;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
 </style>
   <!-- Critical CSS for Subject Selector and Device Mode (Bypasses any CDN cache) -->
   <style>
@@ -2842,8 +3050,14 @@ body.pc-ui .app-main {
         </button>
       </nav>
 
-      <!-- Action Icons -->
+      <!-- Action Icons & Player Level -->
       <div class="header-actions">
+        <div id="player-level-badge" class="player-level-badge" title="ระดับผู้ใช้และ EXP สะสม">
+          <span id="player-level-text">⭐ Lv.1</span>
+          <div class="player-exp-bar" title="EXP สะสมเพื่อเลเวลอัป">
+            <div id="player-exp-fill" class="player-exp-fill" style="width: 0%;"></div>
+          </div>
+        </div>
         <button id="btn-open-tutorial" class="btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.82rem;" title="ดูคู่มือวิธีใช้งานเว็บไซต์ (Tutorial)">
           <span>📖 วิธีใช้งาน</span>
         </button>
@@ -2901,6 +3115,11 @@ body.pc-ui .app-main {
         <!-- Streak Fire Counter -->
         <div id="streak-pill" class="streak-pill" style="display: none;" title="ทำถูกต่อเนื่อง!">
           <span>🔥</span> <span id="streak-count">0</span>
+        </div>
+
+        <!-- Speedrun 60s Live Timer -->
+        <div id="speedrun-timer-container" class="speedrun-timer-pill" style="display: none;">
+          <span>⏱️</span> <span id="speedrun-seconds">60s</span>
         </div>
 
         <!-- Exam Mode Stats (Safe, No Spoilers) -->
@@ -2970,6 +3189,20 @@ body.pc-ui .app-main {
           </div>
         </div>
 
+        <!-- Weak Spot Alert Banner (Dynamically shown if user has wrong answers recorded) -->
+        <div id="weak-spot-banner" class="weak-spot-banner" style="display: none;">
+          <div class="weak-spot-text">
+            <span class="weak-spot-icon">🎯</span>
+            <div>
+              <div class="weak-spot-title">ตรวจพบจุดอ่อนที่เคยตอบผิด (<span id="weak-spot-count">0</span> ข้อ)</div>
+              <div class="weak-spot-sub">ทบทวนเฉพาะข้อที่เคยตอบผิด เพื่อแก้ไขความเข้าใจผิดให้กลายเป็นเกรด 4</div>
+            </div>
+          </div>
+          <button id="btn-weak-spot-drill" class="btn-weak-spot-drill" type="button" onclick="window.examApp?.startWeakSpotDrill()">
+            <span>⚡ ติวซ่อมจุดอ่อนทันที →</span>
+          </button>
+        </div>
+
         <!-- 1. Subject Selection Cards -->
         <div class="section-title">
           <span>📚</span> 1. เลือกวิชาที่ต้องการสอบ (Select Subject)
@@ -2982,6 +3215,15 @@ body.pc-ui .app-main {
             </div>
             <div class="option-card-title" style="font-size: 1.05rem;">การประกอบธุรกิจ ม.5</div>
             <div class="option-card-desc">รูปแบบธุรกิจ, หุ้นส่วน, บริษัท, สภาพแวดล้อมธุรกิจ & วงจรชีวิตธุรกิจ</div>
+            <div class="subject-card-progress-wrap">
+              <div class="subject-progress-info">
+                <span>ความแม่นยำ</span>
+                <span id="subject-progress-text-thurakid">0% (0/50 ข้อ)</span>
+              </div>
+              <div class="subject-progress-track">
+                <div id="subject-progress-bar-thurakid" class="subject-progress-bar" style="width: 0%;"></div>
+              </div>
+            </div>
           </div>
 
           <div class="option-card subject-card" data-subject="history" role="button" tabindex="0" onclick="window.examApp?.switchSubject('history')">
@@ -2991,6 +3233,15 @@ body.pc-ui .app-main {
             </div>
             <div class="option-card-title" style="font-size: 1.05rem;">ประวัติศาสตร์สากล ม.5</div>
             <div class="option-card-desc">เวลาและศักราช (พ.ศ./ค.ศ./ฮ.ศ./ร.ศ.), การแบ่งยุคสมัย & อารยธรรมโบราณ/จีน</div>
+            <div class="subject-card-progress-wrap">
+              <div class="subject-progress-info">
+                <span>ความแม่นยำ</span>
+                <span id="subject-progress-text-history">0% (0/50 ข้อ)</span>
+              </div>
+              <div class="subject-progress-track">
+                <div id="subject-progress-bar-history" class="subject-progress-bar" style="width: 0%; background: #d97706;"></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -3053,14 +3304,21 @@ body.pc-ui .app-main {
         <div class="section-title">
           <span>🎮</span> 5. เลือกโหมดการทำแบบทดสอบ
         </div>
-        <div class="config-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="config-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
           <div class="option-card mode-card active" data-mode="practice">
-            <div class="option-card-title">💡 โหมดฝึกทบทวน (Practice Mode)</div>
+            <div class="option-card-title">💡 โหมดฝึกทบทวน (Practice)</div>
             <div class="option-card-desc">เฉลยทันทีหลังเลือก พร้อมสาระสำคัญคำอธิบาย ตัดช้อยส์ 50:50 และคอมโบ Streak</div>
           </div>
           <div class="option-card mode-card" data-mode="exam">
-            <div class="option-card-title">⏱️ โหมดจำลองสอบจริง (Exam Simulation)</div>
+            <div class="option-card-title">⏱️ โหมดจำลองสอบจริง (Exam)</div>
             <div class="option-card-desc">สอบต่อเนื่อง จับเวลาเสมือนห้องสอบจริง ไม่สปอยล์เฉลย แล้วตรวจคะแนนตอนส่ง</div>
+          </div>
+          <div class="option-card mode-card" data-mode="speedrun">
+            <div class="option-card-title">
+              <span>⚡ ชาเลนจ์ Speedrun 60 วิ</span>
+              <span class="badge" style="background:#fef3c7; color:#d97706; font-size:0.75rem;">🔥 สนุกสุด</span>
+            </div>
+            <div class="option-card-desc">ตอบให้ได้มากที่สุดใน 60 วินาที แข่งกับสถิติ High Score ตัวเอง ฝึกความไวสมอง</div>
           </div>
         </div>
 
@@ -4333,7 +4591,6 @@ body.pc-ui .app-main {
   </div>
 
   <!-- Scripts -->
-  
   <script>
 // Multi-Subject Question Database & Curriculum - RywReviewer
 // Supports Thurakid (50 Questions) and History (50 Questions)
@@ -6704,7 +6961,8 @@ const SUBJECTS_DATA = {
 // Default backward compatibility
 const QUESTIONS_DATA = SUBJECTS_DATA.thurakid.questions;
 
-
+</script>
+  <script>
 // RywReviewer Engine - app.js
 // Production-Ready Exam Review Web Application
 
@@ -6733,6 +6991,7 @@ class ExamApp {
     this.eliminatedChoices = {}; // { [qId]: Set of eliminated indices }
     this.streakCount = 0;
     this.maxStreak = 0;
+    this.exp = parseInt(localStorage.getItem('rywreviewer_exp') || '0', 10);
 
     // Config state
     this.config = {
@@ -6784,6 +7043,10 @@ class ExamApp {
     this.initCheatSheet();
     this.initSearchBank();
     this.initSubjectSystem();
+    this.updateLevelUI();
+    this.updateWeakSpotUI();
+    this.updateSubjectMasteryUI();
+    this.initFlashcardSwipe();
 
     // First time visitor check: open Device Mode setting if never chosen
     setTimeout(() => {
@@ -6938,6 +7201,12 @@ class ExamApp {
     const themeBtn = document.getElementById('theme-toggle-btn');
     if (themeBtn) {
       themeBtn.addEventListener('click', () => this.toggleTheme());
+    }
+
+    // Weak spot drill button
+    const btnWeakSpot = document.getElementById('btn-weak-spot-drill');
+    if (btnWeakSpot) {
+      btnWeakSpot.addEventListener('click', () => this.startWeakSpotDrill());
     }
 
     // Tab Navigation
@@ -7592,6 +7861,34 @@ class ExamApp {
       this.updateTimerDisplay();
     }, 1000);
 
+    // Speedrun Mode setup
+    this.speedrunTimerContainer = document.getElementById('speedrun-timer-container');
+    this.speedrunSecondsEl = document.getElementById('speedrun-seconds');
+    if (this.speedrunInterval) {
+      clearInterval(this.speedrunInterval);
+      this.speedrunInterval = null;
+    }
+
+    if (this.config.mode === 'speedrun') {
+      this.speedrunSecondsLeft = 60;
+      if (this.speedrunTimerContainer) this.speedrunTimerContainer.style.display = 'inline-flex';
+      if (this.speedrunSecondsEl) this.speedrunSecondsEl.textContent = '60s';
+
+      this.speedrunInterval = setInterval(() => {
+        this.speedrunSecondsLeft--;
+        if (this.speedrunSecondsEl) {
+          this.speedrunSecondsEl.textContent = `${this.speedrunSecondsLeft}s`;
+        }
+        if (this.speedrunSecondsLeft <= 0) {
+          clearInterval(this.speedrunInterval);
+          this.speedrunInterval = null;
+          this.finishQuiz(true);
+        }
+      }, 1000);
+    } else {
+      if (this.speedrunTimerContainer) this.speedrunTimerContainer.style.display = 'none';
+    }
+
     // Switch View
     this.screenSetup.style.display = 'none';
     this.screenResult.style.display = 'none';
@@ -7751,8 +8048,12 @@ class ExamApp {
       navigator.vibrate(isCorrect ? [25] : [50, 40, 50]);
     }
 
-    // Sound & Streak feedback
+    // Track weak spot & subject stats
+    this.recordQuestionResult(q, isCorrect);
+
+    // Sound, EXP & Streak feedback
     if (isCorrect) {
+      this.gainExp(10, 'ตอบถูก!');
       this.streakCount++;
       if (this.streakCount > this.maxStreak) this.maxStreak = this.streakCount;
       if (this.streakCount >= 3) {
@@ -7767,6 +8068,20 @@ class ExamApp {
 
     this.updateUpperStats();
     this.renderQuestion();
+
+    // In Speedrun mode: Auto-advance after 220ms
+    if (this.config.mode === 'speedrun') {
+      setTimeout(() => {
+        if (!this.isSubmitted) {
+          if (this.currentIndex + 1 < this.quizQuestions.length) {
+            this.currentIndex++;
+            this.renderQuestion();
+          } else {
+            this.finishQuiz(true);
+          }
+        }
+      }, 220);
+    }
   }
 
   triggerFiftyFifty() {
@@ -7961,11 +8276,17 @@ class ExamApp {
 
     if (!force && answeredCount < total) {
       const remain = total - answeredCount;
-      const confirmSubmit = confirm(`⚠️ คุณยังทำข้อสอบไม่ครบ (ยังเหลืออีก ${remain} ข้อ)\nคุณแน่ใจหรือไม่ว่าต้องการส่งข้อสอบและดูผลคะแนนตอนนี้?`);
+      const confirmSubmit = confirm(`⚠️ คุณยังทำข้อสอบไม่ครบ (ยังเหลืออีก ${remain} ข้อ)
+คุณแน่ใจหรือไม่ว่าต้องการส่งข้อสอบและดูผลคะแนนตอนนี้?`);
       if (!confirmSubmit) return;
     }
 
     if (this.timerInterval) clearInterval(this.timerInterval);
+    if (this.speedrunInterval) {
+      clearInterval(this.speedrunInterval);
+      this.speedrunInterval = null;
+    }
+    if (this.speedrunTimerContainer) this.speedrunTimerContainer.style.display = 'none';
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     this.isSubmitted = true;
     this.showResultScreen();
@@ -8061,6 +8382,22 @@ class ExamApp {
     }
 
     this.renderReviewList('all');
+
+    // EXP & Speedrun rewards
+    if (this.config.mode === 'speedrun') {
+      const bestSpeed = parseInt(localStorage.getItem('rywreviewer_speedrun_best') || '0', 10);
+      if (correct > bestSpeed) {
+        localStorage.setItem('rywreviewer_speedrun_best', correct.toString());
+        feedback = `⚡ นิวไฮสปีดรันใหม่! คุณตอบถูก ${correct} ข้อใน 60 วินาที ชนะสถิติเดิม (${bestSpeed} ข้อ) สมาธิดีเลิศ!`;
+      } else {
+        feedback = `⚡ สปีดรัน 60 วิ ทำได้ ${correct} ข้อ! (สถิติสูงสุดของคุณคือ ${bestSpeed} ข้อ)`;
+      }
+      this.gainExp(correct * 15 + 30, 'Speedrun 60s');
+    } else {
+      this.gainExp(50 + correct * 5, 'สอบเสร็จสิ้น!');
+    }
+    this.updateWeakSpotUI();
+    this.updateSubjectMasteryUI();
 
     // ================= POPUP CUTE MODAL =================
     setTimeout(() => {
@@ -8188,9 +8525,12 @@ class ExamApp {
     const total = this.quizQuestions.length;
     const pct = Math.round((correct / total) * 100);
 
-    const shareText = `📚 ผลการทำแบบทดสอบทบทวน: การประกอบธุรกิจ (ม.5)\n` +
-      `🎯 ได้คะแนน: ${correct}/${total} (${pct}%)\n` +
-      `⏱️ ใช้เวลา: ${this.metricTime.textContent}\n` +
+    const shareText = `📚 ผลการทำแบบทดสอบทบทวน: การประกอบธุรกิจ (ม.5)
+` +
+      `🎯 ได้คะแนน: ${correct}/${total} (${pct}%)
+` +
+      `⏱️ ใช้เวลา: ${this.metricTime.textContent}
+` +
       `💡 มาฝึกทบทวนและทำซ้ำข้อที่ผิดได้ที่ RywReviewer!`;
 
     navigator.clipboard.writeText(shareText).then(() => {
@@ -8651,6 +8991,10 @@ class ExamApp {
 
     // Re-filter Search Bank
     this.filterSearchBank();
+
+    // Update Weak Spot and Subject Mastery UI
+    this.updateWeakSpotUI();
+    this.updateSubjectMasteryUI();
   }
 
   renderLessonPills() {
@@ -8734,11 +9078,254 @@ class ExamApp {
       }
     }
   }
+
+  // ==========================================
+  // LEVEL & GAMIFICATION SYSTEM
+  // ==========================================
+  gainExp(amount, label = '') {
+    const oldLevel = Math.floor(this.exp / 100) + 1;
+    this.exp += amount;
+    localStorage.setItem('rywreviewer_exp', this.exp.toString());
+    const newLevel = Math.floor(this.exp / 100) + 1;
+
+    // Show floating EXP toast
+    try {
+      const toast = document.createElement('div');
+      toast.className = 'exp-floating-toast';
+      toast.innerHTML = `<span>⭐ +${amount} EXP</span> ${label ? `<small style="font-size:0.75rem;opacity:0.9;">(${label})</small>` : ''}`;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        if (toast && toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 1800);
+    } catch (e) {}
+
+    // Level up celebration
+    if (newLevel > oldLevel) {
+      this.playSound('fanfare');
+      this.launchConfetti();
+      setTimeout(() => {
+        alert(`🎉 ยินดีด้วย! คุณเลเวลอัปเป็น Lv.${newLevel} เรียบร้อยแล้ว!
+สะสมความรู้เตรียมพร้อมเกรด 4 ได้อย่างยอดเยี่ยม`);
+      }, 300);
+    }
+
+    this.updateLevelUI();
+  }
+
+  updateLevelUI() {
+    const level = Math.floor(this.exp / 100) + 1;
+    const progress = this.exp % 100;
+    const levelEl = document.getElementById('player-level-text');
+    const fillEl = document.getElementById('player-exp-fill');
+    if (levelEl) levelEl.textContent = `⭐ Lv.${level}`;
+    if (fillEl) fillEl.style.width = `${progress}%`;
+  }
+
+  // ==========================================
+  // WEAK SPOT ANALYZER & DRILL
+  // ==========================================
+  recordQuestionResult(q, isCorrect) {
+    try {
+      const wrongBank = JSON.parse(localStorage.getItem('rywreviewer_wrong_bank') || '{}');
+      const stats = JSON.parse(localStorage.getItem('rywreviewer_stats') || '{}');
+
+      // Update question stats
+      if (!stats[q.id]) stats[q.id] = { correct: 0, wrong: 0, subject: q.subject || this.currentSubject };
+      if (isCorrect) {
+        stats[q.id].correct++;
+      } else {
+        stats[q.id].wrong++;
+      }
+      localStorage.setItem('rywreviewer_stats', JSON.stringify(stats));
+
+      // Update wrong bank
+      if (!isCorrect) {
+        wrongBank[q.id] = {
+          id: q.id,
+          subject: q.subject || this.currentSubject,
+          lesson: q.lesson || 1,
+          question: q.question,
+          choices: q.choices,
+          answer: q.answer,
+          explanation: q.explanation,
+          category: q.category,
+          difficulty: q.difficulty,
+          difficulty_label: q.difficulty_label,
+          wrongCount: (wrongBank[q.id]?.wrongCount || 0) + 1,
+          timestamp: Date.now()
+        };
+      } else {
+        // Mastered this question! Remove from wrong bank
+        if (wrongBank[q.id]) {
+          delete wrongBank[q.id];
+        }
+      }
+      localStorage.setItem('rywreviewer_wrong_bank', JSON.stringify(wrongBank));
+    } catch (e) {
+      console.warn("Storage error in recordQuestionResult:", e);
+    }
+
+    this.updateWeakSpotUI();
+    this.updateSubjectMasteryUI();
+  }
+
+  updateWeakSpotUI() {
+    const banner = document.getElementById('weak-spot-banner');
+    const countEl = document.getElementById('weak-spot-count');
+    if (!banner || !countEl) return;
+
+    try {
+      const wrongBank = JSON.parse(localStorage.getItem('rywreviewer_wrong_bank') || '{}');
+      const curSubj = this.currentSubject;
+      const wrongIds = Object.keys(wrongBank).filter(id => {
+        const item = wrongBank[id];
+        return !item.subject || item.subject === curSubj;
+      });
+
+      if (wrongIds.length > 0) {
+        banner.style.display = 'flex';
+        countEl.textContent = wrongIds.length.toString();
+      } else {
+        banner.style.display = 'none';
+      }
+    } catch (e) {
+      banner.style.display = 'none';
+    }
+  }
+
+  startWeakSpotDrill() {
+    try {
+      const wrongBank = JSON.parse(localStorage.getItem('rywreviewer_wrong_bank') || '{}');
+      const curSubj = this.currentSubject;
+      let wrongList = Object.values(wrongBank).filter(item => !item.subject || item.subject === curSubj);
+      
+      if (wrongList.length === 0) {
+        wrongList = Object.values(wrongBank);
+      }
+
+      if (wrongList.length === 0) {
+        alert("🎉 ยอดเยี่ยมมาก! คุณไม่มีข้อที่ตอบผิดสะสมอยู่เลยในขณะนี้ พร้อมสอบ 100%!");
+        return;
+      }
+
+      const drillQuestions = wrongList.map(item => {
+        const found = this.allQuestions.find(q => q.id === item.id);
+        if (found) return found;
+        return {
+          id: item.id,
+          question: item.question,
+          choices: item.choices || ['ก', 'ข', 'ค', 'ง'],
+          answer: item.answer !== undefined ? item.answer : 0,
+          answer_letter: ['ก', 'ข', 'ค', 'ง'][item.answer || 0],
+          explanation: item.explanation || 'ทบทวนหัวข้อนี้อย่างละเอียดเพื่อความแม่นยำ',
+          category: item.category || 'ติวซ่อมจุดอ่อน',
+          difficulty: item.difficulty || 'medium',
+          difficulty_label: item.difficulty_label || 'ปานกลาง'
+        };
+      });
+
+      this.config.mode = 'practice';
+      this.startQuiz(drillQuestions);
+    } catch (e) {
+      console.error("Error launching weak spot drill:", e);
+    }
+  }
+
+  updateSubjectMasteryUI() {
+    try {
+      const stats = JSON.parse(localStorage.getItem('rywreviewer_stats') || '{}');
+      const wrongBank = JSON.parse(localStorage.getItem('rywreviewer_wrong_bank') || '{}');
+
+      ['thurakid', 'history'].forEach(subKey => {
+        const subData = this.subjectsData[subKey];
+        if (!subData || !subData.questions) return;
+        const total = subData.questions.length;
+        
+        let mastered = 0;
+        subData.questions.forEach(q => {
+          if (stats[q.id] && stats[q.id].correct > 0 && !wrongBank[q.id]) {
+            mastered++;
+          }
+        });
+
+        const pct = total > 0 ? Math.round((mastered / total) * 100) : 0;
+        const textEl = document.getElementById(`subject-progress-text-${subKey}`);
+        const barEl = document.getElementById(`subject-progress-bar-${subKey}`);
+        if (textEl) textEl.textContent = `${pct}% (${mastered}/${total} ข้อ)`;
+        if (barEl) barEl.style.width = `${pct}%`;
+      });
+    } catch (e) {
+      console.warn("Error updating subject mastery:", e);
+    }
+  }
+
+  // ==========================================
+  // FLASHCARD TOUCH SWIPE GESTURES
+  // ==========================================
+  initFlashcardSwipe() {
+    const card = this.flashcardCard;
+    if (!card) return;
+
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let isSwiping = false;
+
+    card.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      currentX = startX;
+      isSwiping = true;
+    }, { passive: true });
+
+    card.addEventListener('touchmove', (e) => {
+      if (!isSwiping || e.touches.length !== 1) return;
+      currentX = e.touches[0].clientX;
+      const diffX = currentX - startX;
+      const diffY = e.touches[0].clientY - startY;
+
+      // Only track distinct horizontal swipe
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 15) {
+        if (diffX < 0) {
+          card.classList.add('swiping-left');
+          card.classList.remove('swiping-right');
+        } else {
+          card.classList.add('swiping-right');
+          card.classList.remove('swiping-left');
+        }
+      }
+    }, { passive: true });
+
+    card.addEventListener('touchend', (e) => {
+      if (!isSwiping) return;
+      isSwiping = false;
+      const diffX = currentX - startX;
+      card.classList.remove('swiping-left', 'swiping-right');
+
+      if (diffX < -60) {
+        // Swipe Left: Review again -> Advance next
+        this.playSound('click');
+        this.navigateFlashcard(1);
+      } else if (diffX > 60) {
+        // Swipe Right: Mastered!
+        const q = this.allQuestions[this.flashcardIndex];
+        if (q && !this.flashcardMastered.has(q.id)) {
+          this.flashcardMastered.add(q.id);
+          this.gainExp(5, 'จำการ์ดได้แล้ว');
+          this.playSound('correct');
+        }
+        this.navigateFlashcard(1);
+      }
+    });
+  }
+
 }
 
 // Instantiate on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
   window.app = new ExamApp();
+  window.examApp = window.app;
   window.app.updateAvailableCounts();
 
   // Support direct URL parameters for deep-linking & previews (e.g. ?mode=learn, ?mode=quiz)

@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;800&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=20261124_06">
+  <link rel="stylesheet" href="style.css?v=20261124_08">
   <!-- Critical CSS for Subject Selector and Device Mode (Bypasses any CDN cache) -->
   <style>
     .subject-bar-wrapper {
@@ -198,8 +198,14 @@
         </button>
       </nav>
 
-      <!-- Action Icons -->
+      <!-- Action Icons & Player Level -->
       <div class="header-actions">
+        <div id="player-level-badge" class="player-level-badge" title="ระดับผู้ใช้และ EXP สะสม">
+          <span id="player-level-text">⭐ Lv.1</span>
+          <div class="player-exp-bar" title="EXP สะสมเพื่อเลเวลอัป">
+            <div id="player-exp-fill" class="player-exp-fill" style="width: 0%;"></div>
+          </div>
+        </div>
         <button id="btn-open-tutorial" class="btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.82rem;" title="ดูคู่มือวิธีใช้งานเว็บไซต์ (Tutorial)">
           <span>📖 วิธีใช้งาน</span>
         </button>
@@ -257,6 +263,11 @@
         <!-- Streak Fire Counter -->
         <div id="streak-pill" class="streak-pill" style="display: none;" title="ทำถูกต่อเนื่อง!">
           <span>🔥</span> <span id="streak-count">0</span>
+        </div>
+
+        <!-- Speedrun 60s Live Timer -->
+        <div id="speedrun-timer-container" class="speedrun-timer-pill" style="display: none;">
+          <span>⏱️</span> <span id="speedrun-seconds">60s</span>
         </div>
 
         <!-- Exam Mode Stats (Safe, No Spoilers) -->
@@ -326,6 +337,20 @@
           </div>
         </div>
 
+        <!-- Weak Spot Alert Banner (Dynamically shown if user has wrong answers recorded) -->
+        <div id="weak-spot-banner" class="weak-spot-banner" style="display: none;">
+          <div class="weak-spot-text">
+            <span class="weak-spot-icon">🎯</span>
+            <div>
+              <div class="weak-spot-title">ตรวจพบจุดอ่อนที่เคยตอบผิด (<span id="weak-spot-count">0</span> ข้อ)</div>
+              <div class="weak-spot-sub">ทบทวนเฉพาะข้อที่เคยตอบผิด เพื่อแก้ไขความเข้าใจผิดให้กลายเป็นเกรด 4</div>
+            </div>
+          </div>
+          <button id="btn-weak-spot-drill" class="btn-weak-spot-drill" type="button" onclick="window.examApp?.startWeakSpotDrill()">
+            <span>⚡ ติวซ่อมจุดอ่อนทันที →</span>
+          </button>
+        </div>
+
         <!-- 1. Subject Selection Cards -->
         <div class="section-title">
           <span>📚</span> 1. เลือกวิชาที่ต้องการสอบ (Select Subject)
@@ -338,6 +363,15 @@
             </div>
             <div class="option-card-title" style="font-size: 1.05rem;">การประกอบธุรกิจ ม.5</div>
             <div class="option-card-desc">รูปแบบธุรกิจ, หุ้นส่วน, บริษัท, สภาพแวดล้อมธุรกิจ & วงจรชีวิตธุรกิจ</div>
+            <div class="subject-card-progress-wrap">
+              <div class="subject-progress-info">
+                <span>ความแม่นยำ</span>
+                <span id="subject-progress-text-thurakid">0% (0/50 ข้อ)</span>
+              </div>
+              <div class="subject-progress-track">
+                <div id="subject-progress-bar-thurakid" class="subject-progress-bar" style="width: 0%;"></div>
+              </div>
+            </div>
           </div>
 
           <div class="option-card subject-card" data-subject="history" role="button" tabindex="0" onclick="window.examApp?.switchSubject('history')">
@@ -347,6 +381,15 @@
             </div>
             <div class="option-card-title" style="font-size: 1.05rem;">ประวัติศาสตร์สากล ม.5</div>
             <div class="option-card-desc">เวลาและศักราช (พ.ศ./ค.ศ./ฮ.ศ./ร.ศ.), การแบ่งยุคสมัย & อารยธรรมโบราณ/จีน</div>
+            <div class="subject-card-progress-wrap">
+              <div class="subject-progress-info">
+                <span>ความแม่นยำ</span>
+                <span id="subject-progress-text-history">0% (0/50 ข้อ)</span>
+              </div>
+              <div class="subject-progress-track">
+                <div id="subject-progress-bar-history" class="subject-progress-bar" style="width: 0%; background: #d97706;"></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -409,14 +452,21 @@
         <div class="section-title">
           <span>🎮</span> 5. เลือกโหมดการทำแบบทดสอบ
         </div>
-        <div class="config-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="config-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
           <div class="option-card mode-card active" data-mode="practice">
-            <div class="option-card-title">💡 โหมดฝึกทบทวน (Practice Mode)</div>
+            <div class="option-card-title">💡 โหมดฝึกทบทวน (Practice)</div>
             <div class="option-card-desc">เฉลยทันทีหลังเลือก พร้อมสาระสำคัญคำอธิบาย ตัดช้อยส์ 50:50 และคอมโบ Streak</div>
           </div>
           <div class="option-card mode-card" data-mode="exam">
-            <div class="option-card-title">⏱️ โหมดจำลองสอบจริง (Exam Simulation)</div>
+            <div class="option-card-title">⏱️ โหมดจำลองสอบจริง (Exam)</div>
             <div class="option-card-desc">สอบต่อเนื่อง จับเวลาเสมือนห้องสอบจริง ไม่สปอยล์เฉลย แล้วตรวจคะแนนตอนส่ง</div>
+          </div>
+          <div class="option-card mode-card" data-mode="speedrun">
+            <div class="option-card-title">
+              <span>⚡ ชาเลนจ์ Speedrun 60 วิ</span>
+              <span class="badge" style="background:#fef3c7; color:#d97706; font-size:0.75rem;">🔥 สนุกสุด</span>
+            </div>
+            <div class="option-card-desc">ตอบให้ได้มากที่สุดใน 60 วินาที แข่งกับสถิติ High Score ตัวเอง ฝึกความไวสมอง</div>
           </div>
         </div>
 
@@ -1689,8 +1739,8 @@
   </div>
 
   <!-- Scripts -->
-  <script src="questions_data.js?v=20261124_06"></script>
-  <script src="app.js?v=20261124_06"></script>
+  <script src="questions_data.js?v=20261124_08"></script>
+  <script src="app.js?v=20261124_08"></script>
   <!-- ================= EXPAND SUBJECT / LESSON MODAL ================= -->
   <div id="expand-subject-modal" class="wizard-modal-backdrop" style="display: none;">
     <div class="wizard-card" style="max-width: 540px;">
