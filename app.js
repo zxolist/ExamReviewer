@@ -96,6 +96,14 @@ class ExamApp {
     this.btnSaveDeviceMode = document.getElementById('btn-save-device-mode');
     this.btnCancelDeviceMode = document.getElementById('btn-cancel-device-mode');
 
+    if (this.wizardModal) {
+      this.wizardModal.addEventListener('click', (e) => {
+        if (e.target === this.wizardModal) {
+          this.closeWizard();
+        }
+      });
+    }
+
     // Screens in Quiz Tab
     this.screenSetup = document.getElementById('screen-setup');
     this.screenQuiz = document.getElementById('screen-quiz');
@@ -539,7 +547,7 @@ class ExamApp {
 
   // --- AUDIO SYNTHESIS ENGINE (Pure Web Audio API) ---
   playSound(type) {
-    if (!this.config.soundEnabled) return;
+    if (!this.config || !this.config.soundEnabled) return;
     try {
       if (!this.audioCtx) {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -760,15 +768,17 @@ class ExamApp {
       card.classList.toggle('active', card.dataset.device === currentMode);
     });
     if (this.wizardModal) {
+      this.wizardModal.style.display = 'flex';
       this.wizardModal.classList.add('active');
-      this.playSound('click');
+      try { this.playSound('click'); } catch (e) {}
     }
   }
 
   closeWizard() {
     if (this.wizardModal) {
       this.wizardModal.classList.remove('active');
-      this.playSound('click');
+      this.wizardModal.style.display = 'none';
+      try { this.playSound('click'); } catch (e) {}
     }
   }
 
@@ -777,7 +787,7 @@ class ExamApp {
     const mode = activeCard ? activeCard.dataset.device : (this.deviceMode || 'mobile');
     this.setDeviceMode(mode);
     this.closeWizard();
-    this.playSound('correct');
+    try { this.playSound('correct'); } catch (e) {}
   }
 
   setDeviceMode(mode) {

@@ -2445,22 +2445,26 @@ input:checked + .slider:before {
   display: none;
 }
 
-.subject-pill-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.48rem 0.95rem;
-  border-radius: 999px;
-  background: var(--card-bg);
-  border: 1.5px solid var(--card-border);
-  color: var(--text-main);
-  font-family: inherit;
-  font-size: 0.86rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+.subject-pill-btn, button.subject-pill-btn {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  padding: 0.48rem 0.95rem !important;
+  border-radius: 999px !important;
+  background: var(--card-bg) !important;
+  border: 1.5px solid var(--card-border) !important;
+  color: var(--text-main) !important;
+  font-family: inherit !important;
+  font-size: 0.86rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  box-shadow: var(--shadow-sm) !important;
+  outline: none !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 [data-theme="dark"] .subject-pill-btn {

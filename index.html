@@ -19,7 +19,148 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;800&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20261124_04">
+  <!-- Critical CSS for Subject Selector and Device Mode (Bypasses any CDN cache) -->
+  <style>
+    .subject-bar-wrapper {
+      background: var(--card-bg, #ffffff);
+      border-bottom: 1px solid var(--card-border, #e2e8f0);
+      padding: 0.55rem 1rem;
+      position: relative;
+      z-index: 55;
+    }
+    [data-theme="dark"] .subject-bar-wrapper {
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom-color: rgba(51, 65, 85, 0.7);
+    }
+    .subject-bar-container {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+    .subject-bar-label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted, #64748b);
+      white-space: nowrap;
+    }
+    .subject-pills-list {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      overflow-x: auto;
+      padding: 4px 2px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .subject-pill-btn, button.subject-pill-btn {
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.45rem !important;
+      padding: 0.48rem 0.95rem !important;
+      border-radius: 999px !important;
+      background: var(--card-bg, #ffffff) !important;
+      border: 1.5px solid var(--card-border, #e2e8f0) !important;
+      color: var(--text-main, #0f172a) !important;
+      font-family: inherit !important;
+      font-size: 0.86rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      white-space: nowrap !important;
+      outline: none !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04) !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    [data-theme="dark"] .subject-pill-btn, [data-theme="dark"] button.subject-pill-btn {
+      background: rgba(30, 41, 59, 0.8) !important;
+      border-color: rgba(71, 85, 105, 0.6) !important;
+      color: #f8fafc !important;
+    }
+    .subject-pill-btn:hover {
+      border-color: var(--primary, #4f46e5) !important;
+      transform: translateY(-1px);
+    }
+    .subject-pill-btn.active, button.subject-pill-btn.active {
+      background: var(--primary, #4f46e5) !important;
+      color: #ffffff !important;
+      border-color: var(--primary, #4f46e5) !important;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3) !important;
+    }
+    .subject-pill-btn.active .subject-pill-name {
+      color: #ffffff !important;
+      font-weight: 700;
+    }
+    .subject-pill-btn.active .subject-pill-badge {
+      background: rgba(255, 255, 255, 0.25) !important;
+      color: #ffffff !important;
+    }
+    .subject-pill-badge {
+      font-size: 0.72rem;
+      padding: 0.12rem 0.45rem;
+      border-radius: 999px;
+      background: var(--primary-light, #eef2ff);
+      color: var(--primary, #4f46e5);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    [data-theme="dark"] .subject-pill-badge {
+      background: rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+    }
+    .subject-card {
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      user-select: none;
+    }
+    .subject-card.active {
+      border-color: var(--primary, #4f46e5) !important;
+      background: var(--primary-light, #eef2ff) !important;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25) !important;
+    }
+    [data-theme="dark"] .subject-card.active {
+      background: rgba(99, 102, 241, 0.15) !important;
+    }
+    .lesson-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.95rem;
+      border-radius: 12px;
+      background: var(--card-bg, #ffffff);
+      border: 1.5px solid var(--card-border, #e2e8f0);
+      color: var(--text-main, #0f172a);
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lesson-pill-btn.active {
+      background: var(--primary-light, #eef2ff);
+      border-color: var(--primary, #4f46e5);
+      color: var(--primary, #4f46e5);
+      font-weight: 700;
+    }
+    [data-theme="dark"] .lesson-pill-btn.active {
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+    }
+    @media (max-width: 640px) {
+      .subject-bar-wrapper { padding: 0.4rem 0.5rem; }
+      .subject-bar-container { gap: 0.35rem; }
+      .subject-bar-label { display: none; }
+      .subject-pill-btn { padding: 0.38rem 0.75rem !important; font-size: 0.82rem !important; }
+    }
+  </style>
 </head>
 <body>
 
@@ -79,12 +220,12 @@
         <span>เลือกวิชา:</span>
       </div>
       <div class="subject-pills-list" id="subject-pills-list">
-        <button class="subject-pill-btn active" data-subject="thurakid" id="subject-pill-thurakid" type="button">
+        <button class="subject-pill-btn active" data-subject="thurakid" id="subject-pill-thurakid" type="button" onclick="window.examApp?.switchSubject('thurakid')">
           <span class="subject-pill-icon">💼</span>
           <span class="subject-pill-name">การประกอบธุรกิจ ม.5</span>
           <span class="subject-pill-badge" id="subject-badge-thurakid">50 ข้อ</span>
         </button>
-        <button class="subject-pill-btn" data-subject="history" id="subject-pill-history" type="button">
+        <button class="subject-pill-btn" data-subject="history" id="subject-pill-history" type="button" onclick="window.examApp?.switchSubject('history')">
           <span class="subject-pill-icon">🏛️</span>
           <span class="subject-pill-name">ประวัติศาสตร์สากล ม.5</span>
           <span class="subject-pill-badge" id="subject-badge-history">50 ข้อ</span>
@@ -190,7 +331,7 @@
           <span>📚</span> 1. เลือกวิชาที่ต้องการสอบ (Select Subject)
         </div>
         <div class="subject-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.85rem; margin-bottom: 1.25rem;">
-          <div class="option-card subject-card active" data-subject="thurakid" role="button" tabindex="0">
+          <div class="option-card subject-card active" data-subject="thurakid" role="button" tabindex="0" onclick="window.examApp?.switchSubject('thurakid')">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
               <span style="font-size: 1.6rem;">💼</span>
               <span class="badge" style="background: rgba(99, 102, 241, 0.12); color: var(--primary); font-weight: 700;">50 ข้อ (2 บท)</span>
@@ -199,7 +340,7 @@
             <div class="option-card-desc">รูปแบบธุรกิจ, หุ้นส่วน, บริษัท, สภาพแวดล้อมธุรกิจ & วงจรชีวิตธุรกิจ</div>
           </div>
 
-          <div class="option-card subject-card" data-subject="history" role="button" tabindex="0">
+          <div class="option-card subject-card" data-subject="history" role="button" tabindex="0" onclick="window.examApp?.switchSubject('history')">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
               <span style="font-size: 1.6rem;">🏛️</span>
               <span class="badge" style="background: rgba(217, 119, 6, 0.12); color: #d97706; font-weight: 700;">50 ข้อ (3 บท)</span>
@@ -1348,7 +1489,7 @@
     <div class="wizard-card" style="max-width: 480px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
         <span style="font-size: 0.95rem; font-weight: 700; color: var(--primary);">📱 / 💻 ตั้งค่าโหมดอุปกรณ์ (Device Mode)</span>
-        <button id="btn-close-wizard" class="icon-btn" style="border: none; width: 32px; height: 32px;" title="ปิด">✕</button>
+        <button id="btn-close-wizard" class="icon-btn" style="border: none; width: 32px; height: 32px;" title="ปิด" onclick="window.examApp?.closeWizard()">✕</button>
       </div>
 
       <div class="wizard-header" style="margin-bottom: 1.25rem;">
@@ -1358,13 +1499,13 @@
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 1.5rem;">
-        <div class="option-card wizard-device-card active" data-device="mobile" role="button" tabindex="0">
+        <div class="option-card wizard-device-card active" data-device="mobile" role="button" tabindex="0" onclick="document.querySelectorAll('.wizard-device-card').forEach(c=>c.classList.remove('active')); this.classList.add('active');">
           <div style="font-size: 2.2rem; text-align: center; margin-bottom: 0.35rem;">📱</div>
           <div class="option-card-title" style="justify-content: center; font-size: 1rem;">สมาร์ตโฟน (Mobile)</div>
           <div class="option-card-desc" style="text-align: center;">ปุ่มสัมผัสขนาดใหญ่พิเศษ เลย์เอาต์แนวตั้ง กดง่าย ไม่กดพลาด</div>
         </div>
 
-        <div class="option-card wizard-device-card" data-device="pc" role="button" tabindex="0">
+        <div class="option-card wizard-device-card" data-device="pc" role="button" tabindex="0" onclick="document.querySelectorAll('.wizard-device-card').forEach(c=>c.classList.remove('active')); this.classList.add('active');">
           <div style="font-size: 2.2rem; text-align: center; margin-bottom: 0.35rem;">💻</div>
           <div class="option-card-title" style="justify-content: center; font-size: 1rem;">คอมพิวเตอร์ (PC / Laptop)</div>
           <div class="option-card-desc" style="text-align: center;">รองรับคีย์บอร์ดลัด 1-4, Enter, Spacebar, หน้าจอกว้างเต็มตา</div>
@@ -1372,8 +1513,8 @@
       </div>
 
       <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
-        <button id="btn-cancel-device-mode" class="btn-secondary" style="padding: 0.6rem 1.2rem;">ยกเลิก</button>
-        <button id="btn-save-device-mode" class="btn-primary" style="width: auto; padding: 0.6rem 1.75rem;">
+        <button id="btn-cancel-device-mode" class="btn-secondary" style="padding: 0.6rem 1.2rem;" onclick="window.examApp?.closeWizard()">ยกเลิก</button>
+        <button id="btn-save-device-mode" class="btn-primary" style="width: auto; padding: 0.6rem 1.75rem;" onclick="window.examApp?.saveDeviceMode()">
           💾 บันทึกโหมด
         </button>
       </div>
@@ -1548,8 +1689,8 @@
   </div>
 
   <!-- Scripts -->
-  <script src="questions_data.js"></script>
-  <script src="app.js"></script>
+  <script src="questions_data.js?v=20261124_04"></script>
+  <script src="app.js?v=20261124_04"></script>
   <!-- ================= EXPAND SUBJECT / LESSON MODAL ================= -->
   <div id="expand-subject-modal" class="wizard-modal-backdrop" style="display: none;">
     <div class="wizard-card" style="max-width: 540px;">
