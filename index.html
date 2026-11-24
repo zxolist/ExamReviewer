@@ -71,6 +71,32 @@
     </div>
   </header>
 
+  <!-- ================= SUBJECT SELECTION BAR ================= -->
+  <div class="subject-bar-wrapper">
+    <div class="subject-bar-container">
+      <div class="subject-bar-label">
+        <span class="subject-bar-icon">📚</span>
+        <span>เลือกวิชา:</span>
+      </div>
+      <div class="subject-pills-list" id="subject-pills-list">
+        <button class="subject-pill-btn active" data-subject="thurakid" id="subject-pill-thurakid" type="button">
+          <span class="subject-pill-icon">💼</span>
+          <span class="subject-pill-name">การประกอบธุรกิจ ม.5</span>
+          <span class="subject-pill-badge" id="subject-badge-thurakid">50 ข้อ</span>
+        </button>
+        <button class="subject-pill-btn" data-subject="history" id="subject-pill-history" type="button">
+          <span class="subject-pill-icon">🏛️</span>
+          <span class="subject-pill-name">ประวัติศาสตร์สากล ม.5</span>
+          <span class="subject-pill-badge" id="subject-badge-history">35 ข้อ</span>
+        </button>
+        <button class="subject-pill-btn add-subject-btn" id="btn-add-subject" type="button" title="เพิ่มวิชาใหม่หรือขยายบทเรียน">
+          <span class="subject-pill-icon">➕</span>
+          <span class="subject-pill-name">เพิ่มวิชา/บทเรียน</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Upper Live Stats Bar (Visible during active quiz) -->
   <div id="upper-stats-bar" class="upper-stats-bar" style="display: none;">
     <div class="stats-container">
@@ -159,9 +185,17 @@
           </div>
         </div>
 
+        <!-- Lesson / Chapter Selection -->
+        <div class="section-title">
+          <span>📑</span> 1. เลือกบทเรียนที่ต้องการติว (Select Lesson)
+        </div>
+        <div id="lesson-pills-container" class="lesson-pills-list">
+          <!-- Dynamically populated from active subject -->
+        </div>
+
         <!-- Difficulty Selection -->
         <div class="section-title">
-          <span>⚡</span> 1. เลือกระดับความยาก (Difficulty)
+          <span>⚡</span> 2. เลือกระดับความยาก (Difficulty)
         </div>
         <div class="config-grid">
           <div class="option-card difficulty-card active" data-difficulty="all">
@@ -196,7 +230,7 @@
 
         <!-- Question Count Selection -->
         <div class="section-title">
-          <span>🔢</span> 2. จำนวนข้อสอบที่ต้องการทำ
+          <span>🔢</span> 3. จำนวนข้อสอบที่ต้องการทำ
         </div>
         <div class="number-pills">
           <button class="number-pill count-pill" data-count="5">5 ข้อ</button>
@@ -208,7 +242,7 @@
 
         <!-- Mode Selection -->
         <div class="section-title">
-          <span>🎮</span> 3. เลือกโหมดการทำแบบทดสอบ
+          <span>🎮</span> 4. เลือกโหมดการทำแบบทดสอบ
         </div>
         <div class="config-grid" style="grid-template-columns: 1fr 1fr;">
           <div class="option-card mode-card active" data-mode="practice">
@@ -223,7 +257,7 @@
 
         <!-- Extra Toggles -->
         <div class="section-title">
-          <span>⚙️</span> 4. ตัวเลือกเพิ่มเติม
+          <span>⚙️</span> 5. ตัวเลือกเพิ่มเติม
         </div>
         <div class="toggle-group">
           <div class="toggle-row">
@@ -516,6 +550,9 @@
 
         <div id="learn-content-container">
 
+          <!-- ================= THURAKID LEARN CONTENT ================= -->
+          <div id="learn-content-thurakid">
+
           <!-- ================= CHAPTER 1 ================= -->
           <div class="learn-chapter-card" data-ch="ch1">
             <span class="learn-chapter-badge">🏛️ บทที่ 1</span>
@@ -777,8 +814,274 @@
             </button>
           </div>
 
-        </div>
-      </section>
+                  </div><!-- end learn-content-thurakid -->
+
+          <!-- ==========================================================================
+               HISTORY LEARN CONTENT (ประวัติศาสตร์สากล: เวลา ยุคสมัย และอารยธรรมจีน)
+               ========================================================================== -->
+          <div id="learn-content-history" style="display: none;">
+            
+            <!-- SECTION 1: เวลาและการเทียบศักราช -->
+            <div class="learn-chapter-card" data-ch="history_era">
+              <div class="learn-chapter-badge">ส่วนที่ 1 • การนับและเทียบศักราชทางประวัติศาสตร์</div>
+              <h3 class="learn-chapter-title">⏳ 1. เวลาและศักราชสำคัญ (สูตรคำนวณ & จุดเน้นออกสอบ)</h3>
+              
+              <div class="learn-highlight-box" style="margin-bottom: 1.25rem;">
+                <h4 style="font-size: 1.05rem; font-weight: 800; color: #b45309; margin-bottom: 0.4rem;">
+                  🎯 ความสำคัญของการศึกษาเวลาทางประวัติศาสตร์
+                </h4>
+                <p style="font-size: 0.9rem; color: var(--text); line-height: 1.6; margin: 0;">
+                  • <strong>ทราบช่วงเวลาที่แน่ชัด:</strong> ช่วยลดความสับสนและข้อผิดพลาดในการลำดับเหตุการณ์<br>
+                  • <strong>เรียงลำดับเหตุการณ์ได้ถูกต้อง:</strong> ทำให้เห็นจุดเริ่มต้น พัฒนาการ และจุดสิ้นสุด<br>
+                  • <strong>เข้าใจความสัมพันธ์และเหตุผล:</strong> เชื่อมโยงเหตุการณ์ในอดีตกับปัจจุบันและเหตุการณ์ร่วมสมัย<br>
+                  • <strong>ศึกษาประวัติศาสตร์สากลร่วมกันได้:</strong> ใช้เกณฑ์เวลากลางในการเทียบเคียงประวัติศาสตร์ไทยกับประวัติศาสตร์โลก
+                </p>
+              </div>
+
+              <!-- ตารางเทียบศักราชทั้ง 6 แบบ -->
+              <h4 class="learn-section-subtitle">📊 ตารางสรุป 6 ศักราชสำคัญ และสูตรเทียบเป็น พ.ศ.</h4>
+              <div class="learn-table-responsive">
+                <table class="learn-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 22%;">ศักราช (Era)</th>
+                      <th style="width: 48%;">จุดเริ่มต้นการนับและประวัติการใช้ในไทย</th>
+                      <th style="width: 30%;">สูตรคำนวณเทียบ พ.ศ.</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>1. พุทธศักราช (พ.ศ.)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">Buddhist Era (B.E.)</span></td>
+                      <td>
+                        • <strong>แบบไทย:</strong> เริ่มนับเมื่อพระพุทธเจ้าเสด็จดับขันธปรินิพพานไปแล้วครบ 1 ปี (ไทยเริ่มใช้เป็นทางการสมัย <strong>รัชกาลที่ 6</strong>)<br>
+                        • <strong>แบบลังกา:</strong> เริ่มนับทันทีในปีที่ปรินิพพาน (เร็วกว่าไทย 1 ปี)
+                      </td>
+                      <td><span class="badge" style="background:#e0f2fe; color:#0369a1; font-size:0.85rem;">เกณฑ์อ้างอิงหลักของไทย</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>2. คริสต์ศักราช (ค.ศ.)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">Anno Domini (A.D.)</span></td>
+                      <td>เริ่มนับ ค.ศ. 1 ในปีที่พระเยซูประสูติ (เหตุการณ์ก่อนประสูติเรียกว่า <strong>B.C. — Before Christ</strong>)</td>
+                      <td>
+                        <strong>พ.ศ. − 543 = ค.ศ.</strong><br>
+                        <span style="color:var(--text-muted); font-size:0.8rem;">ค.ศ. + 543 = พ.ศ.</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>3. ฮิจเราะห์ศักราช (ฮ.ศ.)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">Anno Hegirae (A.H.)</span></td>
+                      <td>นับ ฮ.ศ. 1 ในปีที่ศาสดามุฮัมมัดอพยพ (ฮิจเราะห์) จากนครมักกะฮ์ไปยังนครมะดีนะฮ์ (ตรงกับ ค.ศ. 622) ตรวจสอบได้จาก <em>สำนักจุฬาราชมนตรี</em></td>
+                      <td>
+                        <strong>พ.ศ. − 1122 = ฮ.ศ.</strong><br>
+                        <span style="color:var(--text-muted); font-size:0.8rem;">ฮ.ศ. + 1122 = พ.ศ.</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>4. มหาศักราช (ม.ศ.)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">Saka Era (S.E.)</span></td>
+                      <td><strong>พระเจ้ากณิษกะ</strong> แห่งราชวงศ์กุษาณะ (อินเดีย) ตั้งขึ้น แพร่หลายเข้าพม่าและไทย (พบในศิลาจารึกล้านนา สุโขทัย อยุธยา)</td>
+                      <td>
+                        <strong>พ.ศ. − 621 = ม.ศ.</strong><br>
+                        <span style="color:var(--text-muted); font-size:0.8rem;">ม.ศ. + 621 = พ.ศ.</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>5. จุลศักราช (จ.ศ.)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">Chula Sakarat (C.S.)</span></td>
+                      <td>กษัตริย์พุกาม (พม่า) ตั้งขึ้น นิยมใช้ในล้านนาและไทย จนถึงสมัย <strong>รัชกาลที่ 5 ทรงประกาศยกเลิก</strong> และให้ใช้ ร.ศ. แทน</td>
+                      <td>
+                        <strong>พ.ศ. − 1181 = จ.ศ.</strong><br>
+                        <span style="color:var(--text-muted); font-size:0.8rem;">จ.ศ. + 1181 = พ.ศ.</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>6. รัตนโกสินทร์ศก (ร.ศ.)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">Rattanakosin Era (R.E.)</span></td>
+                      <td><strong>รัชกาลที่ 5</strong> ทรงกำหนดใช้ นับปีสถาปนากรุงเทพฯ (พ.ศ. 2325) เป็น ร.ศ. 1 (ต่อมายกเลิกในสมัย <strong>รัชกาลที่ 6</strong>)</td>
+                      <td>
+                        <strong>พ.ศ. − 2324 = ร.ศ.</strong><br>
+                        <span style="color:var(--text-muted); font-size:0.8rem;">ร.ศ. + 2324 = พ.ศ.</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Alert Box จุดเน้นออกสอบ -->
+              <div style="background: rgba(220, 38, 38, 0.06); border-left: 4px solid #ef4444; border-radius: 8px; padding: 0.85rem 1.15rem; margin-top: 1rem;">
+                <h5 style="color: #dc2626; font-size: 0.95rem; font-weight: 800; margin-bottom: 0.3rem;">🚨 จุดเน้นข้อสอบที่ต้องจำให้แม่น!</h5>
+                <p style="font-size: 0.88rem; color: var(--text); line-height: 1.5; margin: 0;">
+                  1) <strong>ร.5</strong> ทรงยกเลิก จ.ศ. แล้วตั้ง <strong>ร.ศ.</strong> ขึ้นใช้ | ส่วน <strong>ร.6</strong> ทรงยกเลิก ร.ศ. และกำหนดให้ใช้ <strong>พ.ศ.</strong> เป็นทางการ<br>
+                  2) ตัวเลขคำนวณที่ออกสอบบ่อย: <strong>ฮ.ศ. เทียบ 1122</strong>, <strong>ร.ศ. เทียบ 2324</strong>, และ <strong>ม.ศ. เทียบ 621</strong> (เช่น ศิลาจารึก 1214 + 621 = พ.ศ. 1835)
+                </p>
+              </div>
+            </div>
+
+            <!-- SECTION 2: ยุคสมัยและแหล่งโบราณคดี -->
+            <div class="learn-chapter-card" data-ch="history_period">
+              <div class="learn-chapter-badge">ส่วนที่ 2 • การแบ่งยุคสมัยทางประวัติศาสตร์สากล</div>
+              <h3 class="learn-chapter-title">🏺 2. การแบ่งยุคสมัย & แหล่งโบราณคดีในไทย</h3>
+
+              <div class="learn-grid-2col" style="margin-bottom: 1.25rem;">
+                <!-- Prehistoric -->
+                <div style="background: rgba(99,102,241,0.05); border: 1.5px solid var(--border); border-radius: 14px; padding: 1.15rem;">
+                  <h4 style="color: var(--primary); font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem;">
+                    🦴 2.1 ยุคก่อนประวัติศาสตร์ (Prehistoric Period)
+                  </h4>
+                  <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                    <strong>เกณฑ์การแบ่ง:</strong> แบ่งตามวิวัฒนาการของ <em>เครื่องมือเครื่องใช้</em> เพราะมนุษย์ยังไม่มีตัวอักษร
+                  </p>
+                  <ul class="tutorial-list" style="margin: 0; font-size: 0.88rem;">
+                    <li><strong>1. หินเก่า (Paleolithic):</strong> เร่ร่อน ล่าสัตว์ ถ้ำ หินกะเทาะ ภาพวาดในถ้ำ <br><em>แหล่งไทย:</em> <strong>แม่ทะ/บ้านดอนมูล ลำปาง (500,000 ปี)</strong>, ถ้ำลอด แม่ฮ่องสอน, ถ้ำหลังโรงเรียน กระบี่</li>
+                    <li><strong>2. หินกลาง (Mesolithic):</strong> เลี้ยงสัตว์ ปลูกพืช เริ่มลงหลักปักฐานใกล้แหล่งน้ำ เครื่องมือหินขนาดเล็กประณีต <strong>(Microlith)</strong> หัวลูกศร มีด ตะขอเบ็ด</li>
+                    <li><strong>3. หินใหม่ (Neolithic):</strong> ตั้งถิ่นฐานถาวร แบ่งการปกครอง เครื่องมือหินขัดเรียบคม ทำเครื่องปั้นดินเผา ทอผ้า <br><em>แหล่งไทย:</em> <strong>บ้านเก่า กาญจนบุรี (หม้อสามขา ลายเชือกทาบ)</strong>, <strong>โคกพนมดี ชลบุรี (ชุมชนชายฝั่งทะเล หลุมฝังศพ)</strong>, ถ้ำผีแมน แม่ฮ่องสอน</li>
+                    <li><strong>4. ยุคสำริด (Bronze Age):</strong> ถลุงและหลอมผสม <strong>ทองแดง + ดีบุก = สำริด</strong> สังคมขยายเป็นชุมชนเมือง (ตรงกับราชวงศ์เซี่ย-ชาง)</li>
+                    <li><strong>5. ยุคเหล็ก (Iron Age):</strong> ถลุงเหล็กที่แข็งแกร่งกว่าสำริด เทคโนโลยีการเกษตรก้าวหน้า มีการจัดตั้งกองทัพ</li>
+                  </ul>
+                </div>
+
+                <!-- Historic -->
+                <div style="background: rgba(16,185,129,0.05); border: 1.5px solid var(--border); border-radius: 14px; padding: 1.15rem;">
+                  <h4 style="color: #059669; font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem;">
+                    📜 2.2 ยุคประวัติศาสตร์สากล (Historic Period)
+                  </h4>
+                  <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                    <strong>เกณฑ์การแบ่ง:</strong> เริ่มเมื่อมนุษย์ <em>ประดิษฐ์ตัวอักษรขึ้นใช้</em> (เช่น อักษรคูนิฟอร์ม 3,500 B.C.)
+                  </p>
+                  <ul class="tutorial-list" style="margin: 0; font-size: 0.88rem;">
+                    <li><strong>1. สมัยโบราณ (3,500 B.C. – ค.ศ. 476):</strong> เริ่มจากอักษรคูนิฟอร์ม เมโสโปเตเมีย อียิปต์ กรีก โรมัน สิ้นสุดเมื่อ <strong>จักรวรรดิโรมันตะวันตกล่มสลาย</strong></li>
+                    <li><strong>2. สมัยกลาง / ยุคมืด (ค.ศ. 476 – 1453):</strong> คริสตจักรมีอิทธิพลสูงสุด เกิดสงครามครูเสด ระบบฟิวดัลและแมนเนอร์ สิ้นสุดเมื่อ <strong>เสียกรุงคอนสแตนติโนเปิล</strong></li>
+                    <li><strong>3. สมัยใหม่ (ค.ศ. 1453 – 1945):</strong> ฟื้นฟูศิลปวิทยาการ (เรเนซองส์), โคลัมบัสพบอเมริกา, สำรวจทางทะเล, ปฏิวัติวิทยาศาสตร์, ปฏิวัติอุตสาหกรรม สิ้นสุดเมื่อ <strong>จบสงครามโลกครั้งที่ 2</strong></li>
+                    <li><strong>4. สมัยปัจจุบัน (ค.ศ. 1945 – ปัจจุบัน):</strong> โลกไร้พรมแดน เกิดสงครามเย็น วินาศกรรม การก่อการร้าย และปัญหาสิ่งแวดล้อม</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 3: อารยธรรมจีนครบทุกราชวงศ์ -->
+            <div class="learn-chapter-card" data-ch="history_china_ancient">
+              <div class="learn-chapter-badge">ส่วนที่ 3 • อารยธรรมจีน (โบราณและจักรวรรดิ)</div>
+              <h3 class="learn-chapter-title">🐉 3. เจาะลึกอารยธรรมจีนครบ 11 ราชวงศ์</h3>
+
+              <div class="learn-highlight-box" style="margin-bottom: 1.25rem;">
+                <h4 style="font-size: 1rem; font-weight: 800; color: #b45309; margin-bottom: 0.3rem;">
+                  🌏 ภูมิศาสตร์สำคัญของจีน
+                </h4>
+                <p style="font-size: 0.88rem; color: var(--text); line-height: 1.5; margin: 0;">
+                  • <strong>จงกว๋อ (Zhōngguó):</strong> แปลว่า "อาณาจักรกลาง" สะท้อนความเชื่อว่าเป็นศูนย์กลางของโลก<br>
+                  • <strong>สภาพโดดเดี่ยว (Isolation):</strong> ล้อมรอบด้วยปราการธรรมชาติ (ทะเลทรายโกบี/ซินเกียง, ที่ราบสูงทิเบต, มหาสมุทรแปซิฟิก) ทำให้อารยธรรมเป็นเอกลักษณ์<br>
+                  • <strong>แม่น้ำฮวงโห (แม่น้ำเหลือง / แม่น้ำวิปโยค):</strong> อู่กำเนิดอารยธรรมจีน น้ำท่วมบ่อย ผลักดันการคิดค้นระบบชลประทานและขุดคลอง<br>
+                  • <strong>มนุษย์ปักกิ่ง (700,000 ปี โจวโข่วเตี้ยน)</strong> และวัฒนธรรมยุคหินใหม่: <em>หยางเชา (ลายเขียนสี)</em> vs <em>หลงชาน (สีดำขัดมันเงา ภาชนะสามขา)</em>
+                </p>
+              </div>
+
+              <!-- ตารางราชวงศ์จีน -->
+              <h4 class="learn-section-subtitle">👑 ตารางสรุป 11 ราชวงศ์จีน และผลงานสำคัญที่ออกสอบ</h4>
+              <div class="learn-table-responsive">
+                <table class="learn-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 22%;">ราชวงศ์ / ยุคสมัย</th>
+                      <th style="width: 78%;">บุคคลสำคัญ นวัตกรรม และสาระสำคัญที่ออกสอบ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>1. ราชวงศ์เซี่ย (Xia)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">2100 – 1600 B.C.</span></td>
+                      <td>ราชวงศ์แรกในตำนาน (วัฒนธรรมเอ้อหลี่โถว) <strong>พระเจ้าอวี่</strong> ปฐมกษัตริย์แก้ปัญหาน้ำท่วมฮวงโห เริ่มระบบสืบทอดสายเลือดและระบบทาส</td>
+                    </tr>
+                    <tr>
+                      <td><strong>2. ราชวงศ์ชาง (Shang)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">1600 – 1046 B.C.</span></td>
+                      <td><strong>ราชวงศ์แรกที่มีหลักฐานอักษรยืนยัน</strong> อักษรจารึกบนกระดองเต่าและกระดูกสัตว์ (กระดูกเสี่ยงทาย/กระดูกมังกร) บูชาเทพบรรพบุรุษ (ช่างตี้) เด่นสำริดและหยก</td>
+                    </tr>
+                    <tr>
+                      <td><strong>3. ราชวงศ์โจว (Zhou)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">1046 – 256 B.C.</span></td>
+                      <td>
+                        <strong>ปกครองยาวนานที่สุด</strong> เกิดทฤษฎี <strong>เทียนมิ่ง (อาณัติแห่งสวรรค์)</strong> และยุคปรัชญาร้อยสำนัก:<br>
+                        • <em>ลัทธิขงจื๊อ:</em> คุณธรรม จารีต เคารพผู้อาวุโส กตัญญู เน้นการศึกษา<br>
+                        • <em>ลัทธิเต๋า (เล่าจื๊อ):</em> ความเรียบง่าย สันโดษ กลมกลืนกับธรรมชาติ<br>
+                        • <em>ลัทธิฟาเฉีย/นิติธรรม (หานเฟยจื่อ):</em> เชื่อมนุษย์เลวโดยธรรมชาติ ต้องควบคุมด้วยกฎหมายเข้มงวด
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>4. ราชวงศ์ฉิน (Qin)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">221 – 206 B.C.</span></td>
+                      <td><strong>จิ๋นซีฮ่องเต้ (ฉินสื่อหวังตี้)</strong> รวมแผ่นดินเป็นปึกแผ่น รวมอำนาจสู่ศูนย์กลาง ใช้หลักฟาเฉีย <strong>"เผาตำรา ฝังบัณฑิต"</strong> สร้างมาตรฐานอักษร เงินตรา ชั่งตวงวัด กำแพงเมืองจีน และสุสานจิ๋นซี</td>
+                    </tr>
+                    <tr>
+                      <td><strong>5. ราชวงศ์ฮั่น (Han)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">206 B.C. – A.D. 220</span></td>
+                      <td><strong>หลิวปัง (ฮั่นเกาจู่)</strong> ฟื้นฟูขงจื๊อ ริเริ่มสอบจอหงวน, <strong>จางเชียน</strong> บุกเบิกเส้นทางสายไหม (Silk Road), <strong>ไช่หลุน</strong> คิดค้นกระดาษ, <strong>จางเหิง</strong> ประดิษฐ์เครื่องวัดแผ่นดินไหว (ตี้ต้งอี้), ซือหม่าเชียน เขียนประวัติศาสตร์สื่อจี้</td>
+                    </tr>
+                    <tr>
+                      <td><strong>6. ราชวงศ์สุย (Sui)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">A.D. 581 – 618</span></td>
+                      <td>สุยเหวินตี้ รวมแผ่นดินอีกครั้ง ขุด <strong>คลองใหญ่ (ต้ายวิ่นเหอ)</strong> เชื่อมแม่น้ำฮวงโหกับแยงซีเกียงเพื่อการคมนาคมและขนส่ง</td>
+                    </tr>
+                    <tr>
+                      <td><strong>7. ราชวงศ์ถัง (Tang)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">A.D. 618 – 907</span></td>
+                      <td><strong>ยุคทองของจักรวรรดิจีน (ถังไท่จง)</strong> มีจักรพรรดินีหญิงองค์เดียวคือ <strong>อู่เจ๋อเทียน (บูเช็คเทียน)</strong> ยุคทองพุทธศาสนา (พระถังซำจั๋ง/เสวียนจ้าง) เกิดเส้นทางสายไหมทางทะเล และเครื่องเคลือบสามสี</td>
+                    </tr>
+                    <tr>
+                      <td><strong>8. ราชวงศ์ซ่ง (Song)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">A.D. 960 – 1279</span></td>
+                      <td>ปกครองแบบ <strong>"ลำต้นแข็ง กิ่งก้านอ่อน"</strong> (บุ๋นปกครองบู๊ ทหารอ่อนแอ) บุคคลเด่น: เปาบุ้นจิ้น งักฮุย เกิดประเพณี <strong>รัดเท้าสตรี</strong> พัฒนาดินปืน เข็มทิศ และแท่นพิมพ์</td>
+                    </tr>
+                    <tr>
+                      <td><strong>9. ราชวงศ์หยวน (Yuan)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">A.D. 1279 – 1368</span></td>
+                      <td><strong>ราชวงศ์แรกที่ปกครองโดยชาวต่างชาติ (ชาวมองโกล)</strong> ก่อตั้งโดย <strong>กุบไลข่าน</strong> เปิดให้ชาวต่างชาติรับราชการ เช่น <strong>มาร์โค โปโล</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>10. ราชวงศ์หมิง (Ming)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">A.D. 1368 – 1644</span></td>
+                      <td>จูหยวนจาง ขับไล่มองโกล, ขันที <strong>เจิ้งเหอ</strong> เดินเรือสมุทรยาตราถึงแอฟริกา การค้าแบบจิ้มก้อง (รัฐบรรณาการ) ยุคทองของวรรณกรรม (สามก๊ก ไซอิ๋ว ซ้องกั๋ง)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>11. ราชวงศ์ชิง (Qing)</strong><br><span style="font-size:0.75rem; color:var(--text-muted);">A.D. 1644 – 1911</span></td>
+                      <td>ราชวงศ์สุดท้าย ปกครองโดย <strong>ชาวแมนจู (บังคับไว้ผมหางเปีย)</strong> ยุคทอง: คังซี ยงเจิ้น เฉียนหลง วิกฤต: แพ้อังกฤษใน <strong>สงครามฝิ่นครั้งที่ 1 (สนธิสัญญานานกิง เสียเกาะฮ่องกง)</strong> กบฏไท่ผิง กบฏนักมวย พระนางซูสีไทเฮา จักรพรรดิองค์สุดท้ายคือ <strong>ผู่อี๋ (ปูยี)</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- 4 Inventions Box -->
+              <div style="background: rgba(99,102,241,0.06); border: 1.5px solid var(--primary); border-radius: 14px; padding: 1.15rem; margin-top: 1.25rem;">
+                <h4 style="color: var(--primary); font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem;">
+                  ✨ จตุรนวัตกรรมจีน (4 สิ่งประดิษฐ์เปลี่ยนโลก)
+                </h4>
+                <p style="font-size: 0.9rem; color: var(--text); line-height: 1.6; margin: 0;">
+                  1) <strong>กระดาษ:</strong> ไช่หลุน คิดค้นในสมัยราชวงศ์ฮั่น<br>
+                  2) <strong>ดินปืน:</strong> ค้นพบโดยบังเอิญจากการปรุงยาอายุวัฒนะ ปลายราชวงศ์ถัง<br>
+                  3) <strong>เข็มทิศ:</strong> ทำจากแม่เหล็กธรรมชาติ พัฒนาใช้เดินเรือในสมัยราชวงศ์ซ่ง<br>
+                  4) <strong>แท่นพิมพ์:</strong> สลักตัวอักษรเรียงพิมพ์ พัฒนาในสมัยราชวงศ์ซ่ง
+                </p>
+              </div>
+            </div>
+
+            <!-- SECTION 4: จีนสมัยใหม่ -->
+            <div class="learn-chapter-card" data-ch="history_china_modern">
+              <div class="learn-chapter-badge">ส่วนที่ 4 • จีนสมัยใหม่</div>
+              <h3 class="learn-chapter-title">🇨🇳 4. จีนสมัยประชาธิปไตย & คอมมิวนิสต์</h3>
+
+              <div class="learn-grid-2col">
+                <!-- Democracy 1911 -->
+                <div style="background: rgba(59,130,246,0.05); border: 1px solid var(--border); border-radius: 14px; padding: 1.15rem;">
+                  <h4 style="color: #2563eb; font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem;">
+                    🏛️ การปฏิวัติ 1911 (ซินไฮ่) & สาธารณรัฐจีน
+                  </h4>
+                  <ul class="tutorial-list" style="margin: 0; font-size: 0.88rem;">
+                    <li><strong>ดร.ซุน ยัตเซ็น:</strong> ก่อตั้งพรรคก๊กมินตั๋ง ชูอุดมการณ์ <strong>ลัทธิไตรราษฎร์ (เอกราช อธิปไตย ความเป็นธรรม)</strong> และ <strong>หลักเบญจาธิปไตย</strong> ล้มล้างราชวงศ์ชิงสำเร็จ</li>
+                    <li><strong>เจียงไคเช็ค:</strong> ผู้นำพรรคก๊กมินตั๋ง ขัดแย้งกับพรรคคอมมิวนิสต์ของเหมาเจ๋อตง ภายหลังพ่ายแพ้ในสงครามกลางเมือง จึงถอยไปตั้งรัฐบาลที่ <strong>เกาะไต้หวัน</strong></li>
+                  </ul>
+                </div>
+
+                <!-- Communist 1949 -->
+                <div style="background: rgba(239,68,68,0.05); border: 1px solid var(--border); border-radius: 14px; padding: 1.15rem;">
+                  <h4 style="color: #dc2626; font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem;">
+                    🚩 สมัยคอมมิวนิสต์ (A.D. 1949 – ปัจจุบัน)
+                  </h4>
+                  <ul class="tutorial-list" style="margin: 0; font-size: 0.88rem;">
+                    <li><strong>เหมาเจ๋อตง (1949):</strong> สถาปนาสาธารณรัฐประชาชนจีน ใช้นโยบาย <em>ก้าวกระโดดไกล (ระบบนารวม/คอมมูน)</em> และ <em>การปฏิวัติวัฒนธรรม</em> ตั้งกองทัพ <strong>ยุวชนแดง (Red Guard)</strong> ทำลาย 4 เก่า</li>
+                    <li><strong>เติ้งเสี่ยวผิง:</strong> ผู้นำรุ่น 2 เปิดประเทศค้าขาย นโยบาย <strong>สี่ทันสมัย (ทหาร, อุตสาหกรรม, เกษตรกรรม, วิทยาศาสตร์)</strong> รับทุนนิยมแต่ไม่รับประชาธิปไตย (สลายชุมนุมเทียนอันเหมิน 1989)</li>
+                    <li><strong>สีจิ้นผิง:</strong> ชูนโยบาย <em>เส้นทางสายไหมใหม่ (One Belt, One Road)</em></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div></section>
     </div>
 
     <!-- ================= TAB 4: SEARCH BANK ================= -->
@@ -1204,5 +1507,41 @@
   <!-- Scripts -->
   <script src="questions_data.js"></script>
   <script src="app.js"></script>
+  <!-- ================= EXPAND SUBJECT / LESSON MODAL ================= -->
+  <div id="expand-subject-modal" class="wizard-modal-backdrop" style="display: none;">
+    <div class="wizard-card" style="max-width: 540px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+        <span style="font-size: 0.95rem; font-weight: 800; color: var(--primary);">✨ ขยายเพิ่มวิชา / บทเรียน (Add Subject & Lesson)</span>
+        <button id="btn-close-expand-modal" class="icon-btn" style="border: none; width: 32px; height: 32px;">✕</button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5;">
+        ระบบ RywReviewer ออกแบบให้ขยายเพิ่มวิชาและบทเรียนได้ไม่จำกัด เพื่อช่วยดันเกรดของคุณให้พุ่งขึ้นทุกวิชา!
+      </p>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.35rem;">เลือกการดำเนินการ:</label>
+        <select id="expand-action-type" style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1.5px solid var(--border); background: var(--bg); color: var(--text); font-family: inherit;">
+          <option value="subject">➕ เพิ่มวิชาใหม่ (New Subject)</option>
+          <option value="lesson">📑 เพิ่มบทเรียนในวิชาปัจจุบัน (New Lesson)</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.35rem;">ชื่อวิชา หรือ ชื่อบทเรียนใหม่:</label>
+        <input type="text" id="expand-name-input" placeholder="เช่น ภาษาอังกฤษ ม.5, ชีววิทยา, บทที่ 5: การคลัง..." style="width: 100%; padding: 0.65rem; border-radius: 8px; border: 1.5px solid var(--border); background: var(--bg); color: var(--text); font-family: inherit; box-sizing: border-box;">
+      </div>
+
+      <div style="background: rgba(99, 102, 241, 0.06); border-radius: 10px; padding: 0.85rem; margin-bottom: 1.25rem; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
+        💡 <strong>คำแนะนำ:</strong> เมื่อกรอกชื่อวิชาหรือบทเรียน ระบบจะจัดสรรโควตาและสร้างแท็บบทเรียนให้อัตโนมัติ จากนั้นคุณสามารถส่งไฟล์ PDF / โจทย์ข้อสอบมาให้ในแชทเพื่อบรรจุเข้าสู่คลังข้อสอบและแท็บสรุปได้ทันทีครับ!
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+        <button id="btn-cancel-expand" class="btn-secondary" style="width: auto; padding: 0.5rem 1rem;">ยกเลิก</button>
+        <button id="btn-save-expand" class="btn-primary" style="width: auto; padding: 0.5rem 1.25rem;">บันทึกและสร้างทันที</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

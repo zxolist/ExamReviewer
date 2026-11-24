@@ -3,7 +3,22 @@
 
 class ExamApp {
   constructor() {
-    this.allQuestions = typeof QUESTIONS_DATA !== 'undefined' ? QUESTIONS_DATA : [];
+    // Multi-Subject & Lesson Architecture
+    this.subjectsData = typeof SUBJECTS_DATA !== 'undefined' ? SUBJECTS_DATA : {
+      thurakid: { id: 'thurakid', name: 'การประกอบธุรกิจ ม.5', questions: typeof QUESTIONS_DATA !== 'undefined' ? QUESTIONS_DATA : [] }
+    };
+
+    // Load custom subjects if any
+    try {
+      const customSub = JSON.parse(localStorage.getItem('rywreviewer_custom_subjects') || '{}');
+      Object.assign(this.subjectsData, customSub);
+    } catch (e) {}
+
+    this.currentSubject = localStorage.getItem('rywreviewer_active_subject') || 'thurakid';
+    if (!this.subjectsData[this.currentSubject]) this.currentSubject = 'thurakid';
+    this.currentLesson = 'all';
+
+    this.allQuestions = this.subjectsData[this.currentSubject].questions || [];
     this.quizQuestions = [];
     this.currentIndex = 0;
     this.userAnswers = {}; // { [qId]: { selected: number, isCorrect: boolean } }
@@ -59,6 +74,7 @@ class ExamApp {
     this.setupConfetti();
     this.initCheatSheet();
     this.initSearchBank();
+    this.initSubjectSystem();
 
     // First time visitor check: open Step Wizard automatically only on first visit
     setTimeout(() => {
@@ -862,6 +878,9 @@ class ExamApp {
       });
     } else {
       let pool = [...this.allQuestions];
+      if (this.currentLesson && this.currentLesson !== 'all') {
+        pool = pool.filter(q => q.lesson_id === this.currentLesson);
+      }
       if (this.config.difficulty !== 'all') {
         pool = pool.filter(q => q.difficulty === this.config.difficulty);
       }
@@ -1807,6 +1826,238 @@ class ExamApp {
     const themeBtn = document.getElementById('theme-toggle-btn');
     if (themeBtn) {
       themeBtn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+    }
+  }
+
+  // ==========================================================================
+  // MULTI-SUBJECT & LESSON CONTROLLER METHODS
+  // ==========================================================================
+  initSubjectSystem() {
+    // Subject Pills click
+    document.querySelectorAll('.subject-pill-btn[data-subject]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.switchSubject(btn.dataset.subject);
+        this.playSound('click');
+      });
+    });
+
+    // Expand Subject Modal Handlers
+    const btnAddSub = document.getElementById('btn-add-subject');
+    const modalExpand = document.getElementById('expand-subject-modal');
+    const btnCloseExpand = document.getElementById('btn-close-expand-modal');
+    const btnCancelExpand = document.getElementById('btn-cancel-expand');
+    const btnSaveExpand = document.getElementById('btn-save-expand');
+
+    if (btnAddSub && modalExpand) {
+      btnAddSub.addEventListener('click', () => {
+        modalExpand.style.display = 'flex';
+      });
+    }
+    if (btnCloseExpand && modalExpand) {
+      btnCloseExpand.addEventListener('click', () => modalExpand.style.display = 'none');
+    }
+    if (btnCancelExpand && modalExpand) {
+      btnCancelExpand.addEventListener('click', () => modalExpand.style.display = 'none');
+    }
+    if (btnSaveExpand) {
+      btnSaveExpand.addEventListener('click', () => {
+        const type = document.getElementById('expand-action-type')?.value;
+        const name = (document.getElementById('expand-name-input')?.value || '').trim();
+        if (!name) {
+          alert('กรุณากรอกชื่อวิชา หรือชื่อบทเรียนใหม่');
+          return;
+        }
+
+        if (type === 'subject') {
+          const subKey = 'custom_' + Date.now();
+          this.subjectsData[subKey] = {
+            id: subKey,
+            name: name,
+            shortName: name,
+            icon: '📘',
+            color: '#3b82f6',
+            badgeBg: 'rgba(59, 130, 246, 0.12)',
+            desc: `คลังวิชา ${name} (พร้อมขยายบทเรียนและเพิ่มข้อสอบ)`,
+            totalQuestions: 0,
+            lessons: [{ id: 'all', name: 'ทุกบทเรียน' }, { id: subKey + '_l1', name: 'บทเรียนที่ 1' }],
+            questions: []
+          };
+          try {
+            const customSub = JSON.parse(localStorage.getItem('rywreviewer_custom_subjects') || '{}');
+            customSub[subKey] = this.subjectsData[subKey];
+            localStorage.setItem('rywreviewer_custom_subjects', JSON.stringify(customSub));
+          } catch(e) {}
+
+          const pillContainer = document.getElementById('subject-pills-list');
+          if (pillContainer && btnAddSub) {
+            const newBtn = document.createElement('button');
+            newBtn.className = 'subject-pill-btn';
+            newBtn.dataset.subject = subKey;
+            newBtn.type = 'button';
+            newBtn.innerHTML = `<span class="subject-pill-icon">📘</span> <span class="subject-pill-name">${name}</span> <span class="subject-pill-badge">0 ข้อ</span>`;
+            newBtn.addEventListener('click', () => this.switchSubject(subKey));
+            pillContainer.insertBefore(newBtn, btnAddSub);
+          }
+          alert(`สร้างวิชา "${name}" เรียบร้อยแล้ว! ส่งไฟล์หรือคำถามมาให้ระบบช่วยเติมข้อสอบได้เลยครับ`);
+          this.switchSubject(subKey);
+        } else {
+          const lessonId = 'lesson_' + Date.now();
+          const curr = this.subjectsData[this.currentSubject];
+          if (curr) {
+            curr.lessons.push({ id: lessonId, name: name });
+            this.renderLessonPills();
+            alert(`เพิ่มบทเรียน "${name}" ในวิชา "${curr.name}" เรียบร้อยแล้ว!`);
+          }
+        }
+        if (modalExpand) modalExpand.style.display = 'none';
+        const input = document.getElementById('expand-name-input');
+        if (input) input.value = '';
+      });
+    }
+
+    // Initial render
+    this.renderSubjectUI();
+  }
+
+  renderSubjectUI() {
+    this.switchSubject(this.currentSubject);
+  }
+
+  switchSubject(subjectId) {
+    if (!this.subjectsData[subjectId]) return;
+    this.currentSubject = subjectId;
+    this.currentLesson = 'all';
+    this.allQuestions = this.subjectsData[subjectId].questions || [];
+    localStorage.setItem('rywreviewer_active_subject', subjectId);
+
+    // Update active subject pill in UI
+    document.querySelectorAll('.subject-pill-btn[data-subject]').forEach(btn => {
+      if (btn.dataset.subject === subjectId) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    // Update document attribute for CSS accents
+    document.documentElement.setAttribute('data-subject-theme', subjectId);
+
+    // Update Header sub-title
+    const sub = this.subjectsData[subjectId];
+    const subTitle = document.querySelector('.logo-subtitle');
+    if (subTitle) {
+      subTitle.textContent = `${sub.name} (${this.allQuestions.length} ข้อ)`;
+    }
+
+    // Update Study Banner on setup screen
+    const bannerTitle = document.querySelector('.study-banner-title');
+    const bannerDesc = document.querySelector('.study-banner-desc');
+    if (bannerTitle && bannerDesc) {
+      if (subjectId === 'history') {
+        bannerTitle.textContent = 'ยังไม่มั่นใจ? อ่านสรุปประวัติศาสตร์สากล ม.5 (เวลา ศักราช ยุคสมัย อารยธรรมจีน)';
+        bannerDesc.textContent = 'สูตรเทียบ 6 ศักราช (พ.ศ. ค.ศ. ฮ.ศ. ม.ศ. จ.ศ. ร.ศ.), แหล่งโบราณคดี และสรุป 11 ราชวงศ์จีน อ่านจบเข้าใจใน 5 นาที';
+      } else {
+        bannerTitle.textContent = 'ยังไม่มั่นใจ? อ่านสรุปบทเรียนเข้มข้นก่อนเริ่มสอบ (2 บทหลัก)';
+        bannerDesc.textContent = 'สรุปองค์กรธุรกิจ และ วงจรชีวิตธุรกิจ พร้อมตารางเปรียบเทียบและจุดเน้นข้อสอบ อ่านจบเข้าใจใน 5 นาที';
+      }
+    }
+
+    // Render Lesson Pills
+    this.renderLessonPills();
+
+    // Update Learn Tab
+    this.updateLearnTabContent();
+
+    // Update Available Counts
+    this.updateAvailableCounts();
+
+    // Reset Flashcards to index 0
+    this.flashcardIndex = 0;
+    this.renderFlashcard();
+
+    // Re-filter Search Bank
+    this.filterSearchBank();
+  }
+
+  renderLessonPills() {
+    const container = document.getElementById('lesson-pills-container');
+    if (!container) return;
+    const sub = this.subjectsData[this.currentSubject];
+    if (!sub || !sub.lessons) {
+      container.innerHTML = '';
+      return;
+    }
+
+    container.innerHTML = sub.lessons.map(l => `
+      <button class="lesson-pill-btn ${this.currentLesson === l.id ? 'active' : ''}" data-lesson="${l.id}" type="button">
+        ${l.name}
+      </button>
+    `).join('');
+
+    container.querySelectorAll('.lesson-pill-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        container.querySelectorAll('.lesson-pill-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.currentLesson = btn.dataset.lesson;
+        this.updateAvailableCounts();
+        this.playSound('click');
+      });
+    });
+  }
+
+  updateLearnTabContent() {
+    const learnThurakid = document.getElementById('learn-content-thurakid');
+    const learnHistory = document.getElementById('learn-content-history');
+    const badge = document.querySelector('.learn-header-badge');
+    const title = document.querySelector('.learn-header-title');
+    const sub = document.querySelector('.learn-header-sub');
+    const pillsContainer = document.querySelector('.learn-filter-pills');
+
+    if (this.currentSubject === 'history') {
+      if (learnThurakid) learnThurakid.style.display = 'none';
+      if (learnHistory) learnHistory.style.display = 'block';
+      if (badge) badge.textContent = '📖 เอกสารทบทวนเตรียมสอบ • ประวัติศาสตร์สากล ม.5';
+      if (title) title.textContent = 'สรุปเข้มก่อนสอบ: เวลา ยุคสมัย และอารยธรรมจีน';
+      if (sub) sub.textContent = 'สูตรเทียบ 6 ศักราชสำคัญ, ยุคก่อนประวัติศาสตร์ vs ประวัติศาสตร์, สรุป 11 ราชวงศ์จีน และแนวข้อสอบจริง 12 ข้อ';
+      if (pillsContainer) {
+        pillsContainer.innerHTML = `
+          <button class="learn-filter-btn active" data-chapter="all">🌟 เนื้อหาทั้งหมด</button>
+          <button class="learn-filter-btn" data-chapter="history_era">⏳ ส่วนที่ 1: ศักราช</button>
+          <button class="learn-filter-btn" data-chapter="history_period">🏺 ส่วนที่ 2: ยุคสมัย & โบราณคดี</button>
+          <button class="learn-filter-btn" data-chapter="history_china_ancient">🐉 ส่วนที่ 3: อารยธรรมจีน</button>
+          <button class="learn-filter-btn" data-chapter="history_china_modern">🇨🇳 ส่วนที่ 4: จีนสมัยใหม่</button>
+        `;
+        pillsContainer.querySelectorAll('.learn-filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            pillsContainer.querySelectorAll('.learn-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            this.filterLearnChapter(btn.dataset.chapter);
+            this.playSound('click');
+          });
+        });
+      }
+    } else {
+      if (learnThurakid) learnThurakid.style.display = 'block';
+      if (learnHistory) learnHistory.style.display = 'none';
+      if (badge) badge.textContent = '📖 เอกสารทบทวนเตรียมสอบ • การงานอาชีพ 2 (งานธุรกิจ) ม.5';
+      if (title) title.textContent = 'สรุปเนื้อหาเข้มข้น: องค์กรธุรกิจ และ วงจรชีวิตธุรกิจ';
+      if (sub) sub.textContent = 'รวบรวมประเด็นหลัก คำจำกัดความ จุดเน้นข้อสอบ และตารางเปรียบเทียบครบถ้วนตามบทเรียน อ่านจบเข้าใจได้ใน 5-10 นาที';
+      if (pillsContainer) {
+        pillsContainer.innerHTML = `
+          <button class="learn-filter-btn active" data-chapter="all">🌟 เนื้อหาทั้งหมด</button>
+          <button class="learn-filter-btn" data-chapter="ch1">🏛️ บทที่ 1: องค์กรธุรกิจ</button>
+          <button class="learn-filter-btn" data-chapter="ch2">📈 บทที่ 2: วงจรชีวิตธุรกิจ</button>
+          <button class="learn-filter-btn" data-chapter="tips">⚡ จุดเน้นข้อสอบ (Tips)</button>
+        `;
+        pillsContainer.querySelectorAll('.learn-filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            pillsContainer.querySelectorAll('.learn-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            this.filterLearnChapter(btn.dataset.chapter);
+            this.playSound('click');
+          });
+        });
+      }
     }
   }
 }
