@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th" data-theme="light">
+<html lang="th" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -2850,7 +2850,7 @@ body.pc-ui .app-main {
         <button id="btn-reopen-wizard" class="btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.82rem;" title="เลือกโหมดการแสดงผล (มือถือ / คอม)">
           <span>📱/💻 โหมดอุปกรณ์</span>
         </button>
-        <button id="theme-toggle-btn" class="icon-btn" title="สลับโหมดมืด/สว่าง">🌙</button>
+        <button id="theme-toggle-btn" class="icon-btn" title="สลับโหมดมืด/สว่าง">☀️</button>
         <button class="icon-btn" onclick="window.print()" title="พิมพ์ข้อสอบ (Print)">🖨️</button>
       </div>
     </div>
@@ -8470,16 +8470,16 @@ class ExamApp {
   }
 
   loadTheme() {
-    const saved = localStorage.getItem('rywreviewer_theme') || localStorage.getItem('bizexam_theme') || 'light';
+    const saved = localStorage.getItem('rywreviewer_theme_v3') || 'dark';
     document.documentElement.setAttribute('data-theme', saved);
     this.updateThemeIcon(saved);
   }
 
   toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
     const next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('rywreviewer_theme', next);
+    localStorage.setItem('rywreviewer_theme_v3', next);
     this.updateThemeIcon(next);
   }
 

@@ -1763,16 +1763,16 @@ class ExamApp {
   }
 
   loadTheme() {
-    const saved = localStorage.getItem('rywreviewer_theme') || localStorage.getItem('bizexam_theme') || 'light';
+    const saved = localStorage.getItem('rywreviewer_theme_v3') || 'dark';
     document.documentElement.setAttribute('data-theme', saved);
     this.updateThemeIcon(saved);
   }
 
   toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
     const next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('rywreviewer_theme', next);
+    localStorage.setItem('rywreviewer_theme_v3', next);
     this.updateThemeIcon(next);
   }
 
