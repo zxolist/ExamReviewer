@@ -2418,28 +2418,36 @@ input:checked + .slider:before {
 }
 
 /* ==========================================================================
-   MULTI-SUBJECT & LESSON SELECTOR STYLES
+   MULTI-SUBJECT & LESSON SELECTOR STYLES (Fixed & Polished)
    ========================================================================== */
 .subject-bar-wrapper {
   background: var(--card-bg);
-  border-bottom: 1px solid var(--border);
-  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--card-border);
+  padding: 0.55rem 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
   position: relative;
-  z-index: 10;
+  z-index: 55;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+[data-theme="dark"] .subject-bar-wrapper {
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom-color: var(--card-border);
 }
 
 .subject-bar-container {
-  max-width: 1200px;
+  max-width: 1040px;
   margin: 0 auto;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.75rem;
 }
 
 .subject-bar-label {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--text-muted);
@@ -2449,9 +2457,9 @@ input:checked + .slider:before {
 .subject-pills-list {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.55rem;
   overflow-x: auto;
-  padding: 2px 4px;
+  padding: 4px 2px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
@@ -2462,18 +2470,25 @@ input:checked + .slider:before {
 .subject-pill-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: 0.45rem;
+  padding: 0.48rem 0.95rem;
   border-radius: 999px;
-  background: var(--bg);
-  border: 1.5px solid var(--border);
-  color: var(--text);
+  background: var(--card-bg);
+  border: 1.5px solid var(--card-border);
+  color: var(--text-main);
   font-family: inherit;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  box-shadow: var(--shadow-sm);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="dark"] .subject-pill-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(71, 85, 105, 0.6);
+  color: var(--text-main);
 }
 
 .subject-pill-btn:hover {
@@ -2483,23 +2498,34 @@ input:checked + .slider:before {
 
 .subject-pill-btn.active {
   background: var(--primary);
-  color: #ffffff;
+  color: #ffffff !important;
   border-color: var(--primary);
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+.subject-pill-btn.active .subject-pill-name {
+  color: #ffffff !important;
+  font-weight: 700;
 }
 
 .subject-pill-btn.active .subject-pill-badge {
   background: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
+  color: #ffffff !important;
 }
 
 .subject-pill-badge {
   font-size: 0.72rem;
-  padding: 0.15rem 0.45rem;
+  padding: 0.12rem 0.45rem;
   border-radius: 999px;
-  background: var(--border);
-  color: var(--text-muted);
+  background: var(--primary-light);
+  color: var(--primary);
   font-weight: 700;
+  line-height: 1.2;
+}
+
+[data-theme="dark"] .subject-pill-badge {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
 }
 
 .subject-pill-btn.add-subject-btn {
@@ -2507,8 +2533,22 @@ input:checked + .slider:before {
   background: transparent;
   color: var(--primary);
 }
+
 .subject-pill-btn.add-subject-btn:hover {
-  background: rgba(99, 102, 241, 0.08);
+  background: var(--primary-light);
+}
+
+/* Setup Screen Subject Cards */
+.subject-card {
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.subject-card.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 4px 14px var(--primary-glow);
+}
+[data-theme="dark"] .subject-card.active {
+  background: rgba(99, 102, 241, 0.15);
 }
 
 /* Lesson Pills in Setup Screen */
@@ -2526,8 +2566,8 @@ input:checked + .slider:before {
   padding: 0.45rem 0.95rem;
   border-radius: 12px;
   background: var(--card-bg);
-  border: 1.5px solid var(--border);
-  color: var(--text);
+  border: 1.5px solid var(--card-border);
+  color: var(--text-main);
   font-family: inherit;
   font-size: 0.86rem;
   font-weight: 600;
@@ -2535,23 +2575,89 @@ input:checked + .slider:before {
   transition: all 0.2s;
 }
 
+[data-theme="dark"] .lesson-pill-btn {
+  background: rgba(30, 41, 59, 0.7);
+  border-color: rgba(71, 85, 105, 0.6);
+  color: var(--text-main);
+}
+
 .lesson-pill-btn:hover {
   border-color: var(--primary);
+  transform: translateY(-1px);
 }
 
 .lesson-pill-btn.active {
-  background: rgba(99, 102, 241, 0.1);
+  background: var(--primary-light);
   border-color: var(--primary);
   color: var(--primary);
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.18);
+  font-weight: 700;
+  box-shadow: 0 2px 8px var(--primary-glow);
 }
 
-/* History Theme Accents */
+[data-theme="dark"] .lesson-pill-btn.active {
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+}
+
+/* History Subject Theme Accents */
 [data-subject-theme="history"] {
   --primary: #d97706;
   --primary-hover: #b45309;
+  --primary-light: #fef3c7;
+  --primary-glow: rgba(217, 119, 6, 0.25);
 }
 
+[data-theme="dark"][data-subject-theme="history"] {
+  --primary: #f59e0b;
+  --primary-hover: #d97706;
+  --primary-light: rgba(245, 158, 11, 0.15);
+  --primary-glow: rgba(245, 158, 11, 0.35);
+}
+
+/* ==========================================================================
+   DEVICE MODE OVERRIDES (Mobile vs PC Mode)
+   ========================================================================== */
+body.mobile-ui .app-main {
+  max-width: 580px;
+}
+body.mobile-ui .header-container {
+  max-width: 580px;
+}
+body.mobile-ui .subject-bar-container {
+  max-width: 580px;
+}
+body.mobile-ui .config-grid {
+  grid-template-columns: 1fr;
+}
+body.mobile-ui .choice-btn {
+  padding: 0.95rem 1.1rem;
+  font-size: 1rem;
+  min-height: 52px;
+}
+body.mobile-ui .question-text {
+  font-size: 1.12rem;
+  line-height: 1.55;
+}
+
+body.pc-ui .app-main {
+  max-width: 1040px;
+}
+
+@media (max-width: 640px) {
+  .subject-bar-wrapper {
+    padding: 0.4rem 0.5rem;
+  }
+  .subject-bar-container {
+    gap: 0.35rem;
+  }
+  .subject-bar-label {
+    display: none; /* Hide label on small mobile to give room to subject pills */
+  }
+  .subject-pill-btn {
+    padding: 0.38rem 0.75rem;
+    font-size: 0.82rem;
+  }
+}
 
 </style>
 </head>
@@ -2566,7 +2672,7 @@ input:checked + .slider:before {
       <!-- Logo & Home Button -->
       <div id="btn-home-logo" class="logo-group" role="button" tabindex="0" title="🏠 กลับสู่หน้าแรก (Home) / 📖 วิธีใช้งาน (Tutorial)">
         <div class="logo-badge">
-          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHVycGxlR3JhZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM3MDU2ZmMiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNTkzY2YyIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0ic29mdFNoYWRvdyIgeD0iLTE1JSIgeT0iLTE1JSIgd2lkdGg9IjEzMCUiIGhlaWdodD0iMTMwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIyLjUiIHN0ZERldmlhdGlvbj0iMiIgZmxvb2QtY29sb3I9IiMwMDAiIGZsb29kLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8IS0tIFJvdW5kZWQgUHVycGxlIFNxdWlyY2xlIC0tPgogIDxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE4IiBmaWxsPSJ1cmwoI3B1cnBsZUdyYWQpIi8+CiAgCiAgPCEtLSBCb29rIDM6IEN5YW4vQmx1ZSAoQmFjaykgLS0+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIj4KICAgIDxyZWN0IHg9IjMxIiB5PSIyNCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIyIiByeD0iMi41IiBmaWxsPSIjMzhiZGY4Ii8+CiAgICA8cmVjdCB4PSIzMSIgeT0iMjQiIHdpZHRoPSIzLjUiIGhlaWdodD0iMjIiIHJ4PSIxIiBmaWxsPSIjMDI4NGM3Ii8+CiAgICA8cGF0aCBkPSJNMzQuNSA0My41IGgxMSB2Mi41IGgtMTEgeiIgZmlsbD0iI2YwZjlmZiIgb3BhY2l0eT0iMC45Ii8+CiAgPC9nPgoKICA8IS0tIEJvb2sgMjogUmVkL1BpbmsgKE1pZGRsZSkgLS0+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIj4KICAgIDxyZWN0IHg9IjIzIiB5PSIxOSIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIyIiByeD0iMi41IiBmaWxsPSIjZWY0NDQ0Ii8+CiAgICA8cmVjdCB4PSIyMyIgeT0iMTkiIHdpZHRoPSIzLjUiIGhlaWdodD0iMjIiIHJ4PSIxIiBmaWxsPSIjZGMyNjI2Ii8+CiAgICA8cGF0aCBkPSJNMjYuNSAzOC41IGgxMSB2Mi41IGgtMTEgeiIgZmlsbD0iI2ZmZjFmMiIgb3BhY2l0eT0iMC45Ii8+CiAgPC9nPgoKICA8IS0tIEJvb2sgMTogR3JlZW4gKEZyb250KSAtLT4KICA8ZyBmaWx0ZXI9InVybCgjc29mdFNoYWRvdykiPgogICAgPHJlY3QgeD0iMTUiIHk9IjE0IiB3aWR0aD0iMTciIGhlaWdodD0iMjMiIHJ4PSIyLjUiIGZpbGw9IiM4NGNjMTYiLz4KICAgIDxyZWN0IHg9IjE1IiB5PSIxNCIgd2lkdGg9IjMuNSIgaGVpZ2h0PSIyMyIgcng9IjEiIGZpbGw9IiM2NWEzMGQiLz4KICAgIDxwYXRoIGQ9Ik0xOC41IDM0IGgxMiB2Mi41IGgtMTIgeiIgZmlsbD0iI2Y3ZmVlNyIgb3BhY2l0eT0iMC45NSIvPgogICAgPGxpbmUgeDE9IjE4LjUiIHkxPSIzNS4yIiB4Mj0iMzAuNSIgeTI9IjM1LjIiIHN0cm9rZT0iI2Q5Zjk5ZCIgc3Ryb2tlLXdpZHRoPSIwLjYiLz4KICA8L2c+Cjwvc3ZnPgo=" alt="RywReviewer Home Icon" class="logo-img">
+          <img src="logo.svg" alt="RywReviewer Home Icon" class="logo-img">
           <span class="home-indicator-badge" title="กดเพื่อกลับหน้าแรก">🏠</span>
         </div>
         <div>
@@ -2596,8 +2702,8 @@ input:checked + .slider:before {
         <button id="btn-open-tutorial" class="btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.82rem;" title="ดูคู่มือวิธีใช้งานเว็บไซต์ (Tutorial)">
           <span>📖 วิธีใช้งาน</span>
         </button>
-        <button id="btn-reopen-wizard" class="btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.82rem;" title="ตั้งค่าการสอบแบบทีละขั้นตอน">
-          <span>🧙‍♂️ สเต็ปตั้งค่า</span>
+        <button id="btn-reopen-wizard" class="btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.82rem;" title="เลือกโหมดการแสดงผล (มือถือ / คอม)">
+          <span>📱/💻 โหมดอุปกรณ์</span>
         </button>
         <button id="theme-toggle-btn" class="icon-btn" title="สลับโหมดมืด/สว่าง">🌙</button>
         <button class="icon-btn" onclick="window.print()" title="พิมพ์ข้อสอบ (Print)">🖨️</button>
@@ -2621,7 +2727,7 @@ input:checked + .slider:before {
         <button class="subject-pill-btn" data-subject="history" id="subject-pill-history" type="button">
           <span class="subject-pill-icon">🏛️</span>
           <span class="subject-pill-name">ประวัติศาสตร์สากล ม.5</span>
-          <span class="subject-pill-badge" id="subject-badge-history">35 ข้อ</span>
+          <span class="subject-pill-badge" id="subject-badge-history">50 ข้อ</span>
         </button>
         <button class="subject-pill-btn add-subject-btn" id="btn-add-subject" type="button" title="เพิ่มวิชาใหม่หรือขยายบทเรียน">
           <span class="subject-pill-icon">➕</span>
@@ -2668,7 +2774,7 @@ input:checked + .slider:before {
       <!-- Home, Timer, Question Palette & Exit Button -->
       <div style="display: flex; align-items: center; gap: 0.45rem;">
         <button id="btn-upper-home" class="btn-home-nav" title="กลับสู่หน้าแรก (Home)">
-          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHVycGxlR3JhZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM3MDU2ZmMiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNTkzY2YyIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0ic29mdFNoYWRvdyIgeD0iLTE1JSIgeT0iLTE1JSIgd2lkdGg9IjEzMCUiIGhlaWdodD0iMTMwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIyLjUiIHN0ZERldmlhdGlvbj0iMiIgZmxvb2QtY29sb3I9IiMwMDAiIGZsb29kLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8IS0tIFJvdW5kZWQgUHVycGxlIFNxdWlyY2xlIC0tPgogIDxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE4IiBmaWxsPSJ1cmwoI3B1cnBsZUdyYWQpIi8+CiAgCiAgPCEtLSBCb29rIDM6IEN5YW4vQmx1ZSAoQmFjaykgLS0+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIj4KICAgIDxyZWN0IHg9IjMxIiB5PSIyNCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIyIiByeD0iMi41IiBmaWxsPSIjMzhiZGY4Ii8+CiAgICA8cmVjdCB4PSIzMSIgeT0iMjQiIHdpZHRoPSIzLjUiIGhlaWdodD0iMjIiIHJ4PSIxIiBmaWxsPSIjMDI4NGM3Ii8+CiAgICA8cGF0aCBkPSJNMzQuNSA0My41IGgxMSB2Mi41IGgtMTEgeiIgZmlsbD0iI2YwZjlmZiIgb3BhY2l0eT0iMC45Ii8+CiAgPC9nPgoKICA8IS0tIEJvb2sgMjogUmVkL1BpbmsgKE1pZGRsZSkgLS0+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIj4KICAgIDxyZWN0IHg9IjIzIiB5PSIxOSIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIyIiByeD0iMi41IiBmaWxsPSIjZWY0NDQ0Ii8+CiAgICA8cmVjdCB4PSIyMyIgeT0iMTkiIHdpZHRoPSIzLjUiIGhlaWdodD0iMjIiIHJ4PSIxIiBmaWxsPSIjZGMyNjI2Ii8+CiAgICA8cGF0aCBkPSJNMjYuNSAzOC41IGgxMSB2Mi41IGgtMTEgeiIgZmlsbD0iI2ZmZjFmMiIgb3BhY2l0eT0iMC45Ii8+CiAgPC9nPgoKICA8IS0tIEJvb2sgMTogR3JlZW4gKEZyb250KSAtLT4KICA8ZyBmaWx0ZXI9InVybCgjc29mdFNoYWRvdykiPgogICAgPHJlY3QgeD0iMTUiIHk9IjE0IiB3aWR0aD0iMTciIGhlaWdodD0iMjMiIHJ4PSIyLjUiIGZpbGw9IiM4NGNjMTYiLz4KICAgIDxyZWN0IHg9IjE1IiB5PSIxNCIgd2lkdGg9IjMuNSIgaGVpZ2h0PSIyMyIgcng9IjEiIGZpbGw9IiM2NWEzMGQiLz4KICAgIDxwYXRoIGQ9Ik0xOC41IDM0IGgxMiB2Mi41IGgtMTIgeiIgZmlsbD0iI2Y3ZmVlNyIgb3BhY2l0eT0iMC45NSIvPgogICAgPGxpbmUgeDE9IjE4LjUiIHkxPSIzNS4yIiB4Mj0iMzAuNSIgeTI9IjM1LjIiIHN0cm9rZT0iI2Q5Zjk5ZCIgc3Ryb2tlLXdpZHRoPSIwLjYiLz4KICA8L2c+Cjwvc3ZnPgo=" alt="Home" class="upper-home-icon">
+          <img src="logo.svg" alt="Home" class="upper-home-icon">
           <span>🏠 หน้าแรก</span>
         </button>
         <div class="timer-box" title="เวลา">
@@ -2698,7 +2804,7 @@ input:checked + .slider:before {
           <p>คลังข้อสอบทบทวนวิชาการประกอบธุรกิจ ม.5 รวม 50 ข้อ พร้อมเฉลยละเอียดและวิเคราะห์ผล</p>
           <div style="margin-top: 0.85rem; display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
             <button id="btn-hero-wizard" class="btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.9rem; border-color: var(--primary); color: var(--primary);">
-              <span>🧙‍♂️ ตั้งค่าแบบทีละสเต็ป (Step-by-Step Wizard)</span>
+              <span>📱/💻 โหมดอุปกรณ์ (Mobile / PC)</span>
             </button>
             <button id="btn-hero-tutorial" class="btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.9rem; border-color: #8b5cf6; color: #8b5cf6;">
               <span>📖 วิธีใช้งานเว็บไซต์ (Tutorial Guide)</span>
@@ -2719,9 +2825,33 @@ input:checked + .slider:before {
           </div>
         </div>
 
-        <!-- Lesson / Chapter Selection -->
+        <!-- 1. Subject Selection Cards -->
         <div class="section-title">
-          <span>📑</span> 1. เลือกบทเรียนที่ต้องการติว (Select Lesson)
+          <span>📚</span> 1. เลือกวิชาที่ต้องการสอบ (Select Subject)
+        </div>
+        <div class="subject-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.85rem; margin-bottom: 1.25rem;">
+          <div class="option-card subject-card active" data-subject="thurakid" role="button" tabindex="0">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+              <span style="font-size: 1.6rem;">💼</span>
+              <span class="badge" style="background: rgba(99, 102, 241, 0.12); color: var(--primary); font-weight: 700;">50 ข้อ (2 บท)</span>
+            </div>
+            <div class="option-card-title" style="font-size: 1.05rem;">การประกอบธุรกิจ ม.5</div>
+            <div class="option-card-desc">รูปแบบธุรกิจ, หุ้นส่วน, บริษัท, สภาพแวดล้อมธุรกิจ & วงจรชีวิตธุรกิจ</div>
+          </div>
+
+          <div class="option-card subject-card" data-subject="history" role="button" tabindex="0">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+              <span style="font-size: 1.6rem;">🏛️</span>
+              <span class="badge" style="background: rgba(217, 119, 6, 0.12); color: #d97706; font-weight: 700;">50 ข้อ (3 บท)</span>
+            </div>
+            <div class="option-card-title" style="font-size: 1.05rem;">ประวัติศาสตร์สากล ม.5</div>
+            <div class="option-card-desc">เวลาและศักราช (พ.ศ./ค.ศ./ฮ.ศ./ร.ศ.), การแบ่งยุคสมัย & อารยธรรมโบราณ/จีน</div>
+          </div>
+        </div>
+
+        <!-- 2. Lesson / Chapter Selection -->
+        <div class="section-title">
+          <span>📑</span> 2. เลือกบทเรียนที่ต้องการติว (Select Lesson)
         </div>
         <div id="lesson-pills-container" class="lesson-pills-list">
           <!-- Dynamically populated from active subject -->
@@ -2729,7 +2859,7 @@ input:checked + .slider:before {
 
         <!-- Difficulty Selection -->
         <div class="section-title">
-          <span>⚡</span> 2. เลือกระดับความยาก (Difficulty)
+          <span>⚡</span> 3. เลือกระดับความยาก (Difficulty)
         </div>
         <div class="config-grid">
           <div class="option-card difficulty-card active" data-difficulty="all">
@@ -2764,7 +2894,7 @@ input:checked + .slider:before {
 
         <!-- Question Count Selection -->
         <div class="section-title">
-          <span>🔢</span> 3. จำนวนข้อสอบที่ต้องการทำ
+          <span>🔢</span> 4. จำนวนข้อสอบที่ต้องการทำ
         </div>
         <div class="number-pills">
           <button class="number-pill count-pill" data-count="5">5 ข้อ</button>
@@ -2776,7 +2906,7 @@ input:checked + .slider:before {
 
         <!-- Mode Selection -->
         <div class="section-title">
-          <span>🎮</span> 4. เลือกโหมดการทำแบบทดสอบ
+          <span>🎮</span> 5. เลือกโหมดการทำแบบทดสอบ
         </div>
         <div class="config-grid" style="grid-template-columns: 1fr 1fr;">
           <div class="option-card mode-card active" data-mode="practice">
@@ -3853,113 +3983,38 @@ input:checked + .slider:before {
     </div>
   </div>
 
-  <!-- ================= STEP-BY-STEP ONBOARDING WIZARD MODAL ================= -->
+  <!-- ================= DEVICE SETTINGS MODAL ================= -->
   <div id="wizard-modal" class="wizard-modal-backdrop">
-    <div class="wizard-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-        <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary);">✨ ยินดีต้อนรับสู่ RywReviewer</span>
-        <button id="btn-close-wizard" class="icon-btn" style="border: none; width: 32px; height: 32px;">✕</button>
+    <div class="wizard-card" style="max-width: 480px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <span style="font-size: 0.95rem; font-weight: 700; color: var(--primary);">📱 / 💻 ตั้งค่าโหมดอุปกรณ์ (Device Mode)</span>
+        <button id="btn-close-wizard" class="icon-btn" style="border: none; width: 32px; height: 32px;" title="ปิด">✕</button>
       </div>
 
-      <!-- Step Indicators -->
-      <div class="wizard-step-indicator">
-        <div id="wizard-dot-1" class="wizard-step-dot active"></div>
-        <div id="wizard-dot-2" class="wizard-step-dot"></div>
-        <div id="wizard-dot-3" class="wizard-step-dot"></div>
+      <div class="wizard-header" style="margin-bottom: 1.25rem;">
+        <div class="wizard-mascot">📱💻</div>
+        <h3 class="cute-modal-title">คุณกำลังใช้งานผ่านอุปกรณ์ใด?</h3>
+        <p class="cute-modal-desc">เลือกโหมดที่เหมาะสมเพื่อประสบการณ์การทำข้อสอบที่ดีที่สุด</p>
       </div>
 
-      <!-- STEP 1: Device Selection -->
-      <div id="wizard-step-1" class="wizard-step-content active">
-        <div class="wizard-header">
-          <div class="wizard-mascot">📱💻</div>
-          <h3 class="cute-modal-title">คุณกำลังใช้งานผ่านอุปกรณ์ใด?</h3>
-          <p class="cute-modal-desc">ระบบจะปรับแต่งขนาดปุ่มและรูปแบบการแสดงผลให้เหมาะสมที่สุด</p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 1.5rem;">
+        <div class="option-card wizard-device-card active" data-device="mobile" role="button" tabindex="0">
+          <div style="font-size: 2.2rem; text-align: center; margin-bottom: 0.35rem;">📱</div>
+          <div class="option-card-title" style="justify-content: center; font-size: 1rem;">สมาร์ตโฟน (Mobile)</div>
+          <div class="option-card-desc" style="text-align: center;">ปุ่มสัมผัสขนาดใหญ่พิเศษ เลย์เอาต์แนวตั้ง กดง่าย ไม่กดพลาด</div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 1rem;">
-          <div class="option-card wizard-device-card active" data-device="mobile">
-            <div style="font-size: 2rem; text-align: center; margin-bottom: 0.25rem;">📱</div>
-            <div class="option-card-title" style="justify-content: center;">สมาร์ตโฟน (Mobile)</div>
-            <div class="option-card-desc" style="text-align: center;">ปุ่มสัมผัสขนาดใหญ่พิเศษ ป้องกันการกดพลาด</div>
-          </div>
-
-          <div class="option-card wizard-device-card" data-device="pc">
-            <div style="font-size: 2rem; text-align: center; margin-bottom: 0.25rem;">💻</div>
-            <div class="option-card-title" style="justify-content: center;">คอมพิวเตอร์ (PC / Laptop)</div>
-            <div class="option-card-desc" style="text-align: center;">รองรับคีย์ลัด 1-4, Enter, Esc เต็มรูปแบบ</div>
-          </div>
+        <div class="option-card wizard-device-card" data-device="pc" role="button" tabindex="0">
+          <div style="font-size: 2.2rem; text-align: center; margin-bottom: 0.35rem;">💻</div>
+          <div class="option-card-title" style="justify-content: center; font-size: 1rem;">คอมพิวเตอร์ (PC / Laptop)</div>
+          <div class="option-card-desc" style="text-align: center;">รองรับคีย์บอร์ดลัด 1-4, Enter, Spacebar, หน้าจอกว้างเต็มตา</div>
         </div>
       </div>
 
-      <!-- STEP 2: Difficulty Selection -->
-      <div id="wizard-step-2" class="wizard-step-content">
-        <div class="wizard-header">
-          <div class="wizard-mascot">⚡🎯</div>
-          <h3 class="cute-modal-title">เลือกระดับความยากที่ต้องการติว</h3>
-          <p class="cute-modal-desc">ข้อสอบทั้งหมด 50 ข้อ แบ่งออกเป็น 3 ชุดตามความลึก</p>
-        </div>
-
-        <div class="config-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 1rem;">
-          <div class="option-card wizard-diff-card active" data-diff="all">
-            <div class="option-card-title">🌟 รวมทุกระดับ (50 ข้อ)</div>
-            <div class="option-card-desc">สุ่มรวมครบทุกประเด็น</div>
-          </div>
-          <div class="option-card wizard-diff-card" data-diff="easy">
-            <div class="option-card-title">🟢 ง่าย - พื้นฐาน (10 ข้อ)</div>
-            <div class="option-card-desc">ชุดที่ 1: ลักษณะธุรกิจ, รัฐวิสาหกิจ</div>
-          </div>
-          <div class="option-card wizard-diff-card" data-diff="normal">
-            <div class="option-card-title">🟡 ปานกลาง - ประยุกต์ (20 ข้อ)</div>
-            <div class="option-card-desc">ชุดที่ 2: สภาพแวดล้อม, วงจรชีวิต</div>
-          </div>
-          <div class="option-card wizard-diff-card" data-diff="hard">
-            <div class="option-card-title">🔴 ยาก - ครอบคลุม (20 ข้อ)</div>
-            <div class="option-card-desc">ชุดที่ 3: วิเคราะห์โจทย์เชิงลึก</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 3: Count, Mode, and Start -->
-      <div id="wizard-step-3" class="wizard-step-content">
-        <div class="wizard-header">
-          <div class="wizard-mascot">🎲⏱️</div>
-          <h3 class="cute-modal-title">จำนวนข้อและรูปแบบการติว</h3>
-          <p class="cute-modal-desc">ระบบจะสุ่มคำถามและสุ่มตำแหน่งช้อยส์ ก ข ค ง ใหม่ทั้งหมด!</p>
-        </div>
-
-        <!-- Count selection -->
-        <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.45rem;">เลือกจำนวนข้อ:</div>
-        <div class="number-pills" style="margin-bottom: 1.25rem;">
-          <button class="number-pill wizard-count-pill" data-count="5">5 ข้อ</button>
-          <button class="number-pill wizard-count-pill" data-count="10">10 ข้อ</button>
-          <button class="number-pill wizard-count-pill active" data-count="20">20 ข้อ</button>
-          <button class="number-pill wizard-count-pill" data-count="all">ทั้งหมด</button>
-        </div>
-
-        <!-- Mode selection -->
-        <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.45rem;">เลือกโหมดการทำ:</div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem;">
-          <div class="option-card wizard-mode-card active" data-mode="practice">
-            <div class="option-card-title">💡 โหมดฝึกทบทวน</div>
-            <div class="option-card-desc">เฉลยทันที พร้อมคำอธิบายละเอียด</div>
-          </div>
-          <div class="option-card wizard-mode-card" data-mode="exam">
-            <div class="option-card-title">⏱️ โหมดจำลองสอบจริง</div>
-            <div class="option-card-desc">จับเวลา สรุปผลคะแนนตอนจบ</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Wizard Navigation Buttons -->
-      <div class="wizard-nav-buttons">
-        <button id="btn-wizard-prev" class="btn-secondary" style="visibility: hidden;">
-          ← ย้อนกลับ
-        </button>
-        <button id="btn-wizard-next" class="btn-primary" style="width: auto; padding: 0.65rem 1.75rem;">
-          ถัดไป →
-        </button>
-        <button id="btn-wizard-start" class="btn-primary" style="display: none; width: auto; padding: 0.65rem 1.75rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-          🚀 เริ่มทำข้อสอบทันที!
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+        <button id="btn-cancel-device-mode" class="btn-secondary" style="padding: 0.6rem 1.2rem;">ยกเลิก</button>
+        <button id="btn-save-device-mode" class="btn-primary" style="width: auto; padding: 0.6rem 1.75rem;">
+          💾 บันทึกโหมด
         </button>
       </div>
     </div>
@@ -3973,7 +4028,7 @@ input:checked + .slider:before {
       <!-- Tutorial Header -->
       <div class="tutorial-header">
         <div class="tutorial-badge-icon">
-          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHVycGxlR3JhZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM3MDU2ZmMiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNTkzY2YyIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0ic29mdFNoYWRvdyIgeD0iLTE1JSIgeT0iLTE1JSIgd2lkdGg9IjEzMCUiIGhlaWdodD0iMTMwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIyLjUiIHN0ZERldmlhdGlvbj0iMiIgZmxvb2QtY29sb3I9IiMwMDAiIGZsb29kLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8IS0tIFJvdW5kZWQgUHVycGxlIFNxdWlyY2xlIC0tPgogIDxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE4IiBmaWxsPSJ1cmwoI3B1cnBsZUdyYWQpIi8+CiAgCiAgPCEtLSBCb29rIDM6IEN5YW4vQmx1ZSAoQmFjaykgLS0+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIj4KICAgIDxyZWN0IHg9IjMxIiB5PSIyNCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIyIiByeD0iMi41IiBmaWxsPSIjMzhiZGY4Ii8+CiAgICA8cmVjdCB4PSIzMSIgeT0iMjQiIHdpZHRoPSIzLjUiIGhlaWdodD0iMjIiIHJ4PSIxIiBmaWxsPSIjMDI4NGM3Ii8+CiAgICA8cGF0aCBkPSJNMzQuNSA0My41IGgxMSB2Mi41IGgtMTEgeiIgZmlsbD0iI2YwZjlmZiIgb3BhY2l0eT0iMC45Ii8+CiAgPC9nPgoKICA8IS0tIEJvb2sgMjogUmVkL1BpbmsgKE1pZGRsZSkgLS0+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIj4KICAgIDxyZWN0IHg9IjIzIiB5PSIxOSIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIyIiByeD0iMi41IiBmaWxsPSIjZWY0NDQ0Ii8+CiAgICA8cmVjdCB4PSIyMyIgeT0iMTkiIHdpZHRoPSIzLjUiIGhlaWdodD0iMjIiIHJ4PSIxIiBmaWxsPSIjZGMyNjI2Ii8+CiAgICA8cGF0aCBkPSJNMjYuNSAzOC41IGgxMSB2Mi41IGgtMTEgeiIgZmlsbD0iI2ZmZjFmMiIgb3BhY2l0eT0iMC45Ii8+CiAgPC9nPgoKICA8IS0tIEJvb2sgMTogR3JlZW4gKEZyb250KSAtLT4KICA8ZyBmaWx0ZXI9InVybCgjc29mdFNoYWRvdykiPgogICAgPHJlY3QgeD0iMTUiIHk9IjE0IiB3aWR0aD0iMTciIGhlaWdodD0iMjMiIHJ4PSIyLjUiIGZpbGw9IiM4NGNjMTYiLz4KICAgIDxyZWN0IHg9IjE1IiB5PSIxNCIgd2lkdGg9IjMuNSIgaGVpZ2h0PSIyMyIgcng9IjEiIGZpbGw9IiM2NWEzMGQiLz4KICAgIDxwYXRoIGQ9Ik0xOC41IDM0IGgxMiB2Mi41IGgtMTIgeiIgZmlsbD0iI2Y3ZmVlNyIgb3BhY2l0eT0iMC45NSIvPgogICAgPGxpbmUgeDE9IjE4LjUiIHkxPSIzNS4yIiB4Mj0iMzAuNSIgeTI9IjM1LjIiIHN0cm9rZT0iI2Q5Zjk5ZCIgc3Ryb2tlLXdpZHRoPSIwLjYiLz4KICA8L2c+Cjwvc3ZnPgo=" alt="RywReviewer" class="tutorial-logo-img">
+          <img src="logo.svg" alt="RywReviewer" class="tutorial-logo-img">
         </div>
         <h3 class="cute-modal-title" style="margin-top: 0.35rem; font-size: 1.35rem;">📖 วิธีใช้งานเว็บ RywReviewer</h3>
         <p class="cute-modal-desc" style="margin-bottom: 0.75rem;">คู่มือเตรียมตัวสอบการประกอบธุรกิจ ม.5 แบบเข้าใจง่ายใน 1 นาที</p>
@@ -4072,7 +4127,7 @@ input:checked + .slider:before {
           <div class="tutorial-card-box highlight-home-box">
             <div style="display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.75rem;">
               <div class="home-icon-spotlight">
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHVycGxlR3JhZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM3MDU2ZmMiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNTkzY2YyIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0ic29mdFNoYWRvdyIgeD0iLTE1JSIgeT0iLTE1JSIgd2lkdGg9IjEzMCUiIGhlaWdodD0iMTMwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIyLjUiIHN0ZERldmlhdGlvbj0iMiIgZmxvb2QtY29sb3I9IiMwMDAiIGZsb29kLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8IS0tIFJvdW5kZWQgUHVycGxlIFNxdWlyY2xlIC0tPgogIDxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE4IiBmaWxsPSJ1cmwoI3B1cnBsZUdyYWQpIi8+CiAgCiAgPCEtLSBCb29rIDM6IEN5YW4vQmx1ZSAoQmFjaykgLS0+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIj4KICAgIDxyZWN0IHg9IjMxIiB5PSIyNCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIyIiByeD0iMi41IiBmaWxsPSIjMzhiZGY4Ii8+CiAgICA8cmVjdCB4PSIzMSIgeT0iMjQiIHdpZHRoPSIzLjUiIGhlaWdodD0iMjIiIHJ4PSIxIiBmaWxsPSIjMDI4NGM3Ii8+CiAgICA8cGF0aCBkPSJNMzQuNSA0My41IGgxMSB2Mi41IGgtMTEgeiIgZmlsbD0iI2YwZjlmZiIgb3BhY2l0eT0iMC45Ii8+CiAgPC9nPgoKICA8IS0tIEJvb2sgMjogUmVkL1BpbmsgKE1pZGRsZSkgLS0+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIj4KICAgIDxyZWN0IHg9IjIzIiB5PSIxOSIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIyIiByeD0iMi41IiBmaWxsPSIjZWY0NDQ0Ii8+CiAgICA8cmVjdCB4PSIyMyIgeT0iMTkiIHdpZHRoPSIzLjUiIGhlaWdodD0iMjIiIHJ4PSIxIiBmaWxsPSIjZGMyNjI2Ii8+CiAgICA8cGF0aCBkPSJNMjYuNSAzOC41IGgxMSB2Mi41IGgtMTEgeiIgZmlsbD0iI2ZmZjFmMiIgb3BhY2l0eT0iMC45Ii8+CiAgPC9nPgoKICA8IS0tIEJvb2sgMTogR3JlZW4gKEZyb250KSAtLT4KICA8ZyBmaWx0ZXI9InVybCgjc29mdFNoYWRvdykiPgogICAgPHJlY3QgeD0iMTUiIHk9IjE0IiB3aWR0aD0iMTciIGhlaWdodD0iMjMiIHJ4PSIyLjUiIGZpbGw9IiM4NGNjMTYiLz4KICAgIDxyZWN0IHg9IjE1IiB5PSIxNCIgd2lkdGg9IjMuNSIgaGVpZ2h0PSIyMyIgcng9IjEiIGZpbGw9IiM2NWEzMGQiLz4KICAgIDxwYXRoIGQ9Ik0xOC41IDM0IGgxMiB2Mi41IGgtMTIgeiIgZmlsbD0iI2Y3ZmVlNyIgb3BhY2l0eT0iMC45NSIvPgogICAgPGxpbmUgeDE9IjE4LjUiIHkxPSIzNS4yIiB4Mj0iMzAuNSIgeTI9IjM1LjIiIHN0cm9rZT0iI2Q5Zjk5ZCIgc3Ryb2tlLXdpZHRoPSIwLjYiLz4KICA8L2c+Cjwvc3ZnPgo=" alt="Home Button" style="width: 52px; height: 52px; border-radius: 14px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);">
+                <img src="logo.svg" alt="Home Button" style="width: 52px; height: 52px; border-radius: 14px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);">
               </div>
               <div>
                 <h4 style="margin: 0; color: var(--primary);">🏠 ปุ่ม Home (ไอคอนหนังสือสีม่วง)</h4>
@@ -6566,10 +6621,11 @@ class ExamApp {
     this.confettiParticles = [];
     this.confettiAnimId = null;
 
-    // Step-by-Step Onboarding Wizard State
-    this.wizardStep = 1;
+    // Device Mode State ('mobile' or 'pc')
+    const savedDevice = localStorage.getItem('rywreviewer_device_mode') || (window.innerWidth <= 768 ? 'mobile' : 'pc');
+    this.deviceMode = savedDevice;
     this.wizardState = {
-      device: 'mobile',
+      device: savedDevice,
       difficulty: 'all',
       count: 20,
       mode: 'practice'
@@ -6578,35 +6634,29 @@ class ExamApp {
     this.initElements();
     this.bindEvents();
     this.loadTheme();
+    this.setDeviceMode(savedDevice);
     this.setupConfetti();
     this.initCheatSheet();
     this.initSearchBank();
     this.initSubjectSystem();
 
-    // First time visitor check: open Step Wizard automatically only on first visit
+    // First time visitor check: open Device Mode setting if never chosen
     setTimeout(() => {
-      const hasOnboarded = localStorage.getItem('rywreviewer_onboarded_v2') || localStorage.getItem('bizexam_onboarded_v2');
-      if (!hasOnboarded) {
+      const hasChosenDevice = localStorage.getItem('rywreviewer_device_mode');
+      if (!hasChosenDevice) {
         this.openWizard();
       }
     }, 350);
   }
 
   initElements() {
-    // Wizard Modal Elements
+    // Device Settings Modal Elements
     this.wizardModal = document.getElementById('wizard-modal');
-    this.wizardStep1 = document.getElementById('wizard-step-1');
-    this.wizardStep2 = document.getElementById('wizard-step-2');
-    this.wizardStep3 = document.getElementById('wizard-step-3');
-    this.wizardDot1 = document.getElementById('wizard-dot-1');
-    this.wizardDot2 = document.getElementById('wizard-dot-2');
-    this.wizardDot3 = document.getElementById('wizard-dot-3');
-    this.btnWizardPrev = document.getElementById('btn-wizard-prev');
-    this.btnWizardNext = document.getElementById('btn-wizard-next');
-    this.btnWizardStart = document.getElementById('btn-wizard-start');
     this.btnCloseWizard = document.getElementById('btn-close-wizard');
     this.btnReopenWizard = document.getElementById('btn-reopen-wizard');
     this.btnHeroWizard = document.getElementById('btn-hero-wizard');
+    this.btnSaveDeviceMode = document.getElementById('btn-save-device-mode');
+    this.btnCancelDeviceMode = document.getElementById('btn-cancel-device-mode');
 
     // Screens in Quiz Tab
     this.screenSetup = document.getElementById('screen-setup');
@@ -6796,47 +6846,19 @@ class ExamApp {
       btnStart.addEventListener('click', () => this.startQuiz());
     }
 
-    // Step-by-Step Wizard Handlers
+    // Device Settings Modal Handlers
     if (this.btnReopenWizard) this.btnReopenWizard.addEventListener('click', () => this.openWizard());
     if (this.btnHeroWizard) this.btnHeroWizard.addEventListener('click', () => this.openWizard());
     if (this.btnCloseWizard) this.btnCloseWizard.addEventListener('click', () => this.closeWizard());
-    if (this.btnWizardPrev) this.btnWizardPrev.addEventListener('click', () => this.navigateWizard(-1));
-    if (this.btnWizardNext) this.btnWizardNext.addEventListener('click', () => this.navigateWizard(1));
-    if (this.btnWizardStart) this.btnWizardStart.addEventListener('click', () => this.finishWizardAndStart());
+    if (this.btnCancelDeviceMode) this.btnCancelDeviceMode.addEventListener('click', () => this.closeWizard());
+    if (this.btnSaveDeviceMode) this.btnSaveDeviceMode.addEventListener('click', () => this.saveDeviceMode());
 
-    // Wizard Card Choices
+    // Device Option Card Choices in Modal
     document.querySelectorAll('.wizard-device-card').forEach(card => {
       card.addEventListener('click', () => {
         document.querySelectorAll('.wizard-device-card').forEach(c => c.classList.remove('active'));
         card.classList.add('active');
         this.wizardState.device = card.dataset.device;
-        this.playSound('click');
-      });
-    });
-
-    document.querySelectorAll('.wizard-diff-card').forEach(card => {
-      card.addEventListener('click', () => {
-        document.querySelectorAll('.wizard-diff-card').forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        this.wizardState.difficulty = card.dataset.diff;
-        this.playSound('click');
-      });
-    });
-
-    document.querySelectorAll('.wizard-count-pill').forEach(pill => {
-      pill.addEventListener('click', () => {
-        document.querySelectorAll('.wizard-count-pill').forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        this.wizardState.count = pill.dataset.count === 'all' ? 9999 : parseInt(pill.dataset.count, 10);
-        this.playSound('click');
-      });
-    });
-
-    document.querySelectorAll('.wizard-mode-card').forEach(card => {
-      card.addEventListener('click', () => {
-        document.querySelectorAll('.wizard-mode-card').forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        this.wizardState.mode = card.dataset.mode;
         this.playSound('click');
       });
     });
@@ -7293,10 +7315,12 @@ class ExamApp {
     }
   }
 
-  // --- STEP-BY-STEP ONBOARDING WIZARD METHODS ---
+  // --- DEVICE SETTINGS MODAL METHODS ---
   openWizard() {
-    this.wizardStep = 1;
-    this.updateWizardView();
+    const currentMode = this.deviceMode || 'mobile';
+    document.querySelectorAll('.wizard-device-card').forEach(card => {
+      card.classList.toggle('active', card.dataset.device === currentMode);
+    });
     if (this.wizardModal) {
       this.wizardModal.classList.add('active');
       this.playSound('click');
@@ -7310,69 +7334,36 @@ class ExamApp {
     }
   }
 
-  navigateWizard(dir) {
-    const nextStep = this.wizardStep + dir;
-    if (nextStep >= 1 && nextStep <= 3) {
-      this.wizardStep = nextStep;
-      this.updateWizardView();
-      this.playSound('click');
-    }
+  saveDeviceMode() {
+    const activeCard = document.querySelector('.wizard-device-card.active');
+    const mode = activeCard ? activeCard.dataset.device : (this.deviceMode || 'mobile');
+    this.setDeviceMode(mode);
+    this.closeWizard();
+    this.playSound('correct');
   }
 
-  updateWizardView() {
-    if (!this.wizardStep1) return;
-
-    // Update step visibility
-    this.wizardStep1.classList.toggle('active', this.wizardStep === 1);
-    this.wizardStep2.classList.toggle('active', this.wizardStep === 2);
-    this.wizardStep3.classList.toggle('active', this.wizardStep === 3);
-
-    // Update step dots
-    this.wizardDot1.classList.toggle('active', this.wizardStep === 1);
-    this.wizardDot2.classList.toggle('active', this.wizardStep === 2);
-    this.wizardDot3.classList.toggle('active', this.wizardStep === 3);
-
-    // Update navigation buttons
-    this.btnWizardPrev.style.visibility = this.wizardStep > 1 ? 'visible' : 'hidden';
-
-    if (this.wizardStep === 3) {
-      this.btnWizardNext.style.display = 'none';
-      this.btnWizardStart.style.display = 'inline-flex';
-    } else {
-      this.btnWizardNext.style.display = 'inline-flex';
-      this.btnWizardStart.style.display = 'none';
-    }
-  }
-
-  finishWizardAndStart() {
+  setDeviceMode(mode) {
+    this.deviceMode = mode;
+    this.wizardState.device = mode;
+    localStorage.setItem('rywreviewer_device_mode', mode);
     localStorage.setItem('rywreviewer_onboarded_v2', 'true');
 
-    // Sync wizard selections to app config
-    this.config.difficulty = this.wizardState.difficulty;
-    this.config.count = this.wizardState.count;
-    this.config.mode = this.wizardState.mode;
-
-    // Apply mobile device preference
-    if (this.wizardState.device === 'mobile') {
+    if (mode === 'mobile') {
       document.body.classList.add('mobile-ui');
+      document.body.classList.remove('pc-ui');
     } else {
       document.body.classList.remove('mobile-ui');
+      document.body.classList.add('pc-ui');
     }
 
-    // Mirror to screen 1 (setup screen)
-    document.querySelectorAll('.difficulty-card').forEach(card => {
-      card.classList.toggle('active', card.dataset.difficulty === this.config.difficulty);
-    });
-    document.querySelectorAll('.mode-card').forEach(card => {
-      card.classList.toggle('active', card.dataset.mode === this.config.mode);
-    });
-    document.querySelectorAll('.count-pill').forEach(pill => {
-      const c = pill.dataset.count === 'all' ? 9999 : parseInt(pill.dataset.count, 10);
-      pill.classList.toggle('active', c === this.config.count);
-    });
+    if (this.btnReopenWizard) {
+      this.btnReopenWizard.innerHTML = mode === 'mobile' ? '<span>📱 โหมดมือถือ</span>' : '<span>💻 โหมดคอม</span>';
+      this.btnReopenWizard.title = `โหมดปัจจุบัน: ${mode === 'mobile' ? 'มือถือ' : 'คอมพิวเตอร์'} (คลิกเพื่อเปลี่ยน)`;
+    }
 
-    this.closeWizard();
-    this.startQuiz();
+    document.querySelectorAll('.wizard-device-card').forEach(card => {
+      card.classList.toggle('active', card.dataset.device === mode);
+    });
   }
 
   startQuiz(customQuestions = null) {
@@ -8348,10 +8339,18 @@ class ExamApp {
   // MULTI-SUBJECT & LESSON CONTROLLER METHODS
   // ==========================================================================
   initSubjectSystem() {
-    // Subject Pills click
+    // Subject Pills click (Top Bar)
     document.querySelectorAll('.subject-pill-btn[data-subject]').forEach(btn => {
       btn.addEventListener('click', () => {
         this.switchSubject(btn.dataset.subject);
+        this.playSound('click');
+      });
+    });
+
+    // Subject Cards click (Setup Screen)
+    document.querySelectorAll('.subject-card[data-subject]').forEach(card => {
+      card.addEventListener('click', () => {
+        this.switchSubject(card.dataset.subject);
         this.playSound('click');
       });
     });
@@ -8452,6 +8451,11 @@ class ExamApp {
       } else {
         btn.classList.remove('active');
       }
+    });
+
+    // Update active subject cards in Setup screen
+    document.querySelectorAll('.subject-card[data-subject]').forEach(card => {
+      card.classList.toggle('active', card.dataset.subject === subjectId);
     });
 
     // Update document attribute for CSS accents

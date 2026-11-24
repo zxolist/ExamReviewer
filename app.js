@@ -59,10 +59,11 @@ class ExamApp {
     this.confettiParticles = [];
     this.confettiAnimId = null;
 
-    // Step-by-Step Onboarding Wizard State
-    this.wizardStep = 1;
+    // Device Mode State ('mobile' or 'pc')
+    const savedDevice = localStorage.getItem('rywreviewer_device_mode') || (window.innerWidth <= 768 ? 'mobile' : 'pc');
+    this.deviceMode = savedDevice;
     this.wizardState = {
-      device: 'mobile',
+      device: savedDevice,
       difficulty: 'all',
       count: 20,
       mode: 'practice'
@@ -71,35 +72,29 @@ class ExamApp {
     this.initElements();
     this.bindEvents();
     this.loadTheme();
+    this.setDeviceMode(savedDevice);
     this.setupConfetti();
     this.initCheatSheet();
     this.initSearchBank();
     this.initSubjectSystem();
 
-    // First time visitor check: open Step Wizard automatically only on first visit
+    // First time visitor check: open Device Mode setting if never chosen
     setTimeout(() => {
-      const hasOnboarded = localStorage.getItem('rywreviewer_onboarded_v2') || localStorage.getItem('bizexam_onboarded_v2');
-      if (!hasOnboarded) {
+      const hasChosenDevice = localStorage.getItem('rywreviewer_device_mode');
+      if (!hasChosenDevice) {
         this.openWizard();
       }
     }, 350);
   }
 
   initElements() {
-    // Wizard Modal Elements
+    // Device Settings Modal Elements
     this.wizardModal = document.getElementById('wizard-modal');
-    this.wizardStep1 = document.getElementById('wizard-step-1');
-    this.wizardStep2 = document.getElementById('wizard-step-2');
-    this.wizardStep3 = document.getElementById('wizard-step-3');
-    this.wizardDot1 = document.getElementById('wizard-dot-1');
-    this.wizardDot2 = document.getElementById('wizard-dot-2');
-    this.wizardDot3 = document.getElementById('wizard-dot-3');
-    this.btnWizardPrev = document.getElementById('btn-wizard-prev');
-    this.btnWizardNext = document.getElementById('btn-wizard-next');
-    this.btnWizardStart = document.getElementById('btn-wizard-start');
     this.btnCloseWizard = document.getElementById('btn-close-wizard');
     this.btnReopenWizard = document.getElementById('btn-reopen-wizard');
     this.btnHeroWizard = document.getElementById('btn-hero-wizard');
+    this.btnSaveDeviceMode = document.getElementById('btn-save-device-mode');
+    this.btnCancelDeviceMode = document.getElementById('btn-cancel-device-mode');
 
     // Screens in Quiz Tab
     this.screenSetup = document.getElementById('screen-setup');
@@ -289,47 +284,19 @@ class ExamApp {
       btnStart.addEventListener('click', () => this.startQuiz());
     }
 
-    // Step-by-Step Wizard Handlers
+    // Device Settings Modal Handlers
     if (this.btnReopenWizard) this.btnReopenWizard.addEventListener('click', () => this.openWizard());
     if (this.btnHeroWizard) this.btnHeroWizard.addEventListener('click', () => this.openWizard());
     if (this.btnCloseWizard) this.btnCloseWizard.addEventListener('click', () => this.closeWizard());
-    if (this.btnWizardPrev) this.btnWizardPrev.addEventListener('click', () => this.navigateWizard(-1));
-    if (this.btnWizardNext) this.btnWizardNext.addEventListener('click', () => this.navigateWizard(1));
-    if (this.btnWizardStart) this.btnWizardStart.addEventListener('click', () => this.finishWizardAndStart());
+    if (this.btnCancelDeviceMode) this.btnCancelDeviceMode.addEventListener('click', () => this.closeWizard());
+    if (this.btnSaveDeviceMode) this.btnSaveDeviceMode.addEventListener('click', () => this.saveDeviceMode());
 
-    // Wizard Card Choices
+    // Device Option Card Choices in Modal
     document.querySelectorAll('.wizard-device-card').forEach(card => {
       card.addEventListener('click', () => {
         document.querySelectorAll('.wizard-device-card').forEach(c => c.classList.remove('active'));
         card.classList.add('active');
         this.wizardState.device = card.dataset.device;
-        this.playSound('click');
-      });
-    });
-
-    document.querySelectorAll('.wizard-diff-card').forEach(card => {
-      card.addEventListener('click', () => {
-        document.querySelectorAll('.wizard-diff-card').forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        this.wizardState.difficulty = card.dataset.diff;
-        this.playSound('click');
-      });
-    });
-
-    document.querySelectorAll('.wizard-count-pill').forEach(pill => {
-      pill.addEventListener('click', () => {
-        document.querySelectorAll('.wizard-count-pill').forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        this.wizardState.count = pill.dataset.count === 'all' ? 9999 : parseInt(pill.dataset.count, 10);
-        this.playSound('click');
-      });
-    });
-
-    document.querySelectorAll('.wizard-mode-card').forEach(card => {
-      card.addEventListener('click', () => {
-        document.querySelectorAll('.wizard-mode-card').forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        this.wizardState.mode = card.dataset.mode;
         this.playSound('click');
       });
     });
@@ -786,10 +753,12 @@ class ExamApp {
     }
   }
 
-  // --- STEP-BY-STEP ONBOARDING WIZARD METHODS ---
+  // --- DEVICE SETTINGS MODAL METHODS ---
   openWizard() {
-    this.wizardStep = 1;
-    this.updateWizardView();
+    const currentMode = this.deviceMode || 'mobile';
+    document.querySelectorAll('.wizard-device-card').forEach(card => {
+      card.classList.toggle('active', card.dataset.device === currentMode);
+    });
     if (this.wizardModal) {
       this.wizardModal.classList.add('active');
       this.playSound('click');
@@ -803,69 +772,36 @@ class ExamApp {
     }
   }
 
-  navigateWizard(dir) {
-    const nextStep = this.wizardStep + dir;
-    if (nextStep >= 1 && nextStep <= 3) {
-      this.wizardStep = nextStep;
-      this.updateWizardView();
-      this.playSound('click');
-    }
+  saveDeviceMode() {
+    const activeCard = document.querySelector('.wizard-device-card.active');
+    const mode = activeCard ? activeCard.dataset.device : (this.deviceMode || 'mobile');
+    this.setDeviceMode(mode);
+    this.closeWizard();
+    this.playSound('correct');
   }
 
-  updateWizardView() {
-    if (!this.wizardStep1) return;
-
-    // Update step visibility
-    this.wizardStep1.classList.toggle('active', this.wizardStep === 1);
-    this.wizardStep2.classList.toggle('active', this.wizardStep === 2);
-    this.wizardStep3.classList.toggle('active', this.wizardStep === 3);
-
-    // Update step dots
-    this.wizardDot1.classList.toggle('active', this.wizardStep === 1);
-    this.wizardDot2.classList.toggle('active', this.wizardStep === 2);
-    this.wizardDot3.classList.toggle('active', this.wizardStep === 3);
-
-    // Update navigation buttons
-    this.btnWizardPrev.style.visibility = this.wizardStep > 1 ? 'visible' : 'hidden';
-
-    if (this.wizardStep === 3) {
-      this.btnWizardNext.style.display = 'none';
-      this.btnWizardStart.style.display = 'inline-flex';
-    } else {
-      this.btnWizardNext.style.display = 'inline-flex';
-      this.btnWizardStart.style.display = 'none';
-    }
-  }
-
-  finishWizardAndStart() {
+  setDeviceMode(mode) {
+    this.deviceMode = mode;
+    this.wizardState.device = mode;
+    localStorage.setItem('rywreviewer_device_mode', mode);
     localStorage.setItem('rywreviewer_onboarded_v2', 'true');
 
-    // Sync wizard selections to app config
-    this.config.difficulty = this.wizardState.difficulty;
-    this.config.count = this.wizardState.count;
-    this.config.mode = this.wizardState.mode;
-
-    // Apply mobile device preference
-    if (this.wizardState.device === 'mobile') {
+    if (mode === 'mobile') {
       document.body.classList.add('mobile-ui');
+      document.body.classList.remove('pc-ui');
     } else {
       document.body.classList.remove('mobile-ui');
+      document.body.classList.add('pc-ui');
     }
 
-    // Mirror to screen 1 (setup screen)
-    document.querySelectorAll('.difficulty-card').forEach(card => {
-      card.classList.toggle('active', card.dataset.difficulty === this.config.difficulty);
-    });
-    document.querySelectorAll('.mode-card').forEach(card => {
-      card.classList.toggle('active', card.dataset.mode === this.config.mode);
-    });
-    document.querySelectorAll('.count-pill').forEach(pill => {
-      const c = pill.dataset.count === 'all' ? 9999 : parseInt(pill.dataset.count, 10);
-      pill.classList.toggle('active', c === this.config.count);
-    });
+    if (this.btnReopenWizard) {
+      this.btnReopenWizard.innerHTML = mode === 'mobile' ? '<span>📱 โหมดมือถือ</span>' : '<span>💻 โหมดคอม</span>';
+      this.btnReopenWizard.title = `โหมดปัจจุบัน: ${mode === 'mobile' ? 'มือถือ' : 'คอมพิวเตอร์'} (คลิกเพื่อเปลี่ยน)`;
+    }
 
-    this.closeWizard();
-    this.startQuiz();
+    document.querySelectorAll('.wizard-device-card').forEach(card => {
+      card.classList.toggle('active', card.dataset.device === mode);
+    });
   }
 
   startQuiz(customQuestions = null) {
@@ -1841,10 +1777,18 @@ class ExamApp {
   // MULTI-SUBJECT & LESSON CONTROLLER METHODS
   // ==========================================================================
   initSubjectSystem() {
-    // Subject Pills click
+    // Subject Pills click (Top Bar)
     document.querySelectorAll('.subject-pill-btn[data-subject]').forEach(btn => {
       btn.addEventListener('click', () => {
         this.switchSubject(btn.dataset.subject);
+        this.playSound('click');
+      });
+    });
+
+    // Subject Cards click (Setup Screen)
+    document.querySelectorAll('.subject-card[data-subject]').forEach(card => {
+      card.addEventListener('click', () => {
+        this.switchSubject(card.dataset.subject);
         this.playSound('click');
       });
     });
@@ -1945,6 +1889,11 @@ class ExamApp {
       } else {
         btn.classList.remove('active');
       }
+    });
+
+    // Update active subject cards in Setup screen
+    document.querySelectorAll('.subject-card[data-subject]').forEach(card => {
+      card.classList.toggle('active', card.dataset.subject === subjectId);
     });
 
     // Update document attribute for CSS accents
