@@ -78,10 +78,20 @@ class ExamApp {
     this.initCheatSheet();
     this.initSearchBank();
     this.initSubjectSystem();
+    this.nickname = localStorage.getItem('rywreviewer_nickname') || '';
+    this.updateNicknameUI();
     this.updateLevelUI();
     this.updateWeakSpotUI();
     this.updateSubjectMasteryUI();
     this.initFlashcardSwipe();
+
+    // Check first visit: prompt for nickname if never set
+    setTimeout(() => {
+      const hasNickname = localStorage.getItem('rywreviewer_nickname');
+      if (!hasNickname) {
+        this.openNicknameModal();
+      }
+    }, 450);
 
     // First time visitor check: open Device Mode setting if never chosen
     setTimeout(() => {
@@ -1442,17 +1452,18 @@ class ExamApp {
   showCuteResultModal(correct, total, percentage, isHigh, wrong) {
     if (!this.cuteResultModal) return;
 
+    const studentName = this.nickname || 'ผู้สอบ';
     if (isHigh) {
       this.cuteResultCard.className = 'cute-modal-card high-score';
       this.cuteMascotBadge.innerHTML = '🐱✨';
-      this.cuteModalTitle.innerHTML = 'งุ้ยยย เก่งมากเลยน้าา! 🎉✨';
+      this.cuteModalTitle.innerHTML = `งุ้ยยย เก่งมากคุณ ${studentName}! 🎉✨`;
       this.cuteModalScorePill.className = 'cute-modal-score-pill high';
       this.cuteModalScoreText.innerHTML = `ได้ ${correct} / ${total} ข้อ (${percentage}%)`;
       this.cuteModalDesc.innerHTML = 'คุณพร้อมลงสนามสอบจริงแล้ว เจ้าก้อนภูมิใจในตัวคุณมาก ปรบมือให้รัว ๆ เลยยย 👏💖';
     } else {
       this.cuteResultCard.className = 'cute-modal-card low-score';
       this.cuteMascotBadge.innerHTML = '🥺💖';
-      this.cuteModalTitle.innerHTML = 'ไม่เป็นไรน้า สู้ๆ อีกนิดเดียว! 🐾';
+      this.cuteModalTitle.innerHTML = `ไม่เป็นไรนะคุณ ${studentName} สู้ๆ อีกนิดเดียว! 🐾`;
       this.cuteModalScorePill.className = 'cute-modal-score-pill low';
       this.cuteModalScoreText.innerHTML = `ได้ ${correct} / ${total} ข้อ (${percentage}%)`;
       this.cuteModalDesc.innerHTML = 'อย่าเพิ่งท้อนะ! น้อนเชื่อว่าถ้าลองกดปุ่ม <strong>"ทำซ้ำเฉพาะข้อที่ผิด"</strong> เพื่อทวนจุดที่พลาด รอบหน้ารับรองได้คะแนนเต็มแน่นอน! ✨';

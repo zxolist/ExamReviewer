@@ -2871,6 +2871,40 @@ body.pc-ui .app-main {
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
+
+/* Player Profile & Nickname Badge */
+.player-profile-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #059669;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+[data-theme="dark"] .player-profile-badge {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+}
+.player-profile-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25);
+  border-color: #10b981;
+}
+#player-nickname-display {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 </style>
   <!-- Critical CSS for Subject Selector and Device Mode (Bypasses any CDN cache) -->
   <style>
@@ -3052,6 +3086,10 @@ body.pc-ui .app-main {
 
       <!-- Action Icons & Player Level -->
       <div class="header-actions">
+        <div id="player-profile-badge" class="player-profile-badge" title="คลิกเพื่อแก้ไขชื่อเล่นของคุณ" onclick="window.examApp?.openNicknameModal()">
+          <span>👤</span>
+          <span id="player-nickname-display">ผู้สอบ</span>
+        </div>
         <div id="player-level-badge" class="player-level-badge" title="ระดับผู้ใช้และ EXP สะสม">
           <span id="player-level-text">⭐ Lv.1</span>
           <div class="player-exp-bar" title="EXP สะสมเพื่อเลเวลอัป">
@@ -3167,6 +3205,9 @@ body.pc-ui .app-main {
           <h1>🎯 เตรียมความพร้อมก่อนสอบจริง</h1>
           <p>คลังข้อสอบทบทวนวิชาการประกอบธุรกิจ ม.5 รวม 50 ข้อ พร้อมเฉลยละเอียดและวิเคราะห์ผล</p>
           <div style="margin-top: 0.85rem; display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+            <button id="btn-hero-profile" class="btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.9rem; border-color: #10b981; color: #10b981;" onclick="window.examApp?.openNicknameModal()">
+              <span>👤 ชื่อผู้สอบ: <strong id="hero-nickname-display">ผู้สอบ</strong> (คลิกเปลี่ยนชื่อ)</span>
+            </button>
             <button id="btn-hero-wizard" class="btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.9rem; border-color: var(--primary); color: var(--primary);">
               <span>📱/💻 โหมดอุปกรณ์ (Mobile / PC)</span>
             </button>
@@ -4382,6 +4423,47 @@ body.pc-ui .app-main {
         <span>🟥 ตอบผิด</span>
         <span>🟦 กำลังทำ/เลือกแล้ว</span>
         <span>⭐ ติดดาวไว้</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= NICKNAME MODAL (ระบบถามชื่อเล่น) ================= -->
+  <div id="nickname-modal" class="wizard-modal-backdrop">
+    <div class="wizard-card" style="max-width: 440px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <span style="font-size: 0.95rem; font-weight: 700; color: #10b981;">👤 โปรไฟล์ผู้สอบ (Student Profile)</span>
+        <button id="btn-close-nickname" class="icon-btn" style="border: none; width: 32px; height: 32px;" title="ปิด" onclick="window.examApp?.closeNicknameModal()">✕</button>
+      </div>
+
+      <div class="wizard-header" style="margin-bottom: 1.25rem;">
+        <div class="wizard-mascot" style="font-size: 3rem;">🎓✨</div>
+        <h3 class="cute-modal-title">ยินดีต้อนรับ! ขอทราบชื่อเล่นหน่อยครับ</h3>
+        <p class="cute-modal-desc">ใช้สำหรับบันทึกสถิติ, แต้ม EXP และรายงานผลคะแนนในเครื่องของคุณ</p>
+      </div>
+
+      <div style="margin-bottom: 1.35rem;">
+        <label for="nickname-input" style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.45rem;">
+          ชื่อเล่นของคุณ (Nickname):
+        </label>
+        <div style="position: relative;">
+          <input type="text" id="nickname-input" maxlength="25" placeholder="พิมพ์ชื่อเล่นของคุณ (เช่น กานต์, แป้ง, ไอซ์, เคน)" 
+            style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: 14px; border: 1.5px solid var(--card-border); background: var(--bg); color: var(--text-main); font-family: inherit; font-size: 1rem; outline: none; transition: border-color 0.2s;"
+            onkeydown="if(event.key==='Enter') window.examApp?.saveNickname()"
+          >
+          <span style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; opacity: 0.65;">👤</span>
+        </div>
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.45rem;">
+          🔒 ข้อมูลบันทึกอยู่ในเครื่องนี้เท่านั้น ไม่มีการแชร์ข้อมูลออกภายนอก เปลี่ยนชื่อได้ตลอดเวลา
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+        <button id="btn-skip-nickname" class="btn-secondary" style="padding: 0.6rem 1.2rem;" onclick="window.examApp?.closeNicknameModal()">
+          ใช้ชื่อ "ผู้สอบ"
+        </button>
+        <button id="btn-save-nickname" class="btn-primary" style="width: auto; padding: 0.6rem 1.75rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-color: #10b981;" onclick="window.examApp?.saveNickname()">
+          💾 บันทึกชื่อ
+        </button>
       </div>
     </div>
   </div>
@@ -7043,10 +7125,20 @@ class ExamApp {
     this.initCheatSheet();
     this.initSearchBank();
     this.initSubjectSystem();
+    this.nickname = localStorage.getItem('rywreviewer_nickname') || '';
+    this.updateNicknameUI();
     this.updateLevelUI();
     this.updateWeakSpotUI();
     this.updateSubjectMasteryUI();
     this.initFlashcardSwipe();
+
+    // Check first visit: prompt for nickname if never set
+    setTimeout(() => {
+      const hasNickname = localStorage.getItem('rywreviewer_nickname');
+      if (!hasNickname) {
+        this.openNicknameModal();
+      }
+    }, 450);
 
     // First time visitor check: open Device Mode setting if never chosen
     setTimeout(() => {
@@ -8408,17 +8500,18 @@ class ExamApp {
   showCuteResultModal(correct, total, percentage, isHigh, wrong) {
     if (!this.cuteResultModal) return;
 
+    const studentName = this.nickname || 'ผู้สอบ';
     if (isHigh) {
       this.cuteResultCard.className = 'cute-modal-card high-score';
       this.cuteMascotBadge.innerHTML = '🐱✨';
-      this.cuteModalTitle.innerHTML = 'งุ้ยยย เก่งมากเลยน้าา! 🎉✨';
+      this.cuteModalTitle.innerHTML = `งุ้ยยย เก่งมากคุณ ${studentName}! 🎉✨`;
       this.cuteModalScorePill.className = 'cute-modal-score-pill high';
       this.cuteModalScoreText.innerHTML = `ได้ ${correct} / ${total} ข้อ (${percentage}%)`;
       this.cuteModalDesc.innerHTML = 'คุณพร้อมลงสนามสอบจริงแล้ว เจ้าก้อนภูมิใจในตัวคุณมาก ปรบมือให้รัว ๆ เลยยย 👏💖';
     } else {
       this.cuteResultCard.className = 'cute-modal-card low-score';
       this.cuteMascotBadge.innerHTML = '🥺💖';
-      this.cuteModalTitle.innerHTML = 'ไม่เป็นไรน้า สู้ๆ อีกนิดเดียว! 🐾';
+      this.cuteModalTitle.innerHTML = `ไม่เป็นไรนะคุณ ${studentName} สู้ๆ อีกนิดเดียว! 🐾`;
       this.cuteModalScorePill.className = 'cute-modal-score-pill low';
       this.cuteModalScoreText.innerHTML = `ได้ ${correct} / ${total} ข้อ (${percentage}%)`;
       this.cuteModalDesc.innerHTML = 'อย่าเพิ่งท้อนะ! น้อนเชื่อว่าถ้าลองกดปุ่ม <strong>"ทำซ้ำเฉพาะข้อที่ผิด"</strong> เพื่อทวนจุดที่พลาด รอบหน้ารับรองได้คะแนนเต็มแน่นอน! ✨';
