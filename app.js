@@ -447,6 +447,14 @@ class ExamApp {
       });
     }
 
+    const btnHistoryStartTestNow = document.getElementById('btn-history-start-test-now');
+    if (btnHistoryStartTestNow) {
+      btnHistoryStartTestNow.addEventListener('click', () => {
+        this.switchTab('quiz');
+        this.showSetupScreen();
+      });
+    }
+
     document.querySelectorAll('.learn-filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.learn-filter-btn').forEach(b => b.classList.remove('active'));
